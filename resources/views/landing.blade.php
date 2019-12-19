@@ -65,72 +65,27 @@
 
         <section id="program">
             <div class="row justify-content-center text-center mt-2">
+                <?php 
+                $program_les = DB::table('program_les')->get()->toArray();
+                ?>
+                @foreach ($program_les as $pl)
                 <div class="col-lg-4 mt-2">
                     <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
                         <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
+                            <img src="{{URL::asset($pl->image)}}" class="img-thumbnail">
                             <figcaption class="figure-caption">
-                                <h5>Kana</h5>
+                                <h5>{{ $pl->nama_program_les }}</h5>
                             </figcaption>
                         </figure>
                     </button>
                 </div>
-                <div class="col-lg-4 mt-2">
-                    <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
-                        <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
-                            <figcaption class="figure-caption">
-                                <h5>Basic Grammar</h5>
-                            </figcaption>
-                        </figure>
-                    </button>
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
-                        <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
-                            <figcaption class="figure-caption">
-                                <h5>Intermediate Grammar</h5>
-                            </figcaption>
-                        </figure>
-                    </button>
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
-                        <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
-                            <figcaption class="figure-caption">
-                                <h5>Kana</h5>
-                            </figcaption>
-                        </figure>
-                    </button>
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
-                        <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
-                            <figcaption class="figure-caption">
-                                <h5>Basic Grammar</h5>
-                            </figcaption>
-                        </figure>
-                    </button>
-                </div>
-                <div class="col-lg-4 mt-2">
-                    <button class="program" data-toggle="modal" data-target="#ModalDetailProgram">
-                        <figure class="figure">
-                            <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail">
-                            <figcaption class="figure-caption">
-                                <h5>Intermediate Grammar</h5>
-                            </figcaption>
-                        </figure>
-                    </button>
-                </div>
+                @endforeach
             </div>
-            <div class="row justify-content-center text-center mt-3">
+            {{-- <div class="row justify-content-center text-center mt-3">
                 <div class="col">
                     <button class="btn btn-danger">Lihat Selengkapnya</button>
                 </div>
-            </div>
+            </div> --}}
         </section>
 
         <section id="informasi">

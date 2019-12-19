@@ -8,7 +8,8 @@ class SenseiController extends Controller
 {
     public function index()
     {
-        $header = "Sensei";
-        return view('sensei.dashboard', compact('header'));
+        $data['title'] = "Dashboard";
+        $data['header'] = "Sensei";
+        return view('sensei.dashboard', $data);
     }
 }

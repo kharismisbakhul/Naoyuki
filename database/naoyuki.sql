@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 19, 2019 at 05:08 AM
+-- Generation Time: Dec 19, 2019 at 06:50 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -132,6 +132,13 @@ CREATE TABLE `murid` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `murid`
+--
+
+INSERT INTO `murid` (`username`, `nama_lengkap`, `email`, `no_hp`, `alamat`, `created_at`, `updated_at`) VALUES
+('Kharis', 'Misbakhul Kharis', 'kharis@gmail.com', '085607872843', 'Jl. Bunga Kumis Kucing No. 21', NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -204,6 +211,15 @@ CREATE TABLE `program_les` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `program_les`
+--
+
+INSERT INTO `program_les` (`id_program_les`, `nama_program_les`, `image`, `jumlah_pertemuan`, `deskripsi`, `cakupan_materi`, `biaya`, `created_at`, `updated_at`) VALUES
+(1, 'Kana', 'image/thumbnail.jpg', '12', '', '', 500000, NULL, NULL),
+(2, 'Basic Grammar', 'image/thumbnail.jpg', '20', '', '', 500000, NULL, NULL),
+(3, 'Intermediate Grammar', 'image/thumbnail.jpg', '30', '', '', 3000000, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -218,6 +234,13 @@ CREATE TABLE `sensei` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sensei`
+--
+
+INSERT INTO `sensei` (`id_sensei`, `username`, `nama_sensei`, `no_hp`, `created_at`, `updated_at`) VALUES
+(1, 'Baskara', 'Abu Hasan Baskara', '088888888', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -324,6 +347,27 @@ CREATE TABLE `user_sub_menu` (
   `ikon` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_menu` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_sub_menu`
+--
+
+INSERT INTO `user_sub_menu` (`id_sub_menu`, `judul`, `url`, `ikon`, `id_menu`) VALUES
+(1, 'Jadwal Les', '/murid/jadwal', 'far fa-fw fa-calendar-alt', 1),
+(2, 'Program Les', '/murid/programLes', 'fas fa-fw fa-clipboard', 1),
+(3, 'Profil', '/murid/profil', 'fas fa-fw fa-user', 1),
+(4, 'Pembelajaran', '/murid/pembelajaran', 'fas fa-fw fa-book-reader', 1),
+(5, 'Scoreboard', '/sensei/scoreboard', 'far fa-calendar-alt', 2),
+(6, 'Profil', '/sensei/profil', 'fas fa-fw fa-user', 2),
+(7, 'Pembelajaran', '/sensei/pembelajaran', 'fas fa-fw fa-book-reader', 2),
+(8, 'Program Les', '/akademik/programLes', 'fas fa-fw fa-clipboard', 3),
+(9, 'Profil', '/akademik/profil', 'fas fa-fw fa-user', 3),
+(10, 'Pembelajaran', '/akademik/pembelajaran', 'fas fa-fw fa-book-reader', 3),
+(11, 'Informasi', '/marketing/informasi', 'fas fa-fw fa-clipboard', 4),
+(12, 'Profil', '/marketing/profil', 'fas fa-fw fa-user', 4),
+(13, 'Validasi', '/marketing/validasi', 'fas fa-fw fa-book-reader', 4),
+(14, 'Profil', '/admin/profil', 'fas fa-fw fa-user', 5),
+(15, 'Validasi', '/marketing/validasi', 'fas fa-fw fa-users', 5);
 
 --
 -- Indexes for dumped tables
@@ -494,13 +538,13 @@ ALTER TABLE `peserta_kelas`
 -- AUTO_INCREMENT for table `program_les`
 --
 ALTER TABLE `program_les`
-  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `sensei`
 --
 ALTER TABLE `sensei`
-  MODIFY `id_sensei` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sensei` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `status_user`
@@ -524,7 +568,7 @@ ALTER TABLE `user_menu`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id_sub_menu` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sub_menu` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

@@ -3,14 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 use App\Auth;
 
-class PagesController extends Controller
+class AuthController extends Controller
 {
+    public function haha()
+    {
+        Auth::hello();
+    }
+
     public function login()
     {
         if (session()->has('username')) {
-            return redirect('/murid');
+            if (session('status_user') == 1) {
+                return redirect('/murid');
+            } else if (session('status_user') == 2) {
+                return redirect('/sensei');
+            } else if (session('status_user') == 3) {
+                return redirect('/akademik');
+            } else if (session('status_user') == 4) {
+                return redirect('/marketing');
+            } else {
+                return redirect('/admin');
+            }
         }
         return view('login');
     }
@@ -36,8 +53,12 @@ class PagesController extends Controller
             $data = $status->toArray();
             session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['nama_status_user']]);
             if (session('status_user') == 1) {
+                $data_murid = DB::table('murid')->where(['username' => session('username')])->get()->first();
+                session(['nama_lengkap' => $data_murid->nama_lengkap]);
                 return redirect('/murid');
             } else if (session('status_user') == 2) {
+                $data_murid = DB::table('sensei')->where(['username' => session('username')])->get()->first();
+                session(['nama_lengkap' => $data_murid->nama_sensei]);
                 return redirect('/sensei');
             } else if (session('status_user') == 3) {
                 return redirect('/akademik');
@@ -55,5 +76,22 @@ class PagesController extends Controller
     {
         session()->flush();
         return redirect('/')->with('statusLogout', 'Logout Sukses');
+    }
+
+    public function profil()
+    {
+        if (session()->has('username')) {
+            if (session('status_user') == 1) {
+                return redirect('/murid/profil');
+            } else if (session('status_user') == 2) {
+                return redirect('/sensei/profil');
+            } else if (session('status_user') == 3) {
+                return redirect('/akademik/profil');
+            } else if (session('status_user') == 4) {
+                return redirect('/marketing/profil');
+            } else {
+                return redirect('/admin/profil');
+            }
+        }
     }
 }

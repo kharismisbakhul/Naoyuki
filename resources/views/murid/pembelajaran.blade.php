@@ -1,0 +1,8 @@
+@extends('layout.layout')
+
+@section('title', 'Pembelajaran Murid')
+
+@section('container')
+
+
+@endsection                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

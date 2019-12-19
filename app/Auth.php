@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Auth extends Model
 {
     protected $table = 'user';
     protected $fillable = ['username', 'password'];
+
+    public static function hello()
+    {
+        echo "HAHAHAHAHA";
+    }
 }

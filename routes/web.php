@@ -11,13 +11,20 @@
 |
 */
 
-Route::get('/', 'PagesController@login');
-Route::get('/landing', 'PagesController@landing');
-Route::post('/auth', 'PagesController@auth');
-Route::get('/logout', 'PagesController@logout');
+Route::get('/', 'AuthController@login');
+Route::get('/landing', 'AuthController@landing');
+Route::get('/profil', 'AuthController@profil');
+Route::get('/hello', 'AuthController@haha');
+Route::post('/auth', 'AuthController@auth');
+Route::get('/logout', 'AuthController@logout');
 
 // Murid
 Route::get('/murid', 'MuridController@index');
+Route::get('/murid/jadwal', 'MuridController@jadwalLes');
+Route::get('/murid/programLes', 'MuridController@programLes');
+Route::get('/murid/profil', 'MuridController@profil');
+Route::get('/murid/pembelajaran', 'MuridController@pembelajaran');
+
 
 // Sensei
 Route::get('/sensei', 'SenseiController@index');
@@ -44,8 +51,6 @@ Route::get('/admin', 'AdminController@index');
 // Route::get('/students/{student}/edit', 'StudentsController@edit');
 // Route::patch('/students/{student}', 'StudentsController@update');
 
-Route::resource('students', 'StudentsController');
+// Route::resource('students', 'StudentsController');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');

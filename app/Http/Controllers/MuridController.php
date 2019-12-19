@@ -6,120 +6,64 @@ use Illuminate\Http\Request;
 
 class MuridController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    function tanggal($tanggal)
+    {
+        $bulan = array(
+            1 =>   'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        );
+        $pecahkan = explode('-', $tanggal);
+
+        // variabel pecahkan 0 = tanggal
+        // variabel pecahkan 1 = bulan
+        // variabel pecahkan 2 = tahun
+
+        return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
+    }
+
     public function index()
     {
-
-        $header = "Murid";
-        return view('murid.dashboard', compact('header'));
+        $data['title'] = "Dashboard";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.dashboard', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function jadwalLes()
     {
-        //
-        // return view('student.create');
+        $data['title'] = "Jadwal Les";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.jadwal_les', $data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    public function store(Request $request)
+    public function programLes()
     {
-        // $student = new Student;
-
-        // $student->nama = $request->nama;
-        // $student->nrp = $request->nrp;
-        // $student->email = $request->email;
-        // $student->jurusan = $request->jurusan;
-
-        // $student->save();
-
-        // Student::create([
-        //     'nama' => $request->nama,
-        //     'nrp' => $request->nrp,
-        //     'email' => $request->email,
-        //     'jurusan' => $request->jurusan
-        // ]);
-
-
+        $data['title'] = "Program Les";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.program_les', $data);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
+    public function profil()
     {
-        //
-
+        $data['title'] = "Profil";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.profil', $data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function edit()
+    public function pembelajaran()
     {
-        //
-        // return view('student.edit', compact('student'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        //
-        // $request->validate([
-        //     'nama' => 'required',
-        //     'nrp' => 'required|size:5',
-        // ], [
-        //     'nama.required' => 'Nama tidak boleh kosong',
-        //     'nrp.required'  => 'NRP tidak boleh kosong',
-        //     'nrp.size' => 'NRP harus lebih dari 5'
-        // ]);
-
-        // Student::where('id', $student->id)
-        //     ->update([
-        //         'nama' => $request->nama,
-        //         'nrp' => $request->nrp,
-        //         'email' => $request->email,
-        //         'jurusan' => $request->jurusan
-        //     ]);
-        // return redirect('/students')->with('status', 'Data berhasil dihapus');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Student  $student
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy()
-    {
-        //
-        // Student::destroy($student->id);
-        // return redirect('/students')->with('status', 'Data berhasil dihapus');
+        $data['title'] = "Pembelajaran";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.pembelajaran', $data);
     }
 }

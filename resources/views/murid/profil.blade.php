@@ -1,0 +1,7 @@
+@extends('layout.layout')
+
+@section('title', 'Profil Murid')
+
+@section('container')
+
+@endsection                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

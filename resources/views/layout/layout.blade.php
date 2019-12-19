@@ -17,6 +17,8 @@
 
   <!-- Custom styles for this template-->
   <link href="{{URL::asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+  <link href="{{URL::asset('css/all.css')}}" rel="stylesheet">
+  <link rel="icon" href="{{URL::asset('image/icon.png')}}">
 
 </head>
 
@@ -26,7 +28,7 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gray-900 sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('/')}}">
@@ -37,28 +39,54 @@
       </a>
 
       <!-- Divider -->
+      <hr class="sidebar-divider mb-0">
+      <li class="nav-item mt-0">
+        <a class="nav-link" href="{{url('/')}}">
+          <img src="{{URL::asset('image/icon.png')}}" class="img-profile rounded-circle border border-danger mr-2"></img>
+          <span>{{ session('nama_lengkap') }}</span>
+        </a>
+      </li>
       <hr class="sidebar-divider">
 
       <!-- Heading -->
-      <div class="sidebar-heading">
-        {{session('nama_status_user')}}
+      <div class="sidebar-heading mt-2">
+        {{ session('nama_status_user') }}
       </div>
 
-      <!-- Nav Item - Charts -->
+      <!-- Nav Item - Dashboard -->
+      @if($title == "Dashboard")
+      <li class="nav-item active">
+      @else
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
+      @endif
+      <a class="nav-link" href="{{url('/')}}">
+          <i class="fas fa-fw fa-home"></i>
+          <span>Dashboard</span></a>
       </li>
 
-      <!-- Nav Item - Tables -->
-      <li class="nav-item">
-        <a class="nav-link" href="tables.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
-      </li>
+      <?php 
+      $sub_menu = DB::table('user_sub_menu')->where(['id_menu' => session('status_user')])->get()->toArray();
+      ?>
+
+      @foreach ($sub_menu as $sm)
+        @if($title == $sm->judul)
+        <li class="nav-item active">
+        @else
+        <li class="nav-item">
+        @endif
+        <a class="nav-link" href="{{ url($sm->url) }}">
+          <i class="{{ $sm->ikon }}"></i>
+          <span>{{ $sm->judul }}</span></a>
+        </li>
+      @endforeach
 
       <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block mb-0">
+      <li class="nav-item">
+        <a class="nav-link logout" href="#">
+          <i class="fas fa-fw fa-sign-out-alt"></i>
+          <span>Logout</span></a>
+      </li>
       <hr class="sidebar-divider d-none d-md-block">
 
       <!-- Sidebar Toggler (Sidebar) -->
@@ -116,30 +144,8 @@
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  Alerts Center
+                  Notifikasi
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-warning">
@@ -162,16 +168,16 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session('username') }}</span>
                 <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ url('/profil') }}">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
+                  Profil
                 </a>
-                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item logout" href="#">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -183,8 +189,23 @@
         </nav>
         <!-- End of Topbar -->
 
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+        
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+          <h1 class="h3 mb-0 text-gray-800">@yield('title')</h1>
+          <div class="tanggal">
+            <div class="text-md mb-0 font-weight-bold text-gray-400">
+              <span><i class="fas fa-calendar-alt text-gray-400 mr-2"></i></span> {{ $tanggal }}
+            </div>
+          </div>
+        </div>
+
         @yield('container')
 
+        </div>
+        <!-- /.container-fluid -->
 
       </div>
       <!-- End of Main Content -->
@@ -210,25 +231,6 @@
     <i class="fas fa-angle-up"></i>
   </a>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="{{url('/logout')}}">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- Bootstrap core JavaScript-->
   <script src="{{URL::asset('vendor/jquery/jquery.min.js')}}"></script>
   <script src="{{URL::asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -238,13 +240,35 @@
 
   <!-- Custom scripts for all pages-->
   <script src="{{URL::asset('js/sb-admin-2.min.js')}}"></script>
-
+  
+  <!-- Custom scripts for sweet alert-->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="{{URL::asset('js/sweet-alert.js')}}"></script>
+  
   <!-- Page level plugins -->
-  <script src="{{URL::asset('vendor/chart.js/Chart.min.js')}}"></script>
-
+  {{-- <script src="{{URL::asset('vendor/chart.js/Chart.min.js')}}"></script> --}}
+  
   <!-- Page level custom scripts -->
-  <script src="{{URL::asset('js/demo/chart-area-demo.js')}}"></script>
-  <script src="{{URL::asset('js/demo/chart-pie-demo.js')}}"></script>
+  {{-- <script src="{{URL::asset('js/demo/chart-area-demo.js')}}"></script> --}}
+  {{-- <script src="{{URL::asset('js/demo/chart-pie-demo.js')}}"></script> --}}
+  
+  <script src="{{URL::asset('js/date.js')}}"></script>
+
+  <!-- Full Calendar -->
+  <link href='{{ URL::asset('/packages/core/main.css') }}' rel='stylesheet' />
+  <link href='{{ URL::asset('/packages/daygrid/main.css') }}' rel='stylesheet' />
+  <link href='{{ URL::asset('/packages/timegrid/main.css') }}' rel='stylesheet' />
+  <link href='{{ URL::asset('/packages/list/main.css') }}' rel='stylesheet' />
+  <link href='{{ URL::asset('/packages/bootstrap/main.css') }}' rel='stylesheet' />
+  <script src='{{ URL::asset('/vendor/rrule.js') }}'></script>
+  <script src='{{ URL::asset('/packages/core/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/interaction/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/daygrid/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/timegrid/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/list/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/rrule/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/bootstrap/main.js') }}'></script>
+
 
 </body>
 
