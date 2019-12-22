@@ -13,8 +13,7 @@
 
   <!-- Custom fonts for this template-->
   <link href="{{URL::asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-
+  
   <!-- Custom styles for this template-->
   <link href="{{URL::asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
   <link href="{{URL::asset('css/all.css')}}" rel="stylesheet">
@@ -42,7 +41,7 @@
       <hr class="sidebar-divider mb-0">
       <li class="nav-item mt-0">
         <a class="nav-link" href="{{url('/')}}">
-          <img src="{{URL::asset('image/icon.png')}}" class="img-profile rounded-circle border border-danger mr-2"></img>
+          <img src="{{ URL::asset(session('image_profil')) }}" class="img-profile rounded-circle mr-2"></img>
           <span>{{ session('nama_lengkap') }}</span>
         </a>
       </li>
@@ -169,7 +168,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session('username') }}</span>
-                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                <img class="img-profile rounded-circle" src="{{ URL::asset(session('image_profil')) }}">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -269,6 +268,19 @@
   <script src='{{ URL::asset('/packages/rrule/main.js') }}'></script>
   <script src='{{ URL::asset('/packages/bootstrap/main.js') }}'></script>
 
+  <!-- JS Libraies -->
+<script src="{{ URL::asset('/modules/datatables/datatables.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/datatables/dataTables.select.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/select/select2.full.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/datepicker/daterangepicker.js') }}"></script>
+<script src="{{ URL::asset('/modules/jquery-ui/jquery-ui.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/jquery-ui/jquery.mask.js') }}"></script>
+<script src="{{ URL::asset('/modules/select/jquery.selectric.min.js') }}"></script>
+<script src="{{ URL::asset('/modules/ionicons/modules-ion-icons.js') }}"></script>
+
+<!-- Page Specific JS File -->
+<script src="{{ URL::asset('js/murid.js') }}"></script>
 
 </body>
 

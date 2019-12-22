@@ -6,3 +6,11 @@
         white;
     height: 35px;
 }
+
+.dataTables_filter {
+    float: right;
+}
+
+.pagination {
+    float: right;
+}

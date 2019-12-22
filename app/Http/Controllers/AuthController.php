@@ -9,11 +9,6 @@ use App\Auth;
 
 class AuthController extends Controller
 {
-    public function haha()
-    {
-        Auth::hello();
-    }
-
     public function login()
     {
         if (session()->has('username')) {
@@ -51,7 +46,7 @@ class AuthController extends Controller
 
         if ($status != []) {
             $data = $status->toArray();
-            session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['nama_status_user']]);
+            session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['nama_status_user'], 'image_profil' => $data['image']]);
             if (session('status_user') == 1) {
                 $data_murid = DB::table('murid')->where(['username' => session('username')])->get()->first();
                 session(['nama_lengkap' => $data_murid->nama_lengkap]);
@@ -93,5 +88,10 @@ class AuthController extends Controller
                 return redirect('/admin/profil');
             }
         }
+    }
+
+    public function getProgramLes($id)
+    {
+        Auth::getProgramLes($id);
     }
 }

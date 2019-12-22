@@ -83,7 +83,7 @@
 
     </div>
     </div>
-    <p class="text-center" style="margin-top: -30px; font-size: .7rem; color: white;">Copyright © <?= date('Y') ?> Naoyuki Academic Center. All Rights Reserved. </p>
+    <p class="text-center" style="margin-top: -30px; font-size: .7rem;">Copyright © <?= date('Y') ?> Naoyuki Academic Center. All Rights Reserved. </p>
 
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

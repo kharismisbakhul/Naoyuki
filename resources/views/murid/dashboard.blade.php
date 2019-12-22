@@ -32,7 +32,26 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
-            
+
+            {{-- Start Program --}}
+            @foreach ($program_berjalan as $pb)
+            @if($pb->status_pendaftaran == 1)
+            <div class="card mb-3 col-lg">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="{{ URL::asset($pb->image) }}" class="card-img" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title mb-5">{{$pb->nama_program_les}}</h5>
+                    <a href="#" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            @endif
+            @endforeach
+            {{-- End Program --}}
           </div>
         </div>
       </div>
@@ -48,13 +67,19 @@
             <table class="table table-striped table-hover text-left text-nowrap " id="dataTable" width="100%" cellspacing="0">
               <thead style="background-color: #2980b9;color:#ecf0f1 ">
                 <tr>
-                  <th>#</th>
-                  <th>Nama Mahasiswa</th>
-                  <th>Program Studi</th>
-                  <th>Keterangan</th>
+                  <th>No</th>
+                  <th>Nama Kelas</th>
+                  <th>Program</th>
+                  <th>Pertemuan</th>
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Sakura</td>
+                  <td>Kana</td>
+                  <td>10 / 20</td>
+                </tr>
               </tbody>
             </table>
           </div>

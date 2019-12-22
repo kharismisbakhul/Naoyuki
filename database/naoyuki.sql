@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 19, 2019 at 06:50 PM
+-- Generation Time: Dec 22, 2019 at 03:57 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -127,6 +127,7 @@ CREATE TABLE `murid` (
   `nama_lengkap` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `no_hp` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `asal_sekolah` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -136,8 +137,8 @@ CREATE TABLE `murid` (
 -- Dumping data for table `murid`
 --
 
-INSERT INTO `murid` (`username`, `nama_lengkap`, `email`, `no_hp`, `alamat`, `created_at`, `updated_at`) VALUES
-('Kharis', 'Misbakhul Kharis', 'kharis@gmail.com', '085607872843', 'Jl. Bunga Kumis Kucing No. 21', NULL, NULL);
+INSERT INTO `murid` (`username`, `nama_lengkap`, `email`, `no_hp`, `asal_sekolah`, `alamat`, `created_at`, `updated_at`) VALUES
+('Kharis', 'Misbakhul Kharis', 'kharis@gmail.com', '085607872843', 'SMAN 2 Malang', 'Jl. Bunga Kumis Kucing No. 21', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -156,6 +157,31 @@ CREATE TABLE `notifikasi` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pendaftaran`
+--
+
+CREATE TABLE `pendaftaran` (
+  `id_pendaftaran` int(11) NOT NULL,
+  `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_program_les` int(10) UNSIGNED NOT NULL,
+  `status_pendaftaran` int(11) NOT NULL,
+  `bukti_pendaftaran` varchar(255) DEFAULT NULL,
+  `tanggal_pendaftaran` date NOT NULL DEFAULT current_timestamp(),
+  `waktu_pendaftaran` time NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `pendaftaran`
+--
+
+INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
+(4, 'Kharis', 1, 1, '', '2019-12-22', '20:03:11'),
+(5, 'Kharis', 2, 2, '', '2019-12-22', '20:03:11'),
+(8, 'Kharis', 3, 0, NULL, '2019-12-22', '20:03:11');
 
 -- --------------------------------------------------------
 
@@ -203,7 +229,7 @@ CREATE TABLE `program_les` (
   `id_program_les` int(10) UNSIGNED NOT NULL,
   `nama_program_les` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `jumlah_pertemuan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `jumlah_pertemuan` int(10) NOT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cakupan_materi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `biaya` double NOT NULL,
@@ -216,9 +242,13 @@ CREATE TABLE `program_les` (
 --
 
 INSERT INTO `program_les` (`id_program_les`, `nama_program_les`, `image`, `jumlah_pertemuan`, `deskripsi`, `cakupan_materi`, `biaya`, `created_at`, `updated_at`) VALUES
-(1, 'Kana', 'image/thumbnail.jpg', '12', '', '', 500000, NULL, NULL),
-(2, 'Basic Grammar', 'image/thumbnail.jpg', '20', '', '', 500000, NULL, NULL),
-(3, 'Intermediate Grammar', 'image/thumbnail.jpg', '30', '', '', 3000000, NULL, NULL);
+(1, 'Kana', 'image/thumbnail.jpg', 4, 'Kana adalah tingkat 1', 'Hiragana, Katakana', 500000, NULL, NULL),
+(2, 'Beginner Grammar', 'image/thumbnail.jpg', 20, 'Beginner Grammar adalah tingkat 2', 'Conversation', 500000, NULL, NULL),
+(3, 'Beginner Kanji', 'image/thumbnail.jpg', 16, 'Beginner Kanji adalah tingkat 3', 'Kanji N5', 3000000, NULL, NULL),
+(4, 'Basic Grammar', 'image/thumbnail.jpg', 24, 'Basic Grammar adalah tingkat 4', 'Conversation Part 2', 5000000, NULL, NULL),
+(5, 'Basic Kanji', 'image/thumbnail.jpg', 20, 'Basic Kanji adalah tingkat 5', 'Kanji N4', 500000, NULL, NULL),
+(6, 'Intermediate Grammar', 'image/thumbnail.jpg', 28, 'Intermediate Grammar adalah tingkat 6', 'Conversation Part 3', 3000000, NULL, NULL),
+(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -273,6 +303,7 @@ INSERT INTO `status_user` (`id_status_user`, `nama_status_user`) VALUES
 CREATE TABLE `user` (
   `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'image/default.jpg',
   `id_status_user` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -282,12 +313,12 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`username`, `password`, `id_status_user`, `created_at`, `updated_at`) VALUES
-('Admin', '123', 5, NULL, NULL),
-('Baskara', '123', 2, NULL, NULL),
-('Bunga', '123', 4, NULL, NULL),
-('Deni', '123', 3, NULL, NULL),
-('Kharis', '123', 1, NULL, NULL);
+INSERT INTO `user` (`username`, `password`, `image`, `id_status_user`, `created_at`, `updated_at`) VALUES
+('Admin', '123', 'image/profil/default.png', 5, NULL, NULL),
+('Baskara', '123', 'image/profil/default.png', 2, NULL, NULL),
+('Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
+('Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
+('Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -422,6 +453,14 @@ ALTER TABLE `notifikasi`
   ADD KEY `notifikasi_username_foreign` (`username`);
 
 --
+-- Indexes for table `pendaftaran`
+--
+ALTER TABLE `pendaftaran`
+  ADD PRIMARY KEY (`id_pendaftaran`),
+  ADD KEY `id_program_les` (`id_program_les`),
+  ADD KEY `username` (`username`);
+
+--
 -- Indexes for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
@@ -523,6 +562,12 @@ ALTER TABLE `notifikasi`
   MODIFY `id_notifikasi` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `pendaftaran`
+--
+ALTER TABLE `pendaftaran`
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
@@ -538,7 +583,7 @@ ALTER TABLE `peserta_kelas`
 -- AUTO_INCREMENT for table `program_les`
 --
 ALTER TABLE `program_les`
-  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `sensei`
@@ -599,6 +644,13 @@ ALTER TABLE `kelas`
 ALTER TABLE `notifikasi`
   ADD CONSTRAINT `notifikasi_id_kategori_notifikasi_foreign` FOREIGN KEY (`id_kategori_notifikasi`) REFERENCES `kategori_notifikasi` (`id_kategori_notifikasi`),
   ADD CONSTRAINT `notifikasi_username_foreign` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
+
+--
+-- Constraints for table `pendaftaran`
+--
+ALTER TABLE `pendaftaran`
+  ADD CONSTRAINT `pendaftaran_ibfk_1` FOREIGN KEY (`id_program_les`) REFERENCES `program_les` (`id_program_les`),
+  ADD CONSTRAINT `pendaftaran_ibfk_2` FOREIGN KEY (`username`) REFERENCES `murid` (`username`);
 
 --
 -- Constraints for table `peserta_kelas`

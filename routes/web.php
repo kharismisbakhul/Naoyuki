@@ -14,15 +14,20 @@
 Route::get('/', 'AuthController@login');
 Route::get('/landing', 'AuthController@landing');
 Route::get('/profil', 'AuthController@profil');
-Route::get('/hello', 'AuthController@haha');
 Route::post('/auth', 'AuthController@auth');
 Route::get('/logout', 'AuthController@logout');
+Route::get('/getProgram/{id}', 'AuthController@getProgramLes');
 
 // Murid
 Route::get('/murid', 'MuridController@index');
 Route::get('/murid/jadwal', 'MuridController@jadwalLes');
 Route::get('/murid/programLes', 'MuridController@programLes');
+Route::get('/murid/daftarProgram', 'MuridController@daftarProgram');
+Route::post('/murid/daftarProgram', 'MuridController@daftar');
+Route::get('/murid/pembayaran/{id}', 'MuridController@pembayaran');
+Route::post('/murid/bayar/{id}', 'MuridController@bayar');
 Route::get('/murid/profil', 'MuridController@profil');
+Route::post('/murid/editProfil', 'MuridController@editProfil');
 Route::get('/murid/pembelajaran', 'MuridController@pembelajaran');
 
 
