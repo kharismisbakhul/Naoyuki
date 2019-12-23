@@ -25,6 +25,7 @@ Route::get('/murid/programLes', 'MuridController@programLes');
 Route::get('/murid/daftarProgram', 'MuridController@daftarProgram');
 Route::post('/murid/daftarProgram', 'MuridController@daftar');
 Route::get('/murid/pembayaran/{id}', 'MuridController@pembayaran');
+Route::get('/murid/getProgramTerdaftar/{id}', 'MuridController@getProgramTerdaftar');
 Route::post('/murid/bayar/{id}', 'MuridController@bayar');
 Route::get('/murid/profil', 'MuridController@profil');
 Route::post('/murid/editProfil', 'MuridController@editProfil');
@@ -36,6 +37,12 @@ Route::get('/sensei', 'SenseiController@index');
 
 // Akademik
 Route::get('/akademik', 'AkademikController@index');
+Route::get('/akademik/programLes', 'AkademikController@programLes');
+Route::get('/akademik/detailProgramLes/{id}', 'AkademikController@detailProgramLes');
+Route::get('/akademik/tambahProgram', 'AkademikController@tambahProgram');
+Route::post('/akademik/tambahProgram', 'AkademikController@tambahProgramLes');
+Route::get('/akademik/tambahKelas/{id}', 'AkademikController@tambahKelas');
+Route::post('/akademik/tambahKelas', 'AkademikController@tambahKelasLes');
 
 // Marketing
 Route::get('/marketing', 'MarketingController@index');

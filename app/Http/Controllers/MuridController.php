@@ -63,6 +63,11 @@ class MuridController extends Controller
         return view('murid.program_les', $data);
     }
 
+    public function getProgramTerdaftar($id)
+    {
+        Murid::getProgramTerdaftar($id);
+    }
+
     public function daftarProgram()
     {
         $data['title'] = "Program Les";
@@ -73,18 +78,12 @@ class MuridController extends Controller
 
     public function daftar(Request $request)
     {
-
-        // $request->validate([
-        //     'nama' => 'required',
-        //     'nrp' => 'required|size:5',
-        // ], [
-        //     'nama.required' => 'Nama tidak boleh kosong',
-        //     'nrp.required'  => 'NRP tidak boleh kosong',
-        //     'nrp.size' => 'NRP harus lebih dari 5'
-        // ]);
-
         $status = Murid::daftar($request->program);
-        return redirect('/murid/pembayaran/' . $status['id_pendaftaran'])->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
+        if ($status == true) {
+            return redirect('/murid/pembayaran/' . $status['id_pendaftaran'])->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
+        } else {
+            return redirect('/murid/programLes')->with('status', 'Pendaftaran gagal');
+        }
     }
 
     public function pembayaran($id)
@@ -102,33 +101,21 @@ class MuridController extends Controller
     public function bayar(Request $request, $id)
     {
         // echo json_encode($_FILES['buktiDaftar']['name']);
+        // echo json_encode($id);
         // die;
         $file = $request->file('buktiDaftar');
 
-        echo $file->getClientOriginalName() . '<br>';
-        echo $file->getClientOriginalExtension() . '<br>';
-        echo $file->getSize() . '<br>';
-        echo $file->getMimeType() . '<br>';
+        // echo $file->getClientOriginalName() . '<br>';
+        // echo $file->getClientOriginalExtension() . '<br>';
+        // echo $file->getSize() . '<br>';
+        // echo $file->getMimeType() . '<br>';
 
         $tujuan_upload = public_path('bukti_pembayaran/');
         $file->move($tujuan_upload, $file->getClientOriginalName());
-        die;
+        $nama_file = $file->getClientOriginalName();
 
-        // DB::update('update murid set email = ?, no_hp = ? where username = ?', [$request->email, $request->no_telp, $request->username]);
-        // if ($_FILES['buktiDaftar']['name']) {
-        //     $dataUjian['bukti_ujian'] = $_FILES['buktiDaftar']['name'];
-        //     $config['allowed_types'] = 'jpg|png|pdf';
-        //     $config['max_size']     = '2048'; //kb
-        //     $config['upload_path'] = './assets/ujian/';
-        //     $config['file_name'] = time() . '_' . $data['user_login']['nim'] . '_' . $dataUjian['bukti_ujian'];
-        //     $this->load->library('upload', $config);
-        //     if ($this->upload->do_upload('buktiDaftar')) {
-        //         $dataUjian['bukti_ujian'] = $this->upload->data('file_name');
-        //     } else {
-        //         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert"> Data ujian gagal di tambah ! </div>');
-        //         echo $this->upload->display_errors();
-        //     }
-        // }
+        Murid::bayar($id, $nama_file);
+        return redirect('/murid/programLes')->with('status', 'Pembayaran berhasil dilakukan, silahkan menunggu konfirmasi sekitar 1 hari (Waktu Kerja)');
     }
 
     public function profil()

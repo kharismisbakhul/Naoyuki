@@ -9,7 +9,7 @@
     <div class="alert alert-success text-center mb-2">{{ session('status') }}</div>
     @endif
   </div>
-  <div class="col-lg-6 col-md-12 mb-4">
+  <div class="col-lg-12 col-md-12 mb-4">
     <div class="card shadow mb-4">
       <div class="card-header py-3 bg-danger">
         <h6 class="m-0 font-weight-bold text-capitalize text-white">Daftar Semua Program Les</h6>
@@ -34,7 +34,7 @@
                     <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100px; height:100px;"></td>
                     <td>{{ $pl->nama_program_les }}</td>
                     <td>{{ $pl->jumlah_pertemuan }} Kali</td>
-                    <td><button class="btn btn-primary detailProgram" data-toggle="modal" data-target=".modalDetailProgramLes" data-id="{{ $pl->id_program_les }}">Detail</button></td>
+                    <td><a href="{{ url('/akademik/detailProgramLes/'.$pl->id_program_les) }}" class="btn btn-primary" >Detail</a></td>
                   </tr>
                   @endforeach 
                 </tbody>
@@ -76,56 +76,10 @@
     </div>
   </div>
 
-  <div class="col-lg-6 col-md-12 mb-4">
-    <div class="card shadow mb-4">
-      <div class="card-header py-3 bg-danger">
-        <h6 class="m-0 font-weight-bold text-capitalize text-white">Program Les Terdaftar</h6>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="table-responsive">
-            <table class="table table-striped text-wrap" id="table-program-berjalan">
-                <thead>
-                    <tr class="text-center">
-                        <th>No</th>
-                        <th>Foto Program</th>
-                        <th>Nama Program</th>
-                        <th>Jumlah Pertemuan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  @foreach ($program_berjalan as $pb) 
-                  <tr class="text-center">
-                    <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100px; height:100px;"></td>
-                    <td>{{ $pb->nama_program_les }}</td>
-                    <td>{{ $pb->jumlah_pertemuan }} Kali</td>
-                    <td>
-                      @if($pb->status_pendaftaran == 0)
-                      <p class="text-danger">Belum Valid</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Bayar</a>
-                      @elseif($pb->status_pendaftaran == 2)
-                      <p class="text-warning">Sedang diproses</p>
-                      @else
-                      <p class="text-success">Valid</p>
-                      @endif
-                    </td>
-                    <td><button class="btn btn-primary detailProgramTerdaftar" data-toggle="modal" data-target=".modalDetailProgramTerdaftar" data-id="{{ $pb->id_pendaftaran }}">Detail</button></td>
-                  </tr>
-                  @endforeach 
-                </tbody>
-            </table>
-        </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="col-lg-12 col-md-12 mb-4">
     <div class="row">
       <div class="col-lg">
-          <a href="{{ url('/murid/daftarProgram') }}" class="btn btn-danger p-5 float-right"><i class="fas fa-plus"></i><span>Daftar Program</span></a>
+          <a href="{{ url('/akademik/tambahProgram') }}" class="btn btn-danger p-5 float-right"><i class="fas fa-plus"></i><span>Tambah Program</span></a>
       </div>
     </div>
   </div>

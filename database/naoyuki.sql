@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 22, 2019 at 03:57 PM
+-- Generation Time: Dec 23, 2019 at 03:29 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -81,6 +81,13 @@ CREATE TABLE `kelas` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `kelas`
+--
+
+INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `id_program_les`, `created_at`, `updated_at`) VALUES
+(1, 'ABC', 1, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -180,8 +187,8 @@ CREATE TABLE `pendaftaran` (
 
 INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
 (4, 'Kharis', 1, 1, '', '2019-12-22', '20:03:11'),
-(5, 'Kharis', 2, 2, '', '2019-12-22', '20:03:11'),
-(8, 'Kharis', 3, 0, NULL, '2019-12-22', '20:03:11');
+(5, 'Kharis', 2, 2, 'icon.png', '2019-12-22', '20:03:11'),
+(8, 'Kharis', 3, 0, 'icon1.png', '2019-12-22', '20:03:11');
 
 -- --------------------------------------------------------
 
@@ -219,6 +226,13 @@ CREATE TABLE `peserta_kelas` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `peserta_kelas`
+--
+
+INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `status_pendaftaran`, `nilai_evaluasi`, `status_les`, `created_at`, `updated_at`) VALUES
+(1, 'Kharis', 1, 1, 0, 0, NULL, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -228,7 +242,7 @@ CREATE TABLE `peserta_kelas` (
 CREATE TABLE `program_les` (
   `id_program_les` int(10) UNSIGNED NOT NULL,
   `nama_program_les` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'image/thumbnail.jpg',
   `jumlah_pertemuan` int(10) NOT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cakupan_materi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -248,7 +262,8 @@ INSERT INTO `program_les` (`id_program_les`, `nama_program_les`, `image`, `jumla
 (4, 'Basic Grammar', 'image/thumbnail.jpg', 24, 'Basic Grammar adalah tingkat 4', 'Conversation Part 2', 5000000, NULL, NULL),
 (5, 'Basic Kanji', 'image/thumbnail.jpg', 20, 'Basic Kanji adalah tingkat 5', 'Kanji N4', 500000, NULL, NULL),
 (6, 'Intermediate Grammar', 'image/thumbnail.jpg', 28, 'Intermediate Grammar adalah tingkat 6', 'Conversation Part 3', 3000000, NULL, NULL),
-(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000, NULL, NULL);
+(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000, NULL, NULL),
+(8, 'AAA', 'image/thumbnail.jpg', 12, 'AAA', 'AAA', 2500000, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -547,7 +562,7 @@ ALTER TABLE `kategori_notifikasi`
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -577,13 +592,13 @@ ALTER TABLE `pertemuan`
 -- AUTO_INCREMENT for table `peserta_kelas`
 --
 ALTER TABLE `peserta_kelas`
-  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `program_les`
 --
 ALTER TABLE `program_les`
-  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_program_les` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `sensei`
