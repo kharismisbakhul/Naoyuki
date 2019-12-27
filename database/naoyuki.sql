@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 23, 2019 at 03:29 AM
+-- Generation Time: Dec 27, 2019 at 10:31 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -87,7 +87,8 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `id_program_les`, `created_at`, `updated_at`) VALUES
-(1, 'ABC', 1, 2, NULL, NULL);
+(1, 'ABC', 1, 2, NULL, NULL),
+(2, 'ABC', 1, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -188,7 +189,8 @@ CREATE TABLE `pendaftaran` (
 INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
 (4, 'Kharis', 1, 1, '', '2019-12-22', '20:03:11'),
 (5, 'Kharis', 2, 2, 'icon.png', '2019-12-22', '20:03:11'),
-(8, 'Kharis', 3, 0, 'icon1.png', '2019-12-22', '20:03:11');
+(8, 'Kharis', 3, 2, 'a.png', '2019-12-22', '20:03:11'),
+(11, 'Kharis', 5, 0, NULL, '2019-12-27', '13:34:18');
 
 -- --------------------------------------------------------
 
@@ -231,7 +233,8 @@ CREATE TABLE `peserta_kelas` (
 --
 
 INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `status_pendaftaran`, `nilai_evaluasi`, `status_les`, `created_at`, `updated_at`) VALUES
-(1, 'Kharis', 1, 1, 0, 0, NULL, NULL);
+(1, 'Kharis', 1, 1, 0, 0, NULL, NULL),
+(2, 'Kharis', 2, 1, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -262,8 +265,7 @@ INSERT INTO `program_les` (`id_program_les`, `nama_program_les`, `image`, `jumla
 (4, 'Basic Grammar', 'image/thumbnail.jpg', 24, 'Basic Grammar adalah tingkat 4', 'Conversation Part 2', 5000000, NULL, NULL),
 (5, 'Basic Kanji', 'image/thumbnail.jpg', 20, 'Basic Kanji adalah tingkat 5', 'Kanji N4', 500000, NULL, NULL),
 (6, 'Intermediate Grammar', 'image/thumbnail.jpg', 28, 'Intermediate Grammar adalah tingkat 6', 'Conversation Part 3', 3000000, NULL, NULL),
-(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000, NULL, NULL),
-(8, 'AAA', 'image/thumbnail.jpg', 12, 'AAA', 'AAA', 2500000, NULL, NULL);
+(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -306,7 +308,7 @@ INSERT INTO `status_user` (`id_status_user`, `nama_status_user`) VALUES
 (1, 'Murid'),
 (2, 'Sensei'),
 (3, 'Akademik'),
-(4, 'Marketing'),
+(4, 'Finance'),
 (5, 'Admin');
 
 -- --------------------------------------------------------
@@ -562,7 +564,7 @@ ALTER TABLE `kategori_notifikasi`
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -580,7 +582,7 @@ ALTER TABLE `notifikasi`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
@@ -592,7 +594,7 @@ ALTER TABLE `pertemuan`
 -- AUTO_INCREMENT for table `peserta_kelas`
 --
 ALTER TABLE `peserta_kelas`
-  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `program_les`

@@ -52,6 +52,13 @@ class MuridController extends Controller
         return view('murid.jadwal_les', $data);
     }
 
+    public function jadwalKosong()
+    {
+        $data['title'] = "Jadwal Les";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.jadwal_kosong', $data);
+    }
+
     public function programLes()
     {
         $data['title'] = "Program Les";
@@ -131,6 +138,13 @@ class MuridController extends Controller
         $data['title'] = "Pembelajaran";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         return view('murid.pembelajaran', $data);
+    }
+
+    public function detailPembelajaran($id)
+    {
+        $data['title'] = "Pembelajaran";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('murid.detail_pembelajaran', $data);
     }
 
     public function editProfil(Request $request)

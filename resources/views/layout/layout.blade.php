@@ -42,7 +42,11 @@
       <li class="nav-item mt-0">
         <a class="nav-link" href="{{url('/')}}">
           <img src="{{ URL::asset(session('image_profil')) }}" class="img-profile rounded-circle mr-2"></img>
+          @if(session('status_user') == 1 && session('status_user') == 2)
           <span>{{ session('nama_lengkap') }}</span>
+          @else
+          <span>{{ session('username') }}</span>
+          @endif
         </a>
       </li>
       <hr class="sidebar-divider">

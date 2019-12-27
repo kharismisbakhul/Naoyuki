@@ -30,7 +30,7 @@
         <div class="col mr-2">
           <div class="text-xs font-weight-bold text-danger mb-1">
             Jumlah Program Les</div>
-          <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"><span></span> Mahasiswa
+          <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"><span></span>{{ $program_les }} Program Les
           </div>
         </div>
         <div class="col-auto">
@@ -48,7 +48,7 @@
         <div class="col mr-2">
           <div class="text-xs font-weight-bold text-danger mb-1">
             Jumlah Kelas</div>
-          <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"><span></span> Kelas
+          <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"><span></span> {{ $kelas }} Kelas
           </div>
         </div>
         <div class="col-auto">

@@ -15,9 +15,9 @@
 
             <div class="row">
               <div class="col-lg-12">
-                <button class="float-right btn btn-primary">
+                <a href="{{ url('/murid/jadwalKosong') }}" class="float-right btn btn-primary">
                   Jadwal kosong
-                </button>
+                </a>
               </div>
             </div>
           

@@ -31,7 +31,7 @@
               <div class="card-body">
                 <h3 class="card-title">'Sakura'</h3>
                 <h3 class="card-title mb-5">Basic Grammar</h3>
-                <a href="#" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
+                <a href="{{ url('/murid/pembelajaran/1') }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
               </div>
             </div>
           </div>

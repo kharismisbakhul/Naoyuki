@@ -44,7 +44,7 @@
                 <div class="col-md-8">
                   <div class="card-body">
                     <h5 class="card-title mb-5">{{$pb->nama_program_les}}</h5>
-                    <a href="#" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
+                    <a href="{{ url('/murid/pembelajaran/1') }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
                   </div>
                 </div>
               </div>
