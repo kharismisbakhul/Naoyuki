@@ -50,4 +50,15 @@ class MarketingController extends Controller
             ->get();
         return view('marketing.validasi', $data);
     }
+
+    public function validasi_pendaftaran(Request $request)
+    {
+        $status = DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [intval($request->validasi), $request->id_validasi]);
+
+        if ($status == true) {
+            return redirect('/marketing/validasi')->with('status', 'Validasi berhasil');
+        } else {
+            return redirect('/marketing/validasi')->with('status', 'Validasi gagal');
+        }
+    }
 }

@@ -74,12 +74,14 @@
                 </tr>
               </thead>
               <tbody>
+                @foreach ($kelas_berjalan as $kb)
                 <tr>
-                  <td>1</td>
-                  <td>Sakura</td>
-                  <td>Kana</td>
-                  <td>10 / 20</td>
+                  <td>{{$loop->iteration}}</td>
+                  <td>{{$kb->nama_kelas}}</td>
+                  <td>{{$kb->nama_program_les}}</td>
+                  <td></td>
                 </tr>
+                @endforeach
               </tbody>
             </table>
           </div>

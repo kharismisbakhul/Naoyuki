@@ -17,7 +17,7 @@
         <div class="card-body">
           <div class="row">
             <div class="table-responsive">
-              <table class="table table-striped text-wrap" id="table-daftar-program">
+              <table class="table table-striped text-wrap" id="table-daftar-validasi">
                   <thead>
                       <tr class="text-center">
                           <th>No</th>
@@ -74,7 +74,7 @@
                     <div class="col-lg-12">
                         <form action="{{ url('/marketing/validasi')}}" method="post">
                             @csrf
-                            {{-- <input type="hidden" name="username" value=""> --}}
+                            <input type="hidden" name="id_validasi" id="id_validasi" value="">
                             <div class="form-group">
                                 <label for="validasi">Status Validasi</label>
                                 <select class="form-control" id="validasi" name="validasi">
@@ -83,7 +83,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <a href="#" class="btn btn-success">Lihat Bukti Pendaftaran / Transfer</a>
+                                <p class="text text-success" id="bukti-pendaftaran">Bukti Pendaftaran / Transfer</p>
+                                <img src="" class="bukti-les" style="width: 200px; height: 200px;"></img>
                             </div>
                             <div class="row">
                                 <div class="col-lg">

@@ -42,6 +42,14 @@ class MuridController extends Controller
         $data['program_berjalan'] = DB::table('pendaftaran')->where(['username' => session('username')])
             ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->get();
+        $data['kelas_berjalan'] = DB::table('pendaftaran')->where(['username' => session('username')])
+            ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
+            ->join('kelas', 'pendaftaran.id_program_les', '=', 'kelas.id_program_les')
+            ->where('pendaftaran.status_pendaftaran', 1)
+            ->get();
+
+            // Header('Content-type: application/json');
+            // echo json_encode($data['kelas_berjalan']);die;
         return view('murid.dashboard', $data);
     }
 

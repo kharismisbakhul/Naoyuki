@@ -178,8 +178,8 @@ CREATE TABLE `pendaftaran` (
   `id_program_les` int(10) UNSIGNED NOT NULL,
   `status_pendaftaran` int(11) NOT NULL,
   `bukti_pendaftaran` varchar(255) DEFAULT NULL,
-  `tanggal_pendaftaran` date NOT NULL DEFAULT current_timestamp(),
-  `waktu_pendaftaran` time NOT NULL DEFAULT current_timestamp()
+  `tanggal_pendaftaran` date NOT NULL,
+  `waktu_pendaftaran` time NOT NULL 
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

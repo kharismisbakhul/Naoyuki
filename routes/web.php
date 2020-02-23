@@ -49,6 +49,7 @@ Route::post('/akademik/tambahKelas', 'AkademikController@tambahKelasLes');
 // Marketing
 Route::get('/marketing', 'MarketingController@index');
 Route::get('/marketing/validasi', 'MarketingController@validasi');
+Route::post('/marketing/validasi', 'MarketingController@validasi_pendaftaran');
 
 // Admin
 Route::get('/admin', 'AdminController@index');

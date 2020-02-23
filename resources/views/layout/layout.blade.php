@@ -285,6 +285,7 @@
 
 <!-- Page Specific JS File -->
 <script src="{{ URL::asset('js/murid.js') }}"></script>
+<script src="{{ URL::asset('js/marketing.js') }}"></script>
 
 </body>
 
