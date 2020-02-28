@@ -37,7 +37,6 @@ class AkademikController extends Controller
     public function index()
     {
         $data['title'] = "Dashboard Akademik";
-        $data['title'] = "Dashboard Akademik";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['program_les'] = DB::table('program_les')->get()->count();
         $data['kelas'] = DB::table('kelas')->get()->count();
