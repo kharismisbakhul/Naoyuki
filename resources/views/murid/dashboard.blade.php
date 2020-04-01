@@ -39,12 +39,12 @@
             <div class="card mb-3 col-lg">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="{{ URL::asset($pb->image) }}" class="card-img" alt="...">
+                  <img src="{{ URL::asset($pb->image) }}" class="img-fluid" style="width: 100%; height: 100%;" alt="...">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
                     <h5 class="card-title mb-5">{{$pb->nama_program_les}}</h5>
-                    <a href="{{ url('/murid/pembelajaran/1') }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
+                    <a href="{{ url('/murid/pembelajaran') }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
                   </div>
                 </div>
               </div>
@@ -79,7 +79,7 @@
                   <td>{{$loop->iteration}}</td>
                   <td>{{$kb->nama_kelas}}</td>
                   <td>{{$kb->nama_program_les}}</td>
-                  <td></td>
+                  <td>{{count($kb->pertemuan).'/'.$kb->jumlah_pertemuan}}</td>
                 </tr>
                 @endforeach
               </tbody>

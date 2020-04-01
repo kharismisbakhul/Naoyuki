@@ -22,6 +22,7 @@ Route::get('/getProgram/{id}', 'AuthController@getProgramLes');
 Route::get('/murid', 'MuridController@index');
 Route::get('/murid/jadwal', 'MuridController@jadwalLes');
 Route::get('/murid/jadwalKosong', 'MuridController@jadwalKosong');
+Route::post('/murid/jadwalKosong', 'MuridController@tambahJadwalKosong');
 Route::get('/murid/programLes', 'MuridController@programLes');
 Route::get('/murid/daftarProgram', 'MuridController@daftarProgram');
 Route::post('/murid/daftarProgram', 'MuridController@daftar');
@@ -32,10 +33,20 @@ Route::get('/murid/profil', 'MuridController@profil');
 Route::post('/murid/editProfil', 'MuridController@editProfil');
 Route::get('/murid/pembelajaran', 'MuridController@pembelajaran');
 Route::get('/murid/pembelajaran/{id}', 'MuridController@detailPembelajaran');
-
+Route::post('/murid/feedback/', 'MuridController@tambahFeedback');
+Route::get('/murid/getFeedbackKelas/{id}', 'MuridController@getFeedbackKelas');
 
 // Sensei
 Route::get('/sensei', 'SenseiController@index');
+Route::get('/sensei/scoreboard', 'SenseiController@scoreboard');
+Route::get('/sensei/pembelajaran', 'SenseiController@pembelajaran');
+Route::get('/sensei/pembelajaran/{id}', 'SenseiController@detailPembelajaran');
+Route::get('/sensei/getMurid/{username}', 'SenseiController@getMurid');
+Route::get('/sensei/getDetailPeserta/{id}', 'SenseiController@getDetailPeserta');
+Route::get('/sensei/getKehadiranPeserta/{id}', 'SenseiController@getKehadiranPeserta');
+Route::get('/sensei/tambahLaporan/{id}', 'SenseiController@tambahLaporan');
+Route::post('/sensei/tambahLaporan/{id}', 'SenseiController@tambahLaporanKelas');
+Route::post('/sensei/editNilaiMurid', 'SenseiController@editNilai');
 
 // Akademik
 Route::get('/akademik', 'AkademikController@index');

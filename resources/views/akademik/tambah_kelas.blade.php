@@ -57,18 +57,21 @@
                 <div class="col-sm-9">
                   <select class="form-control" id="hariPertemuan" name="hariPertemuan">
                     <option value="" hidden selected>Pilih Hari</option>
-                      <option value="1">Senin</option>
-                      <option value="2">Selasa</option>
-                      <option value="3">Rabu</option>
-                      <option value="4">Kamis</option>
-                      <option value="5">Jumat</option>
+                    @foreach ($hari as $h)
+                    <option value="{{$h->id_hari}}">{{$h->hari}}</option>
+                    @endforeach
                   </select>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="waktuPertemuan" class="col-sm-3 col-form-label">Waktu Pertemuan</label>
                 <div class="col-sm-9">
-                  <input type="time" class="form-control" id="waktuPertemuan" name="waktuPertemuan">
+                    <select class="form-control" id="waktuPertemuan" name="waktuPertemuan">
+                        <option value="" hidden selected>Pilih Sesi</option>
+                        @foreach ($sesi as $s)
+                        <option value="{{$s->id_sesi}}">{{$s->jam_mulai. ' - '.$s->jam_selesai}}</option>
+                        @endforeach
+                    </select>
                 </div>
               </div>
             <div class="row">

@@ -20,18 +20,18 @@
           <div class="row no-gutters">
             <div class="col-lg-3">
                 <figure class="figure text-center">
-                    <img src="{{URL::asset(url('image/thumbnail.jpg'))}}" class="img-thumbnail rounded" style="width: 200px; height: 200px;">
+                    <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;">
                     <figcaption class="figure-caption mt-3">
-                        <h4>"Sakura"</h4>
-                        <h4>Basic Grammar</h4>
-                        <h4 class="text-danger">Nilai Evaluasi : 0</h4>
+                        <h4>{{$detail_kelas->nama_kelas}}</h4>
+                        <h4>{{$detail_kelas->nama_program_les}}</h4>
+                        <h4 class="text-danger">Nilai Evaluasi : {{$detail_kelas->nilai_evaluasi}}</h4>
                     </figcaption>
                 </figure>
             </div>
             <div class="col-lg-9">
               <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped text-wrap" id="">
+                    <table class="table table-striped text-wrap" id="table-pertemuan">
                         <thead>
                             <tr class="text-center">
                                 <th>Pertemuan</th>
@@ -41,18 +41,22 @@
                             </tr>
                         </thead>
                         <tbody>
-                          <tr class="text-center">
-                            <td>1</td>
-                            <td>Hiragana</td>
-                            <td class="text-success">Hadir</td>
-                            <td><button class="btn btn-danger feedback" data-toggle="modal" data-target=".modalFeedback">Feedback</button><button class="btn btn-success detail-feedback ml-3" data-toggle="modal" data-target=".modalDetailFeedback">Detail Feedback</button></td>
-                        </tr>
-                          <tr class="text-center">
-                            <td>2</td>
-                            <td>Katakana</td>
-                            <td class="text-success">Hadir</td>
-                            <td><button class="btn btn-danger feedback" data-toggle="modal" data-target=".modalFeedback">Feedback</button><button class="btn btn-success detail-feedback ml-3" data-toggle="modal" data-target=".modalDetailFeedback">Detail Feedback</button></td>
-                        </tr>
+                                @foreach ($detail_kelas->pertemuan as $p)
+                                <tr class="text-center">
+                                  <td>{{$p->pertemuan_ke}}</td>
+                                  <td>{{$p->deskripsi}}</td>
+                                  @if($p->kehadiran == 1)
+                                  <td class="text-success">Hadir</td>
+                                  @else
+                                  <td class="text-danger">Tidak Hadir</td>
+                                  @endif
+                                  @if($p->feedback == null)
+                                  <td><button class="btn btn-danger feedback" data-toggle="modal" data-target=".modalFeedback" data-id="{{$p->id_kehadiran}}">Tambah Feedback</button></td>
+                                  @else 
+                                  <td><button class="btn btn-success detail-feedback ml-3" data-toggle="modal" data-target=".modalDetailFeedback" data-id="{{$p->id_kehadiran}}">Detail Feedback</button></td>
+                                  @endif
+                                </tr>
+                                @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -73,7 +77,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-danger" id="ModalFeedbackTitle">Feedback</h5>
+                <h5 class="modal-title text-danger" id="ModalFeedbackTitle">Feedback {{ $detail_kelas->nama_kelas}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -82,13 +86,15 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-4">
                         <figure class="figure text-center">
-                            <img src="{{URL::asset(url('image/thumbnail.jpg'))}}" class="img-thumbnail rounded" style="width: 200px; height: 200px;">
+                            <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;">
                         </figure>
                     </div>
                     <div class="col-lg-8">
-                        <form action="{{ url('/murid/feedback/')}}" method="post">
+                        <form action="{{ url('/murid/feedback/')}}" method="post" id="form-pertemuan">
                             @csrf
                             <input type="hidden" name="username" value="">
+                            <input type="hidden" id="id_kehadiran" name="id_kehadiran" value="">
+                            <input type="hidden" id="id_kelas" name="id_kelas" value="{{ $detail_kelas->id_kelas }}">
                             <div class="form-group">
                                 <label for="pertemuan">Pertemuan</label>
                                 <input type="text" class="form-control" id="pertemuan" name="pertemuan" readonly value="1">
@@ -126,18 +132,17 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-4">
                             <figure class="figure text-center">
-                                <img src="{{URL::asset(url('image/thumbnail.jpg'))}}" class="img-thumbnail rounded" style="width: 200px; height: 200px;">
+                                <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 200px; height: 200px;">
                             </figure>
                         </div>
                         <div class="col-lg-8">
-                                <input type="hidden" name="username" value="">
                                 <div class="form-group">
-                                    <label for="pertemuan">Pertemuan</label>
-                                    <input type="text" class="form-control" id="pertemuan" name="pertemuan" readonly value="1">
+                                    <label for="pertemuan-detail">Pertemuan</label>
+                                    <input type="text" class="form-control" id="pertemuan-detail" name="pertemuan-detail" readonly value="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="feeedback">Feedback</label>
-                                    <textarea class="form-control" name="feedback" id="feedback" readonly rows="10">Pertemuan kali ini pembahasannya sangat seru sekali, belajar bahasa jepang untuk pertama kalinya</textarea>
+                                    <label for="feeedback-detail">Feedback</label>
+                                    <textarea class="form-control" name="feedback-detail" id="feedback-detail" readonly rows="10"></textarea>
                                 </div>
                         </div>
                     </div>

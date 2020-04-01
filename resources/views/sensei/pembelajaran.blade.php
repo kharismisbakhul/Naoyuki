@@ -1,6 +1,6 @@
 @extends('layout.layout')
 
-@section('title', 'Pembelajaran Murid')
+@section('title', 'Pembelajaran Sensei')
 
 @section('container')
 <div class="row">
@@ -36,7 +36,7 @@
                 
                 <h3 class="card-title">Jadwal : {{$kb->hari}}</h3>
                 <h3 class="card-title mb-5">Pukul : {{substr($kb->jam_mulai,0,5). ' - '.substr($kb->jam_selesai,0,5)}}</h3>
-                <a href="{{ url('/murid/pembelajaran/'.$kb->id_kelas) }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
+                <a href="{{ url('/sensei/pembelajaran/'.$kb->id_kelas) }}" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
               </div>
             </div>
 

@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="waktuMulai" class="col-sm-3 col-form-label">Waktu Mulai</label>
+              <label for="waktuMulai" class="col-sm-3 col-form-label">Tanggal Mulai</label>
               <div class="col-sm-9">
                 <input type="date" class="form-control @error('waktuMulai') is-invalid @enderror" id="waktuMulai" name="waktuMulai">
                 @error('waktuMulai')

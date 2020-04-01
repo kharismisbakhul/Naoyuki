@@ -31,7 +31,7 @@
                   @foreach ($program_les as $pl) 
                   <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100px; height:100px;"></td>
+                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
                     <td>{{ $pl->nama_program_les }}</td>
                     <td>{{ $pl->jumlah_pertemuan }} Kali</td>
                     <td><button class="btn btn-primary detailProgram" data-toggle="modal" data-target=".modalDetailProgramLes" data-id="{{ $pl->id_program_les }}">Detail</button></td>
@@ -42,35 +42,6 @@
         </div>
         </div>
       
-        {{-- <div class="row justify-content-center text-center mt-2"> --}}
-                      
-         
-        
-        {{-- <div class="card col-lg-3 mx-2 my-2" style="width: 18rem;">
-          <img src="{{ URL::asset($pl->image) }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <h5 class="card-title">{{ $pl->nama_program_les }}</h5>
-            <a href="#" class="card-text float-right mt-5"><small class="text-danger">Detail</small></a>
-          </div>
-        </div> --}}
-
-        {{-- <div class="card mb-3" style="max-width: 350px;">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="{{ URL::asset($pl->image) }}" class="card-img" alt="...">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">{{ $pl->nama_program_les }}</h5>
-                <a href="#" class="card-text float-right"><small class="text-danger">Detail</small></a>
-              </div>
-            </div>
-          </div>
-        </div> --}}
-        
-        
-      {{-- </div> --}}
-
 
       </div>
     </div>
@@ -99,7 +70,7 @@
                   @foreach ($program_berjalan as $pb) 
                   <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100px; height:100px;"></td>
+                    <td><img src="{{ URL::asset($pb->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
                     <td>{{ $pb->nama_program_les }}</td>
                     <td>{{ $pb->jumlah_pertemuan }} Kali</td>
                     <td>
@@ -210,7 +181,7 @@
                     <h5>Bukti Pendaftaran</h5>
                   </div>
                   <div class="row">
-                    <img src="" class="bukti-les-terdaftar"></img>
+                    <img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;"></img>
                   </div>
                 </div>
 

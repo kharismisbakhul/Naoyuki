@@ -30,6 +30,10 @@ var segments = url.split("/");
 //     }
 // });
 
+$("#table-pertemuan").DataTable({
+    "pageLength": 5
+});
+
 $("#table-daftar-program").DataTable({
     "pageLength": 3
 });
@@ -81,6 +85,29 @@ $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () 
             } else {
                 $('.status-les-terdaftar').html('Status Pendaftaran: Belum bayar');
             }
+        }
+    });
+})
+
+$('#table-pertemuan').on('click', '.feedback', function () {
+    let id = $(this).data('id');
+    console.log(id);
+    // var link_form = window.location.origin + '/murid/feedback/' + id;
+    // $('#form-pertemuan').attr('action', link_form);
+    $('#id_kehadiran').val(id);
+})
+
+$('#table-pertemuan').on('click', '.detail-feedback', function () {
+    let id = $(this).data('id');
+    console.log(id);
+    $.ajax({
+        url: segments[0] + '/murid/getFeedbackKelas/' + id,
+        method: 'get',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            $('#pertemuan-detail').val(data['pertemuan_ke']);
+            $('#feedback-detail').html(data['feedback']);
         }
     });
 })

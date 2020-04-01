@@ -39,17 +39,43 @@ class MuridController extends Controller
     {
         $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['program_berjalan'] = DB::table('pendaftaran')->where(['username' => session('username')])
+        $data['program_berjalan'] = DB::table('pendaftaran')
             ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
-            ->get();
-        $data['kelas_berjalan'] = DB::table('pendaftaran')->where(['username' => session('username')])
-            ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
-            ->join('kelas', 'pendaftaran.id_program_les', '=', 'kelas.id_program_les')
-            ->where('pendaftaran.status_pendaftaran', 1)
+            ->where('pendaftaran.username', session('username'))
+            ->groupBy('pendaftaran.id_program_les')
             ->get();
 
+        // Header('Content-type: application/json');
+        // echo json_encode($data['program_berjalan']);
+        // die;
+
+        // Kehadiran
+        $kehadiran = DB::table('kehadiran_peserta')
+        ->select(DB::raw('COUNT(id_kehadiran) as jumlah_kehadiran'))
+        ->where('id_peserta', 1)
+        ->get();
+
+        $data['kelas_berjalan'] = DB::table('pendaftaran')->where(['pendaftaran.username' => session('username')])
+            ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
+            ->join('peserta_kelas', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+            ->join('kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
+            ->where('pendaftaran.status_pendaftaran', 1)
+            ->get();
+        
+        for ($i=0; $i < count($data['kelas_berjalan']); $i++) { 
+            // array_push($data['kelas_berjalan'][0]->peserta_kelas, "AA");
+            $data['kelas_berjalan'][$i]->peserta = DB::table('peserta_kelas')
+            ->where(['username' => session('username')])
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
+            $data['kelas_berjalan'][$i]->pertemuan = DB::table('pertemuan')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+        }
+
             // Header('Content-type: application/json');
-            // echo json_encode($data['kelas_berjalan']);die;
+            // echo json_encode($data['kelas_berjalan'][0]);die;
         return view('murid.dashboard', $data);
     }
 
@@ -64,7 +90,36 @@ class MuridController extends Controller
     {
         $data['title'] = "Jadwal Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['jadwal_kosong'] = DB::table('jadwal_kosong')->where(['username' => session('username')])
+        ->join('hari', 'hari.id_hari', '=', 'jadwal_kosong.id_hari')
+        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kosong.id_sesi')
+        ->where('status_kosong', 0)
+        ->get();
+
+        $data['sesi'] = DB::table('sesi_jam')->get();
+        $data['hari'] = DB::table('hari')->get();
         return view('murid.jadwal_kosong', $data);
+    }
+
+    public function tambahJadwalKosong(Request $request)
+    {
+        $username = $request->username;
+        $hari = intval($request->hari);
+        $sesi = intval($request->jam);
+        $jadwal = DB::table('jadwal_kosong')
+        ->where('username', $username)
+        ->where('id_hari', $hari)
+        ->where('id_sesi', $sesi)
+        ->get();
+
+        if ($jadwal->isEmpty()) {
+            var_dump('KOSONG');die;
+            
+            DB::insert('insert into jadwal_kosong (id_sesi, id_hari, username) values (?, ?, ?)', [$sesi, $hari, $username]);
+            return redirect('/murid/jadwalKosong')->with('status', 'Penambahan jadwal kosong berhasil');
+        } else {
+            return redirect('/murid/jadwalKosong')->with('status', 'Jadwal kosong sudah ada / Jadwal tidak kosong');
+        }
     }
 
     public function programLes()
@@ -93,9 +148,9 @@ class MuridController extends Controller
 
     public function daftar(Request $request)
     {
-        $status = Murid::daftar($request->program);
+        $status = Murid::daftar($request);
         if ($status == true) {
-            return redirect('/murid/pembayaran/' . $status['id_pendaftaran'])->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
+            return redirect('/murid/pembayaran/' . $status->id_pendaftaran)->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
         } else {
             return redirect('/murid/programLes')->with('status', 'Pendaftaran gagal');
         }
@@ -149,11 +204,27 @@ class MuridController extends Controller
         ->where('id_kelas', 1)
         ->groupBy('id_kelas')->get();
 
-        $data['kelas_berjalan'] = DB::table('pendaftaran')->where(['username' => session('username')])
+        $data['kelas_berjalan'] = DB::table('pendaftaran')->where(['pendaftaran.username' => session('username')])
         ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
-        ->join('kelas', 'pendaftaran.id_program_les', '=', 'kelas.id_program_les')
+        ->join('peserta_kelas', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+        ->join('kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
+        ->join('jadwal_kelas', 'kelas.id_kelas', '=', 'jadwal_kelas.id_kelas')
+        ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
         ->where('pendaftaran.status_pendaftaran', 1)
         ->get();
+
+        for ($i=0; $i < count($data['kelas_berjalan']); $i++) { 
+            // array_push($data['kelas_berjalan'][0]->peserta_kelas, "AA");
+            $data['kelas_berjalan'][$i]->peserta = DB::table('peserta_kelas')
+            ->where(['username' => session('username')])
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
+            $data['kelas_berjalan'][$i]->pertemuan = DB::table('pertemuan')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+        }
 
         // Header('Content-type: application/json');
         // echo json_encode($data['kelas_berjalan']);die;
@@ -165,7 +236,30 @@ class MuridController extends Controller
     {
         $data['title'] = "Pembelajaran";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['detail_kelas'] = DB::table('pendaftaran')->where(['pendaftaran.username' => session('username')])
+        ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
+        ->join('peserta_kelas', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+        ->join('kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
+        ->where('pendaftaran.status_pendaftaran', 1)
+        ->where('kelas.id_kelas', intval($id))
+        ->get()->first();
+
+            $data['detail_kelas']->pertemuan = DB::table('pertemuan')
+            ->join('kehadiran_peserta', 'kehadiran_peserta.id_pertemuan', '=', 'pertemuan.id_pertemuan')
+            ->where('id_kelas', "=", $data['detail_kelas']->id_kelas)
+            ->where('id_peserta', "=", $data['detail_kelas']->id_peserta_kelas)
+            ->get();
+
+        // Header('Content-type: application/json');
+        // echo json_encode($data['detail_kelas']);die;
         return view('murid.detail_pembelajaran', $data);
+    }
+
+    public function tambahFeedback(Request $request)
+    {
+        DB::update('update kehadiran_peserta set feedback = ? where id_kehadiran = ?', [$request->feedback, intval($request->id_kehadiran)]);
+        
+        return redirect('/murid/pembelajaran/'.$request->id_kelas)->with('status', 'Feedback berhasil ditambahkan');
     }
 
     public function editProfil(Request $request)
@@ -189,11 +283,20 @@ class MuridController extends Controller
         //         'email' => $request->email,
         //         'jurusan' => $request->jurusan
         //     ]);
-        if ($request->email == null || $request->no_telp == null) {
-            return redirect('/murid/profil')->with('status', 'Eror');
+        if ($request->email == null || $request->no_telp == null || $request->asal_sekolah == null || $request->alamat == null) {
+            return redirect('/murid/profil')->with('gagal', 'Profil gagal diperbarui');
         } else {
             Murid::editProfil($request);
             return redirect('/murid/profil')->with('status', 'Data berhasil diperbarui');
         }
+    }
+
+    public function getFeedbackKelas($id){
+        $data = DB::table('kehadiran_peserta')->where(['id_kehadiran' => intval($id)])
+        ->join('pertemuan', 'kehadiran_peserta.id_pertemuan', '=', 'pertemuan.id_pertemuan')
+        ->get()->first();
+
+        Header('Content-type: application/json');
+        echo json_encode($data);
     }
 }

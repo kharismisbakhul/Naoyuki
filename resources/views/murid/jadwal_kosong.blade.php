@@ -33,11 +33,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                  <tr class="text-center">
-                    <td>1</td>
-                    <td>Senin</td>
-                    <td>07.00 - 09.00</td>
-                </tr>
+                        @foreach ($jadwal_kosong as $jk)
+                        <tr class="text-center">
+                          <td>{{$loop->iteration}}</td>
+                          <td>{{$jk->hari}}</td>
+                          <td>{{substr($jk->jam_mulai,0,5). ' - '.substr($jk->jam_selesai,0,5)}}</td>
+                        </tr>
+                        @endforeach
                 </tbody>
             </table>
         </div>
@@ -62,21 +64,24 @@
                   <div class="col-lg-12">
                       <form action="{{ url('/murid/jadwalKosong/')}}" method="post">
                           @csrf
-                          <input type="hidden" name="username" value="">
+                          <input type="hidden" name="username" value="{{ session('username') }}">
                           <div class="form-group">
                               <label for="hari">Hari</label>
                               <select class="form-control" id="hari" name="hari">
                                 <option value="" hidden selected>Pilih Hari</option>
-                                <option value="">Senin</option>
-                                <option value="">Selasa</option>
-                                <option value="">Rabu</option>
-                                <option value="">Kamis</option>
-                                <option value="">Jumat</option>
+                                @foreach ($hari as $h)
+                                <option value="{{$h->id_hari}}">{{$h->hari}}</option>
+                                @endforeach
                               </select>
                           </div>
                           <div class="form-group">
                               <label for="Jam">Jam</label>
-                              <input type="time" class="form-control" id="jam" name="jam">
+                              <select class="form-control" id="jam" name="jam">
+                                    <option value="" hidden selected>Pilih Jam</option>
+                                    @foreach ($sesi as $s)
+                                    <option value="{{$s->id_sesi}}">{{substr($s->jam_mulai,0,5). ' - '.substr($s->jam_selesai,0,5)}}</option>
+                                    @endforeach
+                              </select>
                           </div>
                           <div class="row">
                               <div class="col-lg">

@@ -45,6 +45,61 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Event sendiri di siujian
+	$.ajax({
+		url: segments[0] + '/murid/getJadwal/' + id,
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			// console.log(data);
+			data.forEach(function (dataA) {
+				var room = dataA.ruangan;
+				if (room != null) {
+					room = '\tRoom ' + room + '\n';
+				} else {
+					room = '';
+				}
+				var title = dataA.nama_agenda;
+				if (dataA.kategoriAgenda == 3 || dataA.kategoriAgenda == 4) {
+					calendar.addEvent({
+						id: dataA.id_agenda,
+						title: room + dataA.nama_agenda,
+						rrule: {
+							dtstart: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
+							until: dataA.tanggalSelesai,
+							byweekday: rrule.RRule[dataA.hariAgenda],
+							freq: 'weekly'
+						},
+						color: 'red',
+						duration: dataA.durasi
+					});
+				} else if (dataA.kategoriAgenda == 2) {
+					calendar.addEvent({
+						id: dataA.id_agenda,
+						title: room + dataA.nama_agenda,
+						start: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
+						end: dataA.tanggalSelesai + 'T' + dataA.waktuSelesai,
+						color: 'blue'
+					});
+				} else {
+					calendar.addEvent({
+						id: dataA.id_agenda,
+						title: room + dataA.nama_agenda,
+						start: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
+						end: dataA.tanggalMulai + 'T' + dataA.waktuSelesai,
+						color: 'green',
+					});
+				}
+
+			})
+			var fc = $('.fc-center h2').html();
+			var monthYear = fc.split(" ");
+			$('.monthYear').html(fc);
+			// console.log(fc);
+		}
+	});
+
+
     // render calendar
     calendar.render();
 

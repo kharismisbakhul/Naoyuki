@@ -11,7 +11,7 @@
         <h6 class="m-0 font-weight-bold text-capitalize text-white">Formulir Pendaftaran Program Les</h6>
       </div>
       <div class="card-body">
-        <form action="{{ url('/akademik/tambahProgram') }}" method="post">
+        <form action="{{ url('/akademik/tambahProgram') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group row">
               <label for="nama" class="col-sm-3 col-form-label">Nama Program</label>
@@ -35,14 +35,18 @@
               <label for="materi" class="col-sm-3 col-form-label">Cakupan Materi</label>
               <div class="col-sm-9">
                 <textarea name="materi" class="form-control" id="materi" rows="5"></textarea>
-                {{-- <input type="text" readonly class="form-control" id="materi" name="materi" value="{{ session('username') }}"> --}}
               </div>
             </div>
             <div class="form-group row">
               <label for="deskripsi" class="col-sm-3 col-form-label">Deskripsi</label>
               <div class="col-sm-9">
                 <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5"></textarea>
-                {{-- <input type="text" readonly class="form-control" id="deskripsi" name="deskripsi" value="{{ session('username') }}"> --}}
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="foto_program" class="col-sm-3 col-form-label">Foto Program</label>
+              <div class="col-sm-9">
+                  <input type="file" name="fotoProgram" class="float-right mr-5">
               </div>
             </div>
             <div class="row">
