@@ -29,6 +29,12 @@
             </div>
           </div>
           <div class="form-group row">
+            <label for="tanggal" class="col-sm-3 col-form-label">Tanggal</label>
+            <div class="col-sm-9">
+              <input type="date" class="form-control" id="tanggal" name="tanggal">
+            </div>
+          </div>
+          <div class="form-group row">
             <label for="deskripsi" class="col-sm-3 col-form-label">Deskripsi Laporan</label>
             <div class="col-sm-9">
               <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5"></textarea>

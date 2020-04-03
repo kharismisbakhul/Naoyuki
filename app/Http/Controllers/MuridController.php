@@ -113,8 +113,6 @@ class MuridController extends Controller
         ->get();
 
         if ($jadwal->isEmpty()) {
-            var_dump('KOSONG');die;
-            
             DB::insert('insert into jadwal_kosong (id_sesi, id_hari, username) values (?, ?, ?)', [$sesi, $hari, $username]);
             return redirect('/murid/jadwalKosong')->with('status', 'Penambahan jadwal kosong berhasil');
         } else {

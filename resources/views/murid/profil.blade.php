@@ -50,7 +50,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal Edit Profil-->
 <div class="modal fade modalEditProfil" id="ModalEditProfil" tabindex="-1" role="dialog" aria-labelledby="ModalEditProfilTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">

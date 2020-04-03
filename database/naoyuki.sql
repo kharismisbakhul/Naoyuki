@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 13, 2020 at 04:00 AM
+-- Generation Time: Apr 03, 2020 at 04:20 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -64,7 +64,8 @@ CREATE TABLE `jadwal_kelas` (
 --
 
 INSERT INTO `jadwal_kelas` (`id_jadwal_kelas`, `id_kelas`, `id_hari`, `id_sesi`) VALUES
-(1, 1, 3, 3);
+(1, 1, 3, 3),
+(2, 1, 4, 3);
 
 -- --------------------------------------------------------
 
@@ -77,6 +78,7 @@ CREATE TABLE `jadwal_kosong` (
   `id_sesi` int(10) NOT NULL,
   `id_hari` int(10) NOT NULL,
   `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status_kosong` int(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -85,43 +87,10 @@ CREATE TABLE `jadwal_kosong` (
 -- Dumping data for table `jadwal_kosong`
 --
 
-INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Kharis', NULL, NULL),
-(2, 3, 2, 'Kharis', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `jadwal_kosong_murid`
---
-
-CREATE TABLE `jadwal_kosong_murid` (
-  `id_jadwal_kosong` int(10) UNSIGNED NOT NULL,
-  `jam` time NOT NULL,
-  `hari` date NOT NULL,
-  `bulan` date NOT NULL,
-  `tahun` date NOT NULL,
-  `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `jadwal_kosong_sensei`
---
-
-CREATE TABLE `jadwal_kosong_sensei` (
-  `id_jadwal_kosong` int(10) UNSIGNED NOT NULL,
-  `jam` time NOT NULL,
-  `hari` date NOT NULL,
-  `bulan` date NOT NULL,
-  `tahun` date NOT NULL,
-  `id_sensei` int(10) UNSIGNED NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username`, `status_kosong`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'Kharis', 0, NULL, NULL),
+(2, 3, 2, 'Kharis', 0, NULL, NULL),
+(3, 8, 1, 'Baskara', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -153,7 +122,12 @@ CREATE TABLE `kehadiran_peserta` (
 --
 
 INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
-(1, 1, 1, 1, 'AAA');
+(4, 1, 8, 1, 'ABC'),
+(5, 2, 8, 1, NULL),
+(6, 1, 9, 1, NULL),
+(7, 2, 9, 0, NULL),
+(8, 1, 10, 1, NULL),
+(9, 2, 10, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -266,6 +240,7 @@ CREATE TABLE `pendaftaran` (
   `id_program_les` int(10) UNSIGNED NOT NULL,
   `status_pendaftaran` int(11) NOT NULL,
   `bukti_pendaftaran` varchar(255) DEFAULT NULL,
+  `tanggal_mulai` date NOT NULL,
   `tanggal_pendaftaran` date NOT NULL,
   `waktu_pendaftaran` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -274,13 +249,14 @@ CREATE TABLE `pendaftaran` (
 -- Dumping data for table `pendaftaran`
 --
 
-INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
-(4, 'Kharis', 1, 1, '', '2019-12-22', '20:03:11'),
-(5, 'Kharis', 2, 2, 'icon.png', '2019-12-22', '20:03:11'),
-(8, 'Kharis', 3, 2, 'a.png', '2019-12-22', '20:03:11'),
-(11, 'Kharis', 5, 0, NULL, '2019-12-27', '13:34:18'),
-(12, 'misbakhul', 1, 1, NULL, '2020-03-09', '00:00:00'),
-(17, 'Kharis', 7, 1, 'AksaraFILKOM.png', '2020-03-13', '09:05:13');
+INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
+(4, 'Kharis', 1, 1, '', '0000-00-00', '2019-12-22', '20:03:11'),
+(5, 'Kharis', 2, 2, 'icon.png', '0000-00-00', '2019-12-22', '20:03:11'),
+(8, 'Kharis', 3, 2, 'a.png', '0000-00-00', '2019-12-22', '20:03:11'),
+(12, 'misbakhul', 1, 1, NULL, '0000-00-00', '2020-03-09', '00:00:00'),
+(21, 'Kharis', 5, 2, 'AksaraFILKOM2.png', '2020-03-31', '2020-03-25', '06:25:03'),
+(22, 'Kharis', 7, 0, NULL, '2020-03-31', '2020-03-25', '06:26:37'),
+(23, 'Kharis', 2, 2, 'AksaraFILKOM.png', '2020-03-28', '2020-03-27', '03:11:13');
 
 -- --------------------------------------------------------
 
@@ -291,11 +267,8 @@ INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `stat
 CREATE TABLE `pertemuan` (
   `id_pertemuan` int(10) UNSIGNED NOT NULL,
   `pertemuan_ke` int(11) NOT NULL,
-  `absensi` int(11) NOT NULL,
-  `feedback` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tanggal` date NOT NULL,
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `laporan` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status_terlaksana` int(11) NOT NULL,
   `id_kelas` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -305,8 +278,10 @@ CREATE TABLE `pertemuan` (
 -- Dumping data for table `pertemuan`
 --
 
-INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `absensi`, `feedback`, `deskripsi`, `laporan`, `status_terlaksana`, `id_kelas`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'ABC', 'ACCC', 'AAAAA', 1, 1, NULL, NULL);
+INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`, `created_at`, `updated_at`) VALUES
+(8, 1, '2020-04-01', 'AAAA', 1, NULL, NULL),
+(9, 2, '2020-04-02', 'BBBB', 1, NULL, NULL),
+(10, 3, '2020-04-03', 'MMMM', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -330,8 +305,8 @@ CREATE TABLE `peserta_kelas` (
 --
 
 INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `id_pendaftaran`, `nilai_evaluasi`, `status_les`, `created_at`, `updated_at`) VALUES
-(1, 'Kharis', 1, 4, 0, 0, NULL, NULL),
-(2, 'Kharis', 2, 5, 0, 0, NULL, NULL);
+(1, 'Kharis', 1, 4, 80, 0, NULL, NULL),
+(2, 'misbakhul', 1, 5, 80, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -460,7 +435,7 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `image`, `id_status_user`
 (3, 'Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
 (4, 'Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
 (5, 'Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL),
-(6, 'Misbakhul', '123', 'image/default.jpg', 1, NULL, NULL);
+(6, 'Joni', '123', 'image/default.jpg', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -530,12 +505,12 @@ INSERT INTO `user_sub_menu` (`id_sub_menu`, `judul`, `url`, `ikon`, `id_menu`) V
 (2, 'Program Les', '/murid/programLes', 'fas fa-fw fa-clipboard', 1),
 (3, 'Profil', '/murid/profil', 'fas fa-fw fa-user', 1),
 (4, 'Pembelajaran', '/murid/pembelajaran', 'fas fa-fw fa-book-reader', 1),
-(5, 'Scoreboard', '/sensei/scoreboard', 'far fa-calendar-alt', 2),
+(5, 'Jadwal Les', '/sensei/jadwal', 'far fa-fw fa-calendar-alt', 2),
+(6, 'Scoreboard', '/sensei/scoreboard', 'far fa-calendar-alt', 2),
 (7, 'Pembelajaran', '/sensei/pembelajaran', 'fas fa-fw fa-book-reader', 2),
 (8, 'Program Les', '/akademik/programLes', 'fas fa-fw fa-clipboard', 3),
-(10, 'Pembelajaran', '/akademik/pembelajaran', 'fas fa-fw fa-book-reader', 3),
-(13, 'Validasi', '/marketing/validasi', 'fas fa-fw fa-book-reader', 4),
-(15, 'Validasi', '/marketing/validasi', 'fas fa-fw fa-users', 5);
+(13, 'Validasi', '/finance/validasi', 'fas fa-fw fa-book-reader', 4),
+(15, 'Manajemen User', '/admin/manajemenUser', 'fas fa-fw fa-users', 5);
 
 --
 -- Indexes for dumped tables
@@ -564,20 +539,6 @@ ALTER TABLE `jadwal_kosong`
   ADD KEY `id_sesi` (`id_sesi`),
   ADD KEY `id_hari` (`id_hari`),
   ADD KEY `username` (`username`);
-
---
--- Indexes for table `jadwal_kosong_murid`
---
-ALTER TABLE `jadwal_kosong_murid`
-  ADD PRIMARY KEY (`id_jadwal_kosong`),
-  ADD KEY `jadwal_kosong_murid_username_foreign` (`username`);
-
---
--- Indexes for table `jadwal_kosong_sensei`
---
-ALTER TABLE `jadwal_kosong_sensei`
-  ADD PRIMARY KEY (`id_jadwal_kosong`),
-  ADD KEY `jadwal_kosong_sensei_id_sensei_foreign` (`id_sensei`);
 
 --
 -- Indexes for table `kategori_notifikasi`
@@ -632,7 +593,8 @@ ALTER TABLE `pendaftaran`
 -- Indexes for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  ADD PRIMARY KEY (`id_pertemuan`);
+  ADD PRIMARY KEY (`id_pertemuan`),
+  ADD KEY `id_kelas` (`id_kelas`);
 
 --
 -- Indexes for table `peserta_kelas`
@@ -711,25 +673,13 @@ ALTER TABLE `hari`
 -- AUTO_INCREMENT for table `jadwal_kelas`
 --
 ALTER TABLE `jadwal_kelas`
-  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `jadwal_kosong`
 --
 ALTER TABLE `jadwal_kosong`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `jadwal_kosong_murid`
---
-ALTER TABLE `jadwal_kosong_murid`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jadwal_kosong_sensei`
---
-ALTER TABLE `jadwal_kosong_sensei`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `kategori_notifikasi`
@@ -741,7 +691,7 @@ ALTER TABLE `kategori_notifikasi`
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `kelas`
@@ -765,13 +715,13 @@ ALTER TABLE `notifikasi`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`
@@ -848,18 +798,6 @@ ALTER TABLE `jadwal_kosong`
   ADD CONSTRAINT `jadwal_kosong_ibfk_3` FOREIGN KEY (`username`) REFERENCES `user` (`username`);
 
 --
--- Constraints for table `jadwal_kosong_murid`
---
-ALTER TABLE `jadwal_kosong_murid`
-  ADD CONSTRAINT `jadwal_kosong_murid_username_foreign` FOREIGN KEY (`username`) REFERENCES `murid` (`username`);
-
---
--- Constraints for table `jadwal_kosong_sensei`
---
-ALTER TABLE `jadwal_kosong_sensei`
-  ADD CONSTRAINT `jadwal_kosong_sensei_id_sensei_foreign` FOREIGN KEY (`id_sensei`) REFERENCES `sensei` (`id_sensei`);
-
---
 -- Constraints for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
@@ -885,6 +823,12 @@ ALTER TABLE `notifikasi`
 ALTER TABLE `pendaftaran`
   ADD CONSTRAINT `pendaftaran_ibfk_1` FOREIGN KEY (`id_program_les`) REFERENCES `program_les` (`id_program_les`),
   ADD CONSTRAINT `pendaftaran_ibfk_2` FOREIGN KEY (`username`) REFERENCES `murid` (`username`);
+
+--
+-- Constraints for table `pertemuan`
+--
+ALTER TABLE `pertemuan`
+  ADD CONSTRAINT `pertemuan_ibfk_1` FOREIGN KEY (`id_kelas`) REFERENCES `kelas` (`id_kelas`);
 
 --
 -- Constraints for table `peserta_kelas`

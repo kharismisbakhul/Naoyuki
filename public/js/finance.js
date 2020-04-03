@@ -11,7 +11,13 @@ $('#table-daftar-validasi').on('click', '.detailValidasi', function () {
             var link_bukti = window.location.origin + '/bukti_pembayaran/' + data['bukti_pendaftaran'];
             $('.image-info').attr('src', link_image);
             $('.bukti-les').attr('src', link_bukti);
-            $('#id_validasi').val(id);
+            $('.pendaftar').val(data['nama_lengkap']);
+            $('.nama_program').val(data['nama_program_les']);
+            $('.id_validasi').val(id);
         }
     });
 })
+
+$("#table-daftar-validasi").DataTable({
+    "pageLength": 5
+});

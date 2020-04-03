@@ -59,9 +59,24 @@ class AkademikController extends Controller
         $data['kelas'] = DB::table('kelas')->where(['pendaftaran.id_program_les' => intval($id)])
             ->join('peserta_kelas', 'kelas.id_kelas', '=', 'peserta_kelas.id_kelas')    
             ->join('pendaftaran', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+            ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
             ->join('sensei', 'kelas.id_sensei', '=', 'sensei.id_sensei')
             ->where('pendaftaran.status_pendaftaran', 1)
             ->get();
+
+
+            for ($i=0; $i < count($data['kelas']) ; $i++) { 
+                $data['kelas'][$i]->jadwal = DB::table('jadwal_kelas')
+                ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+                ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
+                ->where('id_kelas', "=", $data['kelas'][$i]->id_kelas)
+                ->get();;
+
+                $data['kelas'][$i]->pertemuan = DB::table('pertemuan')
+                ->where('id_kelas', "=", $data['kelas'][$i]->id_kelas)
+                ->get()->count();
+            }
+
         return view('akademik.detail_program_les', $data);
     }
 
@@ -109,5 +124,29 @@ class AkademikController extends Controller
         } else {
             return redirect('/akademik/programLes')->with('status', 'Penambahan Kelas Gagal');
         }
+    }
+
+    public function editMateri(Request $request){
+        DB::update('update program_les set cakupan_materi = ? where id_program_les = ?', [$request->materi, intval($request->id_program_les)]);
+        return redirect('/akademik/detailProgramLes/'.$request->id_program_les)->with('status', 'Materi berhasil diupdate');
+    }
+
+    public function getDetailKelas($id){
+        $data = DB::table('kelas')->where(['id_kelas' => $id])
+        ->get()->first();
+
+        $data->peserta = DB::table('peserta_kelas')->where(['id_kelas' => $id])
+        ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
+        ->get();
+
+        $data->pertemuan = DB::table('pertemuan')->where(['id_kelas' => $id])
+        ->get();
+
+        for ($i=0; $i < count($data->pertemuan) ; $i++) { 
+            $data->pertemuan[$i]->tanggal_indo = $this->tanggal($data->pertemuan[$i]->tanggal);
+        }
+
+        Header('Content-type: application/json');
+        echo json_encode($data);
     }
 }

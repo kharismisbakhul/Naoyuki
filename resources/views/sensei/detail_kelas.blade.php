@@ -6,7 +6,7 @@
     @endif
   </div>
 
-  <div class="col-xl-6 col-md-6 col-lg-4 mb-4 dftr">
+  <div class="col-xl-6 col-md-6 col-lg-6 mb-4 dftr">
     <div class="card border-left-danger shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
@@ -15,8 +15,10 @@
               {{ $detail_kelas->nama_program_les }}</div>
             <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"> {{ $detail_kelas->nama_kelas }}
             </div>
-            <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"> {{ $detail_kelas->hari.','.substr($detail_kelas->jam_mulai,0,5). ' - '.substr($detail_kelas->jam_selesai,0,5)}}
+            @foreach($detail_kelas->jadwal as $jadwal)
+            <div class="h4 mb-0 font-weight-bold text-gray-800 mt-3"> {{ $jadwal->hari.' '.substr($jadwal->jam_mulai,0,5). ' - '.substr($jadwal->jam_selesai,0,5)}} 
             </div>
+            @endforeach
           </div>
           <div class="col-auto">
             <i class="fas fa-users fa-4x text-danger"></i>
@@ -26,7 +28,7 @@
     </div>
   </div>
 
-  <div class="col-xl-6 col-md-6 col-lg-4 mb-4 dftr">
+  <div class="col-xl-6 col-md-6 col-lg-6 mb-4 dftr">
     <div class="card border-left-danger shadow h-100 py-2">
       <div class="card-body">
         <div class="row no-gutters align-items-center">
@@ -80,8 +82,6 @@
             </table>
           </div>
         </div>
-
-
       </div>
     </div>
   </div>
@@ -107,6 +107,7 @@
                 <thead>
                   <tr class="text-center">
                     <th>Pertemuan</th>
+                    <th>Tanggal</th>
                     <th>Deskripsi Laporan</th>
                     <th>Aksi</th>
                   </tr>
@@ -115,9 +116,10 @@
                   @foreach ($detail_kelas->pertemuan as $p)
                   <tr>
                     <td>{{ $p->pertemuan_ke }}</td>
+                    <td>{{ $p->tanggal_indo }}</td>
                     <td>{{ $p->deskripsi }}</td>
                     <td>
-                        <button class="btn btn-primary detail_kehadiran" data-toggle="modal" data-target=".modalDetailKehadiran" data-id="{{ $p->id_pertemuan }}">Detail</button>
+                      <button class="btn btn-primary detail_kehadiran" data-toggle="modal" data-target=".modalDetailKehadiran" data-id="{{ $p->id_pertemuan }}">Detail</button>
                     </td>
                   </tr>
                   @endforeach
@@ -219,34 +221,34 @@
 </div>
 
 
-{{--  Modal Detail Kehadiran  --}}
+{{-- Modal Detail Kehadiran --}}
 <div class="modal fade modalDetailKehadiran" id="ModalDetailKehadiran" tabindex="-1" role="dialog" aria-labelledby="ModalDetailKehadiranTitle"
-aria-hidden="true">
-<div class="modal-dialog modal-lg" role="document">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h5 class="modal-title text-danger" id="ModalDetailKehadiranTitle">Detail Peserta</h5>
-      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-danger" id="ModalDetailKehadiranTitle">Detail Peserta</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
       </button>
-    </div>
-    <div class="modal-body">
-      <div class="row justify-content-center">
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center">
           <div class="table-responsive">
-              <table class="table table-striped text-wrap" id="">
-                <thead>
-                  <tr class="text-center">
-                    <th>Nama Murid</th>
-                    <th>Status Kehadiran</th>
-                  </tr>
-                </thead>
-                <tbody class="text-center kehadiran_murid">
-                </tbody>
-              </table>
-            </div>
+            <table class="table table-striped text-wrap" id="">
+              <thead>
+                <tr class="text-center">
+                  <th>Nama Murid</th>
+                  <th>Status Kehadiran</th>
+                </tr>
+              </thead>
+              <tbody class="text-center kehadiran_murid">
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 @endsection

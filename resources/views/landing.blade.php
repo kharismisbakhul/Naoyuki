@@ -72,7 +72,7 @@
                 <div class="col-lg-4 mt-2">
                     <button class="program" data-toggle="modal" data-toggle="modal" data-target=".ModalDetailProgram" data-id="{{ $pl->id_program_les }}">
                         <figure class="figure">
-                            <img src="{{URL::asset($pl->image)}}" class="img-thumbnail">
+                            <img src="{{URL::asset($pl->image)}}" class="img-thumbnail" style="width: 300px; height: 300px;">
                             <figcaption class="figure-caption">
                                 <h5>{{ $pl->nama_program_les }}</h5>
                             </figcaption>

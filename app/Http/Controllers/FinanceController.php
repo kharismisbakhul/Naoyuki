@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
-class MarketingController extends Controller
+class FinanceController extends Controller
 {
     function tanggal($tanggal)
     {
@@ -35,9 +35,11 @@ class MarketingController extends Controller
 
     public function index()
     {
-        $data['title'] = "Dashboard Marketing";
+        $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        return view('marketing.dashboard', $data);
+        $data['jumlah_total_pendaftar'] = DB::table('pendaftaran')->get()->count();
+        $data['jumlah_belum_valid'] = DB::table('pendaftaran')->where('status_pendaftaran', 2)->get()->count();
+        return view('finance.dashboard', $data);
     }
 
     public function validasi()
@@ -48,7 +50,12 @@ class MarketingController extends Controller
             ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->join('murid', 'pendaftaran.username', '=', 'murid.username')
             ->get();
-        return view('marketing.validasi', $data);
+        
+            for ($i=0; $i < count($data['data_pendaftaran']) ; $i++) { 
+                $data['data_pendaftaran'][$i]->tanggal_indo = $this->tanggal($data['data_pendaftaran'][$i]->tanggal_pendaftaran);
+            }
+
+        return view('finance.validasi', $data);
     }
 
     public function validasi_pendaftaran(Request $request)
@@ -56,9 +63,9 @@ class MarketingController extends Controller
         $status = DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [intval($request->validasi), $request->id_validasi]);
 
         if ($status == true) {
-            return redirect('/marketing/validasi')->with('status', 'Validasi berhasil');
+            return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
         } else {
-            return redirect('/marketing/validasi')->with('status', 'Validasi gagal');
+            return redirect('/finance/validasi')->with('status', 'Validasi gagal');
         }
     }
 }

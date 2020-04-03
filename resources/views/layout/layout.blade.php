@@ -176,10 +176,12 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                @if(session('status_user') == 1)
                 <a class="dropdown-item" href="{{ url('/profil') }}">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                   Profil
                 </a>
+                @endif
                 <a class="dropdown-item logout" href="#">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
@@ -286,7 +288,9 @@
 <!-- Page Specific JS File -->
 <script src="{{ URL::asset('js/murid.js') }}"></script>
 <script src="{{ URL::asset('js/sensei.js') }}"></script>
-<script src="{{ URL::asset('js/marketing.js') }}"></script>
+<script src="{{ URL::asset('js/akademik.js') }}"></script>
+<script src="{{ URL::asset('js/finance.js') }}"></script>
+<script src="{{ URL::asset('js/admin.js') }}"></script>
 
 </body>
 

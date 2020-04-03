@@ -38,6 +38,9 @@ Route::get('/murid/getFeedbackKelas/{id}', 'MuridController@getFeedbackKelas');
 
 // Sensei
 Route::get('/sensei', 'SenseiController@index');
+Route::get('/sensei/jadwal', 'SenseiController@jadwalLes');
+Route::get('/sensei/jadwalKosong', 'SenseiController@jadwalKosong');
+Route::post('/sensei/jadwalKosong', 'SenseiController@tambahJadwalKosong');
 Route::get('/sensei/scoreboard', 'SenseiController@scoreboard');
 Route::get('/sensei/pembelajaran', 'SenseiController@pembelajaran');
 Route::get('/sensei/pembelajaran/{id}', 'SenseiController@detailPembelajaran');
@@ -56,14 +59,22 @@ Route::get('/akademik/tambahProgram', 'AkademikController@tambahProgram');
 Route::post('/akademik/tambahProgram', 'AkademikController@tambahProgramLes');
 Route::get('/akademik/tambahKelas/{id}', 'AkademikController@tambahKelas');
 Route::post('/akademik/tambahKelas', 'AkademikController@tambahKelasLes');
+Route::post('/akademik/materi', 'AkademikController@editMateri');
+Route::get('/akademik/getDetailKelas/{id}', 'AkademikController@getDetailKelas');
 
-// Marketing
-Route::get('/marketing', 'MarketingController@index');
-Route::get('/marketing/validasi', 'MarketingController@validasi');
-Route::post('/marketing/validasi', 'MarketingController@validasi_pendaftaran');
+// Finance
+Route::get('/finance', 'FinanceController@index');
+Route::get('/finance/validasi', 'FinanceController@validasi');
+Route::post('/finance/validasi', 'FinanceController@validasi_pendaftaran');
 
 // Admin
 Route::get('/admin', 'AdminController@index');
+Route::get('/admin/manajemenUser', 'AdminController@manajemenUser');
+Route::get('/admin/tambahUser', 'AdminController@viewTambahUser');
+Route::post('/admin/tambahUser', 'AdminController@tambahUser');
+Route::post('/admin/editUser', 'AdminController@editUser');
+Route::get('/admin/hapusUser/{id}', 'AdminController@hapusUser');
+Route::get('/admin/getUser/{id}', 'AdminController@getUser');
 
 // Route::get('/about', 'PagesController@about');
 // Route::get('/mahasiswa', 'MahasiswaController@index');

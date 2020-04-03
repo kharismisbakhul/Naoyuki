@@ -57,6 +57,47 @@ class SenseiController extends Controller
         return view('sensei.dashboard', $data);
     }
 
+    public function jadwalLes()
+    {
+        $data['title'] = "Jadwal Les";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        return view('sensei.jadwal_les', $data);
+    }
+
+    public function jadwalKosong()
+    {
+        $data['title'] = "Jadwal Les";
+        $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['jadwal_kosong'] = DB::table('jadwal_kosong')->where(['username' => session('username')])
+        ->join('hari', 'hari.id_hari', '=', 'jadwal_kosong.id_hari')
+        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kosong.id_sesi')
+        ->where('status_kosong', 0)
+        ->get();
+
+        $data['sesi'] = DB::table('sesi_jam')->get();
+        $data['hari'] = DB::table('hari')->get();
+        return view('sensei.jadwal_kosong', $data);
+    }
+
+    public function tambahJadwalKosong(Request $request)
+    {
+        $username = $request->username;
+        $hari = intval($request->hari);
+        $sesi = intval($request->jam);
+        $jadwal = DB::table('jadwal_kosong')
+        ->where('username', $username)
+        ->where('id_hari', $hari)
+        ->where('id_sesi', $sesi)
+        ->get();
+
+        if ($jadwal->isEmpty()) {
+            DB::insert('insert into jadwal_kosong (id_sesi, id_hari, username) values (?, ?, ?)', [$sesi, $hari, $username]);
+            return redirect('/sensei/jadwalKosong')->with('status', 'Penambahan jadwal kosong berhasil');
+        } else {
+            return redirect('/sensei/jadwalKosong')->with('status', 'Jadwal kosong sudah ada / Jadwal tidak kosong');
+        }
+    }
+
     public function scoreboard(){
         $data['title'] = "Scoreboard";
         $data['header'] = "Sensei";
@@ -74,9 +115,6 @@ class SenseiController extends Controller
         ->join('peserta_kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
         ->join('pendaftaran', 'peserta_kelas.username', '=', 'pendaftaran.username')
         ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
-        ->join('jadwal_kelas', 'kelas.id_kelas', '=', 'jadwal_kelas.id_kelas')
-        ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
-        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
         ->where('pendaftaran.status_pendaftaran', 1)
         ->groupBy('pendaftaran.id_program_les')
         ->get();
@@ -88,6 +126,12 @@ class SenseiController extends Controller
         for ($i=0; $i < count($data['kelas_berjalan']); $i++) { 
 
             $data['kelas_berjalan'][$i]->pertemuan = DB::table('pertemuan')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+            
+            $data['kelas_berjalan'][$i]->jadwal = DB::table('jadwal_kelas')
+            ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+            ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
             ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
             ->get();
         }
@@ -105,9 +149,6 @@ class SenseiController extends Controller
         ->join('pendaftaran', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
         ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
         ->join('sensei', 'kelas.id_sensei', '=', 'sensei.id_sensei')
-        ->join('jadwal_kelas', 'kelas.id_kelas', '=', 'jadwal_kelas.id_kelas')
-        ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
-        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
         ->where('pendaftaran.status_pendaftaran', 1)
         ->get()->first();
 
@@ -122,10 +163,21 @@ class SenseiController extends Controller
             ->where('id_peserta', "=", $id_peserta_kelas)
             ->where('kehadiran', "=", 1)
             ->get()->count();
+
         }
         
         $data['detail_kelas']->pertemuan = DB::table('pertemuan')
         ->where('id_kelas', "=", $id)
+        ->get();
+
+        for ($i=0; $i < count($data['detail_kelas']->pertemuan) ; $i++) { 
+            $data['detail_kelas']->pertemuan[$i]->tanggal_indo = $this->tanggal($data['detail_kelas']->pertemuan[$i]->tanggal);
+        }
+
+        $data['detail_kelas']->jadwal = DB::table('jadwal_kelas')
+        ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
+        ->where('id_kelas', "=", $data['detail_kelas']->id_kelas)
         ->get();
 
         // Header('Content-type: application/json');
@@ -194,6 +246,7 @@ class SenseiController extends Controller
         
         $data['id_kelas'] = $request->id_kelas;
         $data['pertemuan'] = $request->pertemuan;
+        $data['tanggal'] = $request->tanggal;
         $data['deskripsi'] = $request->deskripsi;
         $data['kehadiran'] = $request->kehadiran;
 
@@ -201,7 +254,7 @@ class SenseiController extends Controller
         ->whereNotIn('id_peserta_kelas', $data['kehadiran'])
         ->get();
 
-        DB::insert('insert into pertemuan (pertemuan_ke, deskripsi, id_kelas) values (?, ?, ?)', [$data['pertemuan'], $data['deskripsi'], $data['id_kelas']]);
+        DB::insert('insert into pertemuan (pertemuan_ke, tanggal, deskripsi, id_kelas) values (?, ?, ?, ?)', [$data['pertemuan'], $data['tanggal'], $data['deskripsi'], $data['id_kelas']]);
 
         $pertemuan = DB::table('pertemuan')
         ->where('pertemuan_ke', $data['pertemuan'])

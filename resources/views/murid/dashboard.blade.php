@@ -10,7 +10,7 @@
         <div class="card-body">
           <div class="row no-gutters align-items-center">
             <div class="col ml-auto">
-              <div class="h5 mb-0 font-weight-bold text-gray-800">Selamat Datang, <span id="user_name" class="text-gray-900 font-weight-bolder">Kharis</span></div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">Selamat Datang, <span id="user_name" class="text-gray-900 font-weight-bolder">{{session('username')}}</span></div>
               <div class="text-s font-weight-normal text-gray-800 mt-2"></div>
             </div>
             <div class="col-auto mr-3">
