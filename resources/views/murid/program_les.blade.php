@@ -78,6 +78,8 @@
                       <p class="text-danger">Belum Valid</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Bayar</a>
                       @elseif($pb->status_pendaftaran == 2)
                       <p class="text-warning">Sedang diproses</p>
+                      @elseif($pb->status_pendaftaran == 3)
+                      <p class="text-primary">Menunggu Kelas</p>
                       @else
                       <p class="text-success">Valid</p>
                       @endif

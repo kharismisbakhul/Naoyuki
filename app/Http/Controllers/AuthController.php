@@ -58,7 +58,7 @@ class AuthController extends Controller
             } else if (session('status_user') == 3) {
                 return redirect('/akademik');
             } else if (session('status_user') == 4) {
-                return redirect('/marketing');
+                return redirect('/finance');
             } else {
                 return redirect('/admin');
             }

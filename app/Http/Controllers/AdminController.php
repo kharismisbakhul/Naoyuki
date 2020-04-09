@@ -48,6 +48,7 @@ class AdminController extends Controller
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['user'] = DB::table('user')->where('username', '!=', session('username'))
         ->join('status_user', 'user.id_status_user', '=', 'status_user.id_status_user')
+        ->orderBy('user.id_status_user', 'asc')
         ->get();
         
         return view('admin.manajemen_user', $data);
@@ -64,8 +65,29 @@ class AdminController extends Controller
     }
 
     public function tambahUser(Request $request)
-    {
-        DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+    {   
+        if($request->status == 1){
+            $file = $request->file('fotoUser');
+            
+            $tujuan_upload = public_path('image/profil/');
+    
+            // echo json_encode($file);die;
+            $file->move($tujuan_upload, $file->getClientOriginalName());
+            $nama_file = 'image/profil/'.$file->getClientOriginalName();
+
+            DB::insert('insert into user (username, password, id_status_user, image) values (?, ?, ?, ?)', [$request->username, $request->password, $request->status, $nama_file]);
+
+            DB::insert('insert into murid (username, nama_lengkap, email, no_hp, asal_sekolah, alamat) values (?, ?, ?, ?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->email_user, $request->no_hp_user, $request->asal_sekolah_user, $request->alamat_user]);    
+        }
+        else if($request->status == 2){
+            DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+
+            DB::insert('insert into sensei (username, nama_sensei, no_hp) values (?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->no_hp_user]);
+        }
+        else{
+            DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+        }
+        
         return redirect('/admin/manajemenUser')->with('status', 'Penambahan user berhasil');
     }
 

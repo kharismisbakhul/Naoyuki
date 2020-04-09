@@ -138,7 +138,7 @@
             </li>
 
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
+            {{--  <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
@@ -162,7 +162,7 @@
                 </a>
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li>  --}}
 
             <!-- Nav Item - Messages -->
 
@@ -267,6 +267,7 @@
   <link href='{{ URL::asset('/packages/bootstrap/main.css') }}' rel='stylesheet' />
   <script src='{{ URL::asset('/vendor/rrule.js') }}'></script>
   <script src='{{ URL::asset('/packages/core/main.js') }}'></script>
+  <script src='{{ URL::asset('/packages/core/locales-all.js') }}'></script>
   <script src='{{ URL::asset('/packages/interaction/main.js') }}'></script>
   <script src='{{ URL::asset('/packages/daygrid/main.js') }}'></script>
   <script src='{{ URL::asset('/packages/timegrid/main.js') }}'></script>

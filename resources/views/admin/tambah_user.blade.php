@@ -28,7 +28,7 @@
             <div class="form-group row">
               <label for="status" class="col-sm-3 col-form-label">Status User</label>
               <div class="col-sm-9">
-                <select type="number" class="form-control" id="status" name="status">
+                <select type="number" class="form-control status" id="status" name="status">
                     <option value="" hidden selected>Pilih Status User</option>
                     @foreach($status_user as $su)
                     <option value="{{$su->id_status_user}}">{{$su->nama_status_user}}</option>
@@ -38,19 +38,15 @@
             </div>
             <div class="form-group row nama_lengkap">
             </div>
-            <div class="form-group row email">
-            </div>
             <div class="form-group row no_hp">
             </div>
+                <div class="form-group row email">
+                </div>
             <div class="form-group row asal_sekolah">
             </div>
             <div class="form-group row alamat">
             </div>
-            <div class="form-group row">
-              <label for="foto_program" class="col-sm-3 col-form-label">Foto User</label>
-              <div class="col-sm-9">
-                  <input type="file" name="fotoProgram">
-              </div>
+            <div class="form-group row foto">
             </div>
             <div class="row">
                 <div class="col-lg">

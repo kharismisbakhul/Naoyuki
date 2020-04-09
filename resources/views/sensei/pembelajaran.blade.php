@@ -15,10 +15,10 @@
         <div class="card-header py-3 bg-danger">
           <h6 class="m-0 font-weight-bold text-capitalize text-white">Pembelajaran Berjalan</h6>
         </div>
-        <div class="card-body">
-          <div class="card col-lg-5 mb-3" style="">
-          <div class="row no-gutters">
-              @foreach ($kelas_berjalan as $kb)
+        <div class="card-body row">
+          @foreach ($kelas_berjalan as $kb)
+            <div class="card col-lg-5 mb-3" style="">
+            <div class="row no-gutters">
               
             <div class="col-md-4">
                 <figure class="figure text-center">
@@ -42,9 +42,12 @@
               </div>
             </div>
 
-            @endforeach
           </div>
         </div>
+
+        <div class="col-lg-1 mb-3" style="">
+        </div>
+            @endforeach
         </div>
       </div>
     </div>

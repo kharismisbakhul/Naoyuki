@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 03, 2020 at 04:20 PM
+-- Generation Time: Apr 09, 2020 at 05:30 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -65,7 +65,9 @@ CREATE TABLE `jadwal_kelas` (
 
 INSERT INTO `jadwal_kelas` (`id_jadwal_kelas`, `id_kelas`, `id_hari`, `id_sesi`) VALUES
 (1, 1, 3, 3),
-(2, 1, 4, 3);
+(2, 1, 4, 3),
+(4, 6, 1, 1),
+(5, 2, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -90,7 +92,8 @@ CREATE TABLE `jadwal_kosong` (
 INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username`, `status_kosong`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 'Kharis', 0, NULL, NULL),
 (2, 3, 2, 'Kharis', 0, NULL, NULL),
-(3, 8, 1, 'Baskara', 0, NULL, NULL);
+(3, 8, 1, 'Baskara', 0, NULL, NULL),
+(4, 1, 1, 'Baskara', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -122,12 +125,11 @@ CREATE TABLE `kehadiran_peserta` (
 --
 
 INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
-(4, 1, 8, 1, 'ABC'),
+(4, 1, 8, 1, 'AAA'),
 (5, 2, 8, 1, NULL),
-(6, 1, 9, 1, NULL),
-(7, 2, 9, 0, NULL),
-(8, 1, 10, 1, NULL),
-(9, 2, 10, 1, NULL);
+(10, 1, 11, 1, 'BBBB'),
+(11, 2, 11, 0, NULL),
+(12, 5, 11, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -139,6 +141,7 @@ CREATE TABLE `kelas` (
   `id_kelas` int(10) UNSIGNED NOT NULL,
   `nama_kelas` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_sensei` int(10) UNSIGNED NOT NULL,
+  `color` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -147,9 +150,10 @@ CREATE TABLE `kelas` (
 -- Dumping data for table `kelas`
 --
 
-INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `created_at`, `updated_at`) VALUES
-(1, 'Kelas Pertama', 1, NULL, NULL),
-(2, 'ABC', 1, NULL, NULL);
+INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `color`, `created_at`, `updated_at`) VALUES
+(1, 'Kelas Pertama', 1, '#5F5F5F', NULL, NULL),
+(2, 'ABC', 1, '#000000', NULL, NULL),
+(6, 'Kanji 123', 1, '#111000', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -250,13 +254,9 @@ CREATE TABLE `pendaftaran` (
 --
 
 INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
-(4, 'Kharis', 1, 1, '', '0000-00-00', '2019-12-22', '20:03:11'),
-(5, 'Kharis', 2, 2, 'icon.png', '0000-00-00', '2019-12-22', '20:03:11'),
-(8, 'Kharis', 3, 2, 'a.png', '0000-00-00', '2019-12-22', '20:03:11'),
-(12, 'misbakhul', 1, 1, NULL, '0000-00-00', '2020-03-09', '00:00:00'),
-(21, 'Kharis', 5, 2, 'AksaraFILKOM2.png', '2020-03-31', '2020-03-25', '06:25:03'),
-(22, 'Kharis', 7, 0, NULL, '2020-03-31', '2020-03-25', '06:26:37'),
-(23, 'Kharis', 2, 2, 'AksaraFILKOM.png', '2020-03-28', '2020-03-27', '03:11:13');
+(4, 'Kharis', 1, 1, '', '2020-04-01', '2019-12-22', '20:03:11'),
+(5, 'misbakhul', 2, 1, 'icon.png', '2020-04-01', '2019-12-22', '20:03:11'),
+(25, 'Kharis', 3, 1, 'AksaraFILKOM.png', '2020-04-04', '2020-04-04', '10:55:04');
 
 -- --------------------------------------------------------
 
@@ -280,8 +280,7 @@ CREATE TABLE `pertemuan` (
 
 INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`, `created_at`, `updated_at`) VALUES
 (8, 1, '2020-04-01', 'AAAA', 1, NULL, NULL),
-(9, 2, '2020-04-02', 'BBBB', 1, NULL, NULL),
-(10, 3, '2020-04-03', 'MMMM', 1, NULL, NULL);
+(11, 2, '2020-04-05', 'ABC', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -306,7 +305,8 @@ CREATE TABLE `peserta_kelas` (
 
 INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `id_pendaftaran`, `nilai_evaluasi`, `status_les`, `created_at`, `updated_at`) VALUES
 (1, 'Kharis', 1, 4, 80, 0, NULL, NULL),
-(2, 'misbakhul', 1, 5, 80, 0, NULL, NULL);
+(2, 'misbakhul', 2, 5, 80, 0, NULL, NULL),
+(5, 'Kharis', 6, 25, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -359,7 +359,8 @@ CREATE TABLE `sensei` (
 --
 
 INSERT INTO `sensei` (`id_sensei`, `username`, `nama_sensei`, `no_hp`, `created_at`, `updated_at`) VALUES
-(1, 'Baskara', 'Abu Hasan Baskara', '088888888', NULL, NULL);
+(1, 'Baskara', 'Abu Hasan Baskara', '088888888', NULL, NULL),
+(2, 'Sensei1', 'Sensei Sensei', '0888', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -435,7 +436,8 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `image`, `id_status_user`
 (3, 'Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
 (4, 'Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
 (5, 'Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL),
-(6, 'Joni', '123', 'image/default.jpg', 1, NULL, NULL);
+(6, 'Joni', '123', 'image/default.jpg', 1, NULL, NULL),
+(7, 'Sensei1', '123', 'image/default.jpg', 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -506,7 +508,6 @@ INSERT INTO `user_sub_menu` (`id_sub_menu`, `judul`, `url`, `ikon`, `id_menu`) V
 (3, 'Profil', '/murid/profil', 'fas fa-fw fa-user', 1),
 (4, 'Pembelajaran', '/murid/pembelajaran', 'fas fa-fw fa-book-reader', 1),
 (5, 'Jadwal Les', '/sensei/jadwal', 'far fa-fw fa-calendar-alt', 2),
-(6, 'Scoreboard', '/sensei/scoreboard', 'far fa-calendar-alt', 2),
 (7, 'Pembelajaran', '/sensei/pembelajaran', 'fas fa-fw fa-book-reader', 2),
 (8, 'Program Les', '/akademik/programLes', 'fas fa-fw fa-clipboard', 3),
 (13, 'Validasi', '/finance/validasi', 'fas fa-fw fa-book-reader', 4),
@@ -673,13 +674,13 @@ ALTER TABLE `hari`
 -- AUTO_INCREMENT for table `jadwal_kelas`
 --
 ALTER TABLE `jadwal_kelas`
-  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `jadwal_kosong`
 --
 ALTER TABLE `jadwal_kosong`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `kategori_notifikasi`
@@ -691,13 +692,13 @@ ALTER TABLE `kategori_notifikasi`
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -715,19 +716,19 @@ ALTER TABLE `notifikasi`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`
 --
 ALTER TABLE `peserta_kelas`
-  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `program_les`
@@ -739,7 +740,7 @@ ALTER TABLE `program_les`
 -- AUTO_INCREMENT for table `sensei`
 --
 ALTER TABLE `sensei`
-  MODIFY `id_sensei` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_sensei` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sesi_jam`
@@ -757,7 +758,7 @@ ALTER TABLE `status_user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`

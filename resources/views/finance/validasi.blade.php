@@ -37,6 +37,9 @@
                                     @elseif($dp->status_pendaftaran == 0)
                                     <td class="text-warning">Belum Membayar</td>
                                     <td></td>
+                                    @elseif($dp->status_pendaftaran == 3)
+                                    <td class="text-primary">Valid - Menunggu Kelas</td>
+                                    <td></td>
                                     @else
                                     <td class="text-danger">Belum Valid</td>
                                     <td><button class="btn btn-success detailValidasi" data-toggle="modal" data-target=".modalDetailValidasi"
@@ -70,7 +73,7 @@
             <div class="modal-body">
                 <div class="row justify-content-center">
                     <div class="col-lg-12">
-                        <form action="{{ url('/marketing/validasi')}}" method="post">
+                        <form action="{{ url('/finance/validasi')}}" method="post">
                             @csrf
                             <input type="hidden" class="id_validasi" name="id_validasi" id="id_validasi" value="">
                             <div class="form-group">
@@ -84,8 +87,8 @@
                             <div class="form-group">
                                 <label for="validasi">Status Validasi</label>
                                 <select class="form-control" id="validasi" name="validasi">
-                                <option value="1">Valid</option>
-                                <option value="3">Tolak</option>
+                                <option value="3">Valid</option>
+                                <option value="0">Tolak</option>
                                 </select>
                             </div>
                             <div class="form-group">

@@ -19,6 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var dateNow = year + '-' + month + '-' + day;
 
+    var prevColor;
+    function getRandomColor(usePrev) {
+        if (usePrev && prevColor)
+          return prevColor;
+    
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        prevColor = color;
+        return color;
+      }
+
     var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list', 'rrule'],
         themeSystem: 'bootstrap',
@@ -29,88 +43,53 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         defaultDate: dateNow,
-        locale: 'en',
+        locale: 'id',
         navLinks: true, // can click day/week names to navigate views
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         backgroundColor: 'gray',
     });
 
-    // Ubah Ukuran view list
-    // $('body').on('DOMSubtreeModified', ".fc-button-active", function () {
-    //     var button = $('.fc-button-active').html();
-    //     // console.log(button);
-    //     if (button == "list") {
-    //         // console.log(true);
-    //     }
-    // });
-
     // Event sendiri di siujian
-	// $.ajax({
-	// 	url: segments[0] + '/murid/getJadwal/' + id,
-	// 	dataType: 'json',
-	// 	type: 'get',
-	// 	success: function (data) {
-	// 		// console.log(data);
-	// 		data.forEach(function (dataA) {
-	// 			var room = dataA.ruangan;
-	// 			if (room != null) {
-	// 				room = '\tRoom ' + room + '\n';
-	// 			} else {
-	// 				room = '';
-	// 			}
-	// 			var title = dataA.nama_agenda;
-	// 			if (dataA.kategoriAgenda == 3 || dataA.kategoriAgenda == 4) {
-	// 				calendar.addEvent({
-	// 					id: dataA.id_agenda,
-	// 					title: room + dataA.nama_agenda,
-	// 					rrule: {
-	// 						dtstart: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
-	// 						until: dataA.tanggalSelesai,
-	// 						byweekday: rrule.RRule[dataA.hariAgenda],
-	// 						freq: 'weekly'
-	// 					},
-	// 					color: 'red',
-	// 					duration: dataA.durasi
-	// 				});
-	// 			} else if (dataA.kategoriAgenda == 2) {
-	// 				calendar.addEvent({
-	// 					id: dataA.id_agenda,
-	// 					title: room + dataA.nama_agenda,
-	// 					start: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
-	// 					end: dataA.tanggalSelesai + 'T' + dataA.waktuSelesai,
-	// 					color: 'blue'
-	// 				});
-	// 			} else {
-	// 				calendar.addEvent({
-	// 					id: dataA.id_agenda,
-	// 					title: room + dataA.nama_agenda,
-	// 					start: dataA.tanggalMulai + 'T' + dataA.waktuMulai,
-	// 					end: dataA.tanggalMulai + 'T' + dataA.waktuSelesai,
-	// 					color: 'green',
-	// 				});
-	// 			}
+	$.ajax({
+		url: segments[0] + '/murid/getJadwal',
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+            console.log(data);
+			data['kelas_berjalan'].forEach(function (kelas) {
+                console.log(kelas);
+                kelas['jadwal'].forEach(function (jadwal) {
+                    calendar.addEvent({
+						id: kelas.id_kelas,
+						title: kelas.nama_kelas,
+						rrule: {
+							dtstart: kelas.tanggal_mulai + 'T' + jadwal.jam_mulai,
+                            byweekday: rrule.RRule[jadwal.day],
+                            count: kelas.jumlah_pertemuan,
+							freq: 'weekly'
+						},
+						color: kelas.color,
+						duration: jadwal.durasi
+					});
+                })
+			})
 
-	// 		})
-	// 		var fc = $('.fc-center h2').html();
-	// 		var monthYear = fc.split(" ");
-	// 		$('.monthYear').html(fc);
-	// 		// console.log(fc);
-	// 	}
-	// });
+		}
+	});
 
 
     // render calendar
     calendar.render();
 
-    // $('#tanggalSpesifik').on('change', function () {
-    //     var seleksiTanggal = $('#tanggalSpesifik').val();
-    //     if (seleksiTanggal != "") {
-    //         calendar.gotoDate(seleksiTanggal);
-    //     } else {
-    //         calendar.gotoDate(dateNow);
-    //     }
-    // })
+    $('#tanggalSpesifik').on('change', function () {
+        var seleksiTanggal = $('#tanggalSpesifik').val();
+        if (seleksiTanggal != "") {
+            calendar.gotoDate(seleksiTanggal);
+        } else {
+            calendar.gotoDate(dateNow);
+        }
+    })
 
 });
 
@@ -148,14 +127,51 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         defaultDate: dateNow,
-        locale: 'en',
+        locale: 'id',
         navLinks: true, // can click day/week names to navigate views
         editable: true,
         eventLimit: true, // allow "more" link when too many events
         backgroundColor: 'gray',
     });
 
+    // Event sendiri di siujian
+	$.ajax({
+		url: segments[0] + '/sensei/getJadwal',
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+            console.log(data);
+			data['kelas_berjalan'].forEach(function (kelas) {
+                console.log(kelas);
+                kelas['jadwal'].forEach(function (jadwal) {
+                    calendar.addEvent({
+						id: kelas.id_kelas,
+						title: kelas.nama_kelas,
+						rrule: {
+							dtstart: kelas.tanggal_mulai + 'T' + jadwal.jam_mulai,
+                            byweekday: rrule.RRule[jadwal.day],
+                            count: kelas.jumlah_pertemuan,
+							freq: 'weekly'
+						},
+						color: kelas.color,
+						duration: jadwal.durasi
+					});
+                })
+			})
+
+		}
+    });
+    
     // render calendar
     calendar.render();
+
+    $('#tanggalSpesifik').on('change', function () {
+        var seleksiTanggal = $('#tanggalSpesifik').val();
+        if (seleksiTanggal != "") {
+            calendar.gotoDate(seleksiTanggal);
+        } else {
+            calendar.gotoDate(dateNow);
+        }
+    })
 
 });

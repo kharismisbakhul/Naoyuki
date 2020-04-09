@@ -21,6 +21,7 @@ Route::get('/getProgram/{id}', 'AuthController@getProgramLes');
 // Murid
 Route::get('/murid', 'MuridController@index');
 Route::get('/murid/jadwal', 'MuridController@jadwalLes');
+Route::get('/murid/getJadwal', 'MuridController@getJadwal');
 Route::get('/murid/jadwalKosong', 'MuridController@jadwalKosong');
 Route::post('/murid/jadwalKosong', 'MuridController@tambahJadwalKosong');
 Route::get('/murid/programLes', 'MuridController@programLes');
@@ -39,6 +40,7 @@ Route::get('/murid/getFeedbackKelas/{id}', 'MuridController@getFeedbackKelas');
 // Sensei
 Route::get('/sensei', 'SenseiController@index');
 Route::get('/sensei/jadwal', 'SenseiController@jadwalLes');
+Route::get('/sensei/getJadwal', 'SenseiController@getJadwal');
 Route::get('/sensei/jadwalKosong', 'SenseiController@jadwalKosong');
 Route::post('/sensei/jadwalKosong', 'SenseiController@tambahJadwalKosong');
 Route::get('/sensei/scoreboard', 'SenseiController@scoreboard');

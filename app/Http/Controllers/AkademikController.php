@@ -109,8 +109,12 @@ class AkademikController extends Controller
     {
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['program_les'] = DB::table('program_les')->where(['id_program_les' => $id])->get();
-        $data['murid'] = DB::table('murid')->get();
+        $data['program_les'] = DB::table('program_les')->where(['id_program_les' => $id])->get()->first();
+        $data['murid'] = DB::table('pendaftaran')
+        ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+        ->where('pendaftaran.status_pendaftaran', 3)
+        ->where('pendaftaran.id_program_les', $id)
+        ->get();
         $data['sensei'] = DB::table('sensei')->get();
         $data['sesi'] = DB::table('sesi_jam')->get();
         $data['hari'] = DB::table('hari')->get();

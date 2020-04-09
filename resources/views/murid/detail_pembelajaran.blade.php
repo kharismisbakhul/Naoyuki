@@ -97,7 +97,7 @@
                             <input type="hidden" id="id_kelas" name="id_kelas" value="{{ $detail_kelas->id_kelas }}">
                             <div class="form-group">
                                 <label for="pertemuan">Pertemuan</label>
-                                <input type="text" class="form-control" id="pertemuan" name="pertemuan" readonly value="1">
+                                <input type="text" class="form-control" id="pertemuan" name="pertemuan" readonly>
                             </div>
                             <div class="form-group">
                                 <label for="feeedback">Feedback</label>
@@ -138,7 +138,7 @@
                         <div class="col-lg-8">
                                 <div class="form-group">
                                     <label for="pertemuan-detail">Pertemuan</label>
-                                    <input type="text" class="form-control" id="pertemuan-detail" name="pertemuan-detail" readonly value="">
+                                    <input type="text" class="form-control" id="pertemuan-detail" name="pertemuan-detail" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="feeedback-detail">Feedback</label>

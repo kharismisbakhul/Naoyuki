@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use DateTime;
 
 class SenseiController extends Controller
 {
@@ -72,6 +73,8 @@ class SenseiController extends Controller
         ->join('hari', 'hari.id_hari', '=', 'jadwal_kosong.id_hari')
         ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kosong.id_sesi')
         ->where('status_kosong', 0)
+        ->orderBy('jadwal_kosong.id_hari', 'asc')
+        ->orderBy('jadwal_kosong.id_sesi', 'asc')
         ->get();
 
         $data['sesi'] = DB::table('sesi_jam')->get();
@@ -112,11 +115,12 @@ class SenseiController extends Controller
         ->get()->first();
 
         $data['kelas_berjalan'] = DB::table('kelas')
-        ->join('peserta_kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
-        ->join('pendaftaran', 'peserta_kelas.username', '=', 'pendaftaran.username')
-        ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
-        ->where('pendaftaran.status_pendaftaran', 1)
-        ->groupBy('pendaftaran.id_program_les')
+        // ->join('peserta_kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
+        // ->join('pendaftaran', 'peserta_kelas.username', '=', 'pendaftaran.username')
+        // ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+        ->where('kelas.id_sensei', $sensei->id_sensei)
+        // ->where('pendaftaran.status_pendaftaran', 1)
+        // ->groupBy('pendaftaran.id_program_les')
         ->get();
 
         // Header('Content-type: application/json');
@@ -125,9 +129,19 @@ class SenseiController extends Controller
 
         for ($i=0; $i < count($data['kelas_berjalan']); $i++) { 
 
+            $data['kelas_berjalan'][$i]->peserta = DB::table('peserta_kelas')
+            ->join('pendaftaran', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+            ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
             $data['kelas_berjalan'][$i]->pertemuan = DB::table('pertemuan')
             ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
             ->get();
+
+            $data['kelas_berjalan'][$i]->jumlah_pertemuan = $data['kelas_berjalan'][$i]->peserta[0]->jumlah_pertemuan;
+            $data['kelas_berjalan'][$i]->image = $data['kelas_berjalan'][$i]->peserta[0]->image;
+            $data['kelas_berjalan'][$i]->nama_program_les = $data['kelas_berjalan'][$i]->peserta[0]->nama_program_les;
             
             $data['kelas_berjalan'][$i]->jadwal = DB::table('jadwal_kelas')
             ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
@@ -137,6 +151,8 @@ class SenseiController extends Controller
         }
 
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        // Header('Content-type: application/json');
+        // echo json_encode($data);die;
         return view('sensei.pembelajaran', $data);
     }
 
@@ -305,5 +321,74 @@ class SenseiController extends Controller
         DB::update('update peserta_kelas set nilai_evaluasi = ? where id_peserta_kelas = ?', [$nilai_evaluasi, intval($id_peserta_kelas)]);
 
         return redirect('/sensei/pembelajaran/'.$id_kelas)->with('status', 'Nilai Evaluasi berhasil diperbarui');
+    }
+
+    public function getJadwal(){
+        $sensei = DB::table('sensei')->where(['username' => session('username')])
+        ->get()->first();
+
+        $data['kelas_berjalan'] = DB::table('pendaftaran')
+        ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
+        ->join('peserta_kelas', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
+        ->join('kelas', 'peserta_kelas.id_kelas', '=', 'kelas.id_kelas')
+        ->where('pendaftaran.status_pendaftaran', 1)
+        ->where('kelas.id_sensei', $sensei->id_sensei)
+        // ->groupBy('kelas.id_kelas')
+        ->get();
+
+        for ($i=0; $i < count($data['kelas_berjalan']); $i++) { 
+            // array_push($data['kelas_berjalan'][0]->peserta_kelas, "AA");
+            $data['kelas_berjalan'][$i]->peserta = DB::table('peserta_kelas')
+            ->where(['username' => session('username')])
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
+            $data['kelas_berjalan'][$i]->pertemuan = DB::table('pertemuan')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
+            $data['kelas_berjalan'][$i]->jadwal = DB::table('jadwal_kelas')
+            ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+            ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
+            ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
+            ->get();
+
+            for ($j=0; $j < count($data['kelas_berjalan'][$i]->jadwal); $j++) { 
+                $date1 = new DateTime(date('Y-m-d') . 'T' . $data['kelas_berjalan'][$i]->jadwal[$j]->jam_mulai);
+                $date2 = new DateTime(date('Y-m-d') . 'T' . $data['kelas_berjalan'][$i]->jadwal[$j]->jam_selesai);
+                $diff = $date2->diff($date1);
+                $data['kelas_berjalan'][$i]->jadwal[$j]->durasi = $diff->format('%H:%I:%S');
+
+                if($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 1){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "MO";
+                }
+                elseif($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 2){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "TU";
+                }
+                elseif($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 3){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "WE";
+                }
+                elseif($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 4){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "TH";
+                }
+                elseif($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 5){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "FR";
+                }
+                elseif($data['kelas_berjalan'][$i]->jadwal[$j]->id_hari == 6){
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "SA";
+                }
+                else{
+                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "SU";
+                }
+                // $nameOfDay = date('D', strtotime(date('Y-m-d')));
+                // $hari = strtoupper(substr($nameOfDay, 0, 2));
+
+                // echo json_encode($hari);die;
+            }
+
+        }
+
+        Header('Content-type: application/json');
+        echo json_encode($data);
     }
 }
