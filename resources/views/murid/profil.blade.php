@@ -69,7 +69,7 @@
                         </figure>
                     </div>
                     <div class="col-lg-6">
-                        <form action="{{ url('/murid/editProfil/')}}" method="post">
+                        <form action="{{ url('/murid/editProfil/')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" name="username" value="{{ $profil['username'] }}">
                             <div class="form-group">
@@ -87,6 +87,10 @@
                             <div class="form-group">
                                 <label for="alamat">Alamat</label>
                                 <input type="text" class="form-control" id="alamat" name="alamat" value="{{ $profil['alamat'] }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="foto">Foto User</label>
+                                <input type="file" class="form-control" name="fotoProfil">
                             </div>
                             <div class="row">
                                 <div class="col-lg">

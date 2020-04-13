@@ -103,6 +103,10 @@
           @endif
           <div class="row">
             <div class="table-responsive">
+              
+          @if(count($detail_kelas->pertemuan) == 0)
+          <div class="alert alert-warning text-center mt-2 mb-2 col-lg-12">Belum ada pertemuan</div>
+          @else
               <table class="table table-striped text-wrap" id="table-daftar-pertemuan">
                 <thead>
                   <tr class="text-center">
@@ -125,6 +129,7 @@
                   @endforeach
                 </tbody>
               </table>
+              @endif
             </div>
           </div>
 
@@ -227,7 +232,8 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-danger" id="ModalDetailKehadiranTitle">Detail Peserta</h5>
+        <h5 class="modal-title text-danger" id="ModalDetailKehadiranTitle">Detail Pertemuan <span class="pertemuan-judul"></span>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
       </button>
@@ -240,6 +246,7 @@
                 <tr class="text-center">
                   <th>Nama Murid</th>
                   <th>Status Kehadiran</th>
+                  <th>Feedback</th>
                 </tr>
               </thead>
               <tbody class="text-center kehadiran_murid">

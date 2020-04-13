@@ -58,6 +58,9 @@
         </div>
         <div class="row">
           <div class="table-responsive">
+            @if(count($kelas) == 0)
+              <div class="alert alert-warning text-center mt-2 mb-2 col-lg-12">Tidak ada kelas</div>
+            @else
             <table class="table table-striped text-wrap" id="table-daftar-kelas">
               <thead>
                 <tr class="text-center">
@@ -85,6 +88,7 @@
                 @endforeach
               </tbody>
             </table>
+            @endif
           </div>
         </div>
 
@@ -143,6 +147,7 @@
                       <th>Pertemuan</th>
                       <th>Tanggal</th>
                       <th>Deskripsi</th>
+                      <th>Kehadiran + Feedback</th>
                     </tr>
                   </thead>
                   <tbody class="text-center" id="body-pertemuan-modal">

@@ -54,7 +54,10 @@
       </div>
       <div class="card-body">
         <div class="row">
-          <div class="table-responsive">
+            <div class="table-responsive">
+            @if(count($program_berjalan) == 0)
+              <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada program yang terdaftar</div>
+            @else
             <table class="table table-striped text-wrap" id="table-program-berjalan">
                 <thead>
                     <tr class="text-center">
@@ -75,11 +78,13 @@
                     <td>{{ $pb->jumlah_pertemuan }} Kali</td>
                     <td>
                       @if($pb->status_pendaftaran == 0)
-                      <p class="text-danger">Belum Valid</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Bayar</a>
+                      <p class="text-danger">Belum Bayar</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Bayar</a>
                       @elseif($pb->status_pendaftaran == 2)
                       <p class="text-warning">Sedang diproses</p>
                       @elseif($pb->status_pendaftaran == 3)
                       <p class="text-primary">Menunggu Kelas</p>
+                      @elseif($pb->status_pendaftaran == 5)
+                      <p class="text-danger">Bukti Pembayaran Tidak Valid</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Upload Ulang Bukti</a>
                       @else
                       <p class="text-success">Valid</p>
                       @endif
@@ -89,6 +94,7 @@
                   @endforeach 
                 </tbody>
             </table>
+            @endif
         </div>
         </div>
       </div>

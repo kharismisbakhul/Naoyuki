@@ -33,6 +33,10 @@
         <div class="card-body">
           <div class="table-responsive">
 
+            @if(count($program_berjalan) == 0)
+              <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada program yang sedang berjalan</div>
+            @else
+
             {{-- Start Program --}}
             @foreach ($program_berjalan as $pb)
             @if($pb->status_pendaftaran == 1)
@@ -51,6 +55,7 @@
             </div>
             @endif
             @endforeach
+            @endif
             {{-- End Program --}}
           </div>
         </div>
@@ -64,6 +69,9 @@
         </div>
         <div class="card-body">
           <div class="table-responsive">
+            @if(count($kelas_berjalan) == 0)
+              <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada kelas yang sedang berjalan</div>
+            @else
             <table class="table table-striped table-hover text-left text-nowrap " id="dataTable" width="100%" cellspacing="0">
               <thead style="background-color: #2980b9;color:#ecf0f1 ">
                 <tr>
@@ -84,6 +92,7 @@
                 @endforeach
               </tbody>
             </table>
+            @endif
           </div>
         </div>
       </div>

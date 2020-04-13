@@ -16,6 +16,9 @@
           <h6 class="m-0 font-weight-bold text-capitalize text-white">Pembelajaran Berjalan</h6>
         </div>
         <div class="card-body row">
+          @if(count($kelas_berjalan) == 0)
+          <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada pembelajaran yang berlangsung</div>
+          @else
           @foreach ($kelas_berjalan as $kb)
             <div class="card col-lg-5 mb-3" style="">
             <div class="row no-gutters">
@@ -42,12 +45,13 @@
               </div>
             </div>
 
-          </div>
-        </div>
+            </div>
+            </div>
 
-        <div class="col-lg-1 mb-3" style="">
-        </div>
-            @endforeach
+            <div class="col-lg-1 mb-3" style="">
+            </div>
+          @endforeach
+          @endif
         </div>
       </div>
     </div>

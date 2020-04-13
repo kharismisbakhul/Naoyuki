@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2020 at 05:30 PM
+-- Generation Time: Apr 13, 2020 at 10:02 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -64,10 +64,8 @@ CREATE TABLE `jadwal_kelas` (
 --
 
 INSERT INTO `jadwal_kelas` (`id_jadwal_kelas`, `id_kelas`, `id_hari`, `id_sesi`) VALUES
-(1, 1, 3, 3),
-(2, 1, 4, 3),
-(4, 6, 1, 1),
-(5, 2, 2, 2);
+(6, 13, 1, 1),
+(7, 13, 2, 3);
 
 -- --------------------------------------------------------
 
@@ -90,10 +88,15 @@ CREATE TABLE `jadwal_kosong` (
 --
 
 INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username`, `status_kosong`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Kharis', 0, NULL, NULL),
-(2, 3, 2, 'Kharis', 0, NULL, NULL),
+(1, 1, 1, 'Kharis', 1, NULL, NULL),
+(2, 3, 2, 'Kharis', 1, NULL, NULL),
 (3, 8, 1, 'Baskara', 0, NULL, NULL),
-(4, 1, 1, 'Baskara', 0, NULL, NULL);
+(4, 1, 3, 'Baskara', 0, NULL, NULL),
+(5, 1, 1, 'Baskara', 1, NULL, NULL),
+(6, 1, 1, 'Joni', 0, NULL, NULL),
+(7, 1, 1, 'misbakhul', 0, NULL, NULL),
+(8, 2, 2, 'Baskara', 0, NULL, NULL),
+(9, 3, 2, 'Baskara', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -125,11 +128,7 @@ CREATE TABLE `kehadiran_peserta` (
 --
 
 INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
-(4, 1, 8, 1, 'AAA'),
-(5, 2, 8, 1, NULL),
-(10, 1, 11, 1, 'BBBB'),
-(11, 2, 11, 0, NULL),
-(12, 5, 11, 0, NULL);
+(16, 7, 13, 1, 'Seru banget materinya');
 
 -- --------------------------------------------------------
 
@@ -151,9 +150,7 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `color`, `created_at`, `updated_at`) VALUES
-(1, 'Kelas Pertama', 1, '#5F5F5F', NULL, NULL),
-(2, 'ABC', 1, '#000000', NULL, NULL),
-(6, 'Kanji 123', 1, '#111000', NULL, NULL);
+(13, 'Kelas Kana 1', 1, '#C7AE23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -198,7 +195,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 CREATE TABLE `murid` (
   `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
   `nama_lengkap` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `no_hp` varchar(14) COLLATE utf8mb4_unicode_ci NOT NULL,
   `asal_sekolah` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alamat` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -211,6 +208,7 @@ CREATE TABLE `murid` (
 --
 
 INSERT INTO `murid` (`username`, `nama_lengkap`, `email`, `no_hp`, `asal_sekolah`, `alamat`, `created_at`, `updated_at`) VALUES
+('Joni', 'Joni Ariawan', 'joniariawan@gmail.com', '08111111', 'SMA N 2 Malang', 'Jl. Veteran No. 73', NULL, NULL),
 ('Kharis', 'Misbakhul Kharis', 'kharis@gmail.com', '085607872843', 'SMAN 2 Malang', 'Jl. Bunga Kumis Kucing No. 21', NULL, NULL),
 ('misbakhul', 'Kharis Misbakhul', 'kharis@gmail.com', '088888888', 'SMAN 1 Kembangbahu', 'Blimbing', NULL, NULL);
 
@@ -254,9 +252,7 @@ CREATE TABLE `pendaftaran` (
 --
 
 INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`) VALUES
-(4, 'Kharis', 1, 1, '', '2020-04-01', '2019-12-22', '20:03:11'),
-(5, 'misbakhul', 2, 1, 'icon.png', '2020-04-01', '2019-12-22', '20:03:11'),
-(25, 'Kharis', 3, 1, 'AksaraFILKOM.png', '2020-04-04', '2020-04-04', '10:55:04');
+(28, 'Kharis', 1, 1, 'AksaraFILKOM.png', '2020-04-14', '2020-04-13', '11:29:07');
 
 -- --------------------------------------------------------
 
@@ -279,8 +275,7 @@ CREATE TABLE `pertemuan` (
 --
 
 INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`, `created_at`, `updated_at`) VALUES
-(8, 1, '2020-04-01', 'AAAA', 1, NULL, NULL),
-(11, 2, '2020-04-05', 'ABC', 1, NULL, NULL);
+(13, 1, '2020-04-13', 'Pertemuan pertama', 13, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -304,9 +299,7 @@ CREATE TABLE `peserta_kelas` (
 --
 
 INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `id_pendaftaran`, `nilai_evaluasi`, `status_les`, `created_at`, `updated_at`) VALUES
-(1, 'Kharis', 1, 4, 80, 0, NULL, NULL),
-(2, 'misbakhul', 2, 5, 80, 0, NULL, NULL),
-(5, 'Kharis', 6, 25, 0, 0, NULL, NULL);
+(7, 'Kharis', 13, 28, 0, 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -435,9 +428,10 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `image`, `id_status_user`
 (2, 'Baskara', '123', 'image/profil/default.png', 2, NULL, NULL),
 (3, 'Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
 (4, 'Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
-(5, 'Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL),
+(5, 'Kharis', '123', 'image/profil/kharis_ub.png', 1, NULL, NULL),
 (6, 'Joni', '123', 'image/default.jpg', 1, NULL, NULL),
-(7, 'Sensei1', '123', 'image/default.jpg', 2, NULL, NULL);
+(7, 'Sensei1', '123', 'image/default.jpg', 2, NULL, NULL),
+(8, 'misbakhul', '123', 'image/default.jpg', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -674,13 +668,13 @@ ALTER TABLE `hari`
 -- AUTO_INCREMENT for table `jadwal_kelas`
 --
 ALTER TABLE `jadwal_kelas`
-  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jadwal_kosong`
 --
 ALTER TABLE `jadwal_kosong`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `kategori_notifikasi`
@@ -692,13 +686,13 @@ ALTER TABLE `kategori_notifikasi`
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -716,19 +710,19 @@ ALTER TABLE `notifikasi`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`
 --
 ALTER TABLE `peserta_kelas`
-  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `program_les`
@@ -758,7 +752,7 @@ ALTER TABLE `status_user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`

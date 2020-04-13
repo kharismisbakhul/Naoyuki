@@ -10,6 +10,7 @@
         <form action="{{ url('/sensei/tambahLaporan/'.$detail_kelas->id_kelas) }}" method="post">
           @csrf
           <input type="hidden" name="id_kelas" value="{{$detail_kelas->id_kelas}}">
+          <input type="hidden" name="jumlah_pertemuan" value="{{$detail_kelas->jumlah_pertemuan}}">
           <div class="form-group row">
             <label for="nama_program" class="col-sm-3 col-form-label">Nama Program</label>
             <div class="col-sm-9">
@@ -25,7 +26,7 @@
           <div class="form-group row">
             <label for="pertemuan" class="col-sm-3 col-form-label">Pertemuan Ke</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="pertemuan" name="pertemuan" value="{{$detail_kelas->jumlah_pertemuan +  1}}" readonly>
+              <input type="text" class="form-control" id="pertemuan" name="pertemuan" value="{{$detail_kelas->jumlah_pertemuan_hadir +  1}}" readonly>
             </div>
           </div>
           <div class="form-group row">

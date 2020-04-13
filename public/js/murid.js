@@ -43,13 +43,13 @@ $("#table-program-berjalan").DataTable({
 
 $('#table-daftar-program').on('click', '.detailProgram', function () {
     let id = $(this).data('id');
-    console.log(id);
+    // console.log(id);
     $.ajax({
         url: segments[0] + '/getProgram/' + id,
         method: 'get',
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             var link_image = window.location.origin + '/' + data['image'];
             $('.image-info').attr('src', link_image);
             $('.judul-caption').html(data['nama_program_les']);
@@ -62,13 +62,13 @@ $('#table-daftar-program').on('click', '.detailProgram', function () {
 
 $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () {
     let id = $(this).data('id');
-    console.log(id);
+    // console.log(id);
     $.ajax({
         url: segments[0] + '/murid/getProgramTerdaftar/' + id,
         method: 'get',
         dataType: 'json',
         success: function (data) {
-            console.log(data);
+            // console.log(data);
             var link_image = window.location.origin + '/' + data['image'];
             var link_bukti = window.location.origin + '/bukti_pembayaran/' + data['bukti_pendaftaran'];
             $('.image-info').attr('src', link_image);
@@ -78,13 +78,17 @@ $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () 
             $('.pertemuan-les-terdaftar').html('Pertemuan ' + data['jumlah_pertemuan'] + " Kali");
             $('.pendaftar-les-terdaftar').html('Nama Pendaftar: ' + data['nama_lengkap']);
             $('.waktu-les-terdaftar').html('Tanggal Pendaftaran: ' + data['tanggal_pendaftaran']);
+            var status_daftar = '';
             if (data['status_pendaftaran'] == "1") {
-                $('.status-les-terdaftar').html('Status Pendaftaran: Valid');
-            } else if (data['status_pendaftaran'] == "2") {
-                $('.status-les-terdaftar').html('Status Pendaftaran: Sedang diproses');
-            } else {
-                $('.status-les-terdaftar').html('Status Pendaftaran: Belum bayar');
+                status_daftar = '<span class="text-success">Valid</span>';
+            } else if(data['status_pendaftaran'] == "0") {
+                status_daftar = '<span class="text-danger">Belum Bayar</span>';
+            } else if(data['status_pendaftaran'] == "2") {
+                status_daftar = '<span class="text-warning">Sedang di Proses</span>';
+            } else{
+                status_daftar = '<span class="text-primary">Menunggu Kelas</span>';
             }
+            $('.status-les-terdaftar').html('Status Pendaftaran: '+status_daftar);
         }
     });
 })

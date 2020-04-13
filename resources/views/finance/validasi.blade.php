@@ -13,6 +13,9 @@
             <div class="card-body">
                 <div class="row">
                     <div class="table-responsive">
+                        @if(count($data_pendaftaran) == 0)
+                            <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada data pendaftaran</div>
+                        @else
                         <table class="table table-striped text-wrap" id="table-daftar-validasi">
                             <thead>
                                 <tr class="text-center">
@@ -40,6 +43,9 @@
                                     @elseif($dp->status_pendaftaran == 3)
                                     <td class="text-primary">Valid - Menunggu Kelas</td>
                                     <td></td>
+                                    @elseif($dp->status_pendaftaran == 5)
+                                    <td class="text-warning">Bukti Pembayaran Tidak Valid</td>
+                                    <td></td>
                                     @else
                                     <td class="text-danger">Belum Valid</td>
                                     <td><button class="btn btn-success detailValidasi" data-toggle="modal" data-target=".modalDetailValidasi"
@@ -50,6 +56,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        @endif
                     </div>
                 </div>
 
@@ -88,7 +95,7 @@
                                 <label for="validasi">Status Validasi</label>
                                 <select class="form-control" id="validasi" name="validasi">
                                 <option value="3">Valid</option>
-                                <option value="0">Tolak</option>
+                                <option value="5">Tolak</option>
                                 </select>
                             </div>
                             <div class="form-group">

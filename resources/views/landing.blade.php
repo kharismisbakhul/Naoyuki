@@ -33,12 +33,12 @@
                     <a class="nav-item nav-link active" href="#home">Home <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" href="#program">Program</a>
                     <a class="nav-item nav-link" href="#informasi">Informasi</a>
-                    <?php if (session()->has('username')) {
-                        echo '<a class="nav-item nav-link" href="#">Hai, ' . session('username') . '</a>';
-                    } else {
-                    ?>
+                    @if(session()->has('username'))
+                        <a class="nav-item nav-link" href="{{'/'}}">Dashboard</a>
+                        <a class="nav-item nav-link" href="#">Hai, {{session('username')}}</a>
+                    @else
                         <a class="nav-item nav-link" href="{{' / '}}">Login</a>
-                    <?php } ?>
+                    @endif
                 </div>
             </div>
         </div>

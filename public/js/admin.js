@@ -43,7 +43,7 @@ $('#table-daftar-user').on('click', '.edit_user', function () {
 
 $('#status').on('click', function () {
     let id_status_user = $('#status').val();
-    console.log(id_status_user);
+    // console.log(id_status_user);
     $('.nama_lengkap').html(``);
     $('.email').html(``);
     $('.no_hp').html(``);

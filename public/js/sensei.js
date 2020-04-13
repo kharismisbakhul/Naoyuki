@@ -45,16 +45,25 @@ $('#table-daftar-pertemuan').on('click', '.detail_kehadiran', function () {
         method: 'get',
         dataType: 'json',
         success: function (data) {
-            data.forEach(function(e) {
+            // console.log(data);
+            $('.pertemuan-judul').html(data['pertemuan']['pertemuan_ke'])
+            data['kehadiran'].forEach(function(e) {
                 var temp = '';
+                var fb = '';
                 if (e['kehadiran'] == 1) {
                     temp = '<td class="text-success text-center">Hadir</td>';
                 } else {
                     temp = '<td class="text-danger text-center">Tidak Hadir</td>';
                 }
+                if (e['feedback'] == null) {
+                    fb = '<td class="text-secondary text-center">* Belum ada feedback *</td>';
+                } else {
+                    fb = `<td class="text-warning text-center">`+e['feedback']+`</td>`;
+                }
                 $('.kehadiran_murid').append(`
                 <tr>
-                    <td>`+e['nama_lengkap']+`</td>`+temp+`
+                    <td>`+e['nama_lengkap']+`</td>`+
+                    temp+fb+`
                 </tr>
                 `);
             });

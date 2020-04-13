@@ -115,18 +115,44 @@ class AkademikController extends Controller
         ->where('pendaftaran.status_pendaftaran', 3)
         ->where('pendaftaran.id_program_les', $id)
         ->get();
+        $data['jadwal_kosong'] = DB::table('jadwal_kosong')
+        // ->where(['username' => 'Kharis'])
+        ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+        ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        ->groupBy('jadwal_kosong.id_sesi')
+        ->groupBy('jadwal_kosong.id_hari')
+        ->get();
+
+        // Header('Content-type: application/json');
+        // echo json_encode($data['jadwal_kosong']);
+        // die;
+        
         $data['sensei'] = DB::table('sensei')->get();
+
+
         $data['sesi'] = DB::table('sesi_jam')->get();
         $data['hari'] = DB::table('hari')->get();
         return view('akademik.tambah_kelas', $data);
     }
+    
+    function getRandomColor() 
+    {
+        $letters = '0123456789ABCDEF';
+        $color = '#';
+        for ($i = 0; $i < 6; $i++) {
+            $color = $color.''.$letters[random_int(0,15)];
+        }
+        return $color;
+    }
+
     public function tambahKelasLes(Request $request)
     {
-        $status = Akademik::tambahKelas($request);
+        
+        $status = Akademik::tambahKelas($request, $this->getRandomColor());
         if ($status == true) {
-            return redirect('/akademik/programLes')->with('status', 'Penambahan Kelas Berhasil');
+            return redirect('/akademik/detailProgramLes/'.$request->nama_program)->with('status', 'Penambahan Kelas Berhasil');
         } else {
-            return redirect('/akademik/programLes')->with('status', 'Penambahan Kelas Gagal');
+            return redirect('/akademik/detailProgramLes/'.$request->nama_program)->with('status', 'Penambahan Kelas Gagal');
         }
     }
 
@@ -148,9 +174,174 @@ class AkademikController extends Controller
 
         for ($i=0; $i < count($data->pertemuan) ; $i++) { 
             $data->pertemuan[$i]->tanggal_indo = $this->tanggal($data->pertemuan[$i]->tanggal);
+            $data->pertemuan[$i]->kehadiran_peserta = DB::table('kehadiran_peserta')
+            ->where(['id_pertemuan' => $data->pertemuan[$i]->id_pertemuan])
+            ->join('peserta_kelas', 'kehadiran_peserta.id_peserta', '=', 'peserta_kelas.id_peserta_kelas')
+            ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
+            ->get();
         }
 
         Header('Content-type: application/json');
         echo json_encode($data);
     }
+
+    public function getMurid($id){
+        $data = DB::table('pendaftaran')
+        ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+        ->where('pendaftaran.status_pendaftaran', 3)
+        ->where('pendaftaran.id_program_les', $id)
+        ->get();
+
+        Header('Content-type: application/json');
+        echo json_encode($data);
+    }
+
+    public function getJadwalKosong(Request $request){
+        $murid = [];
+        if($request->get('murid1')){
+            array_push($murid, intval($request->get('murid1')));
+        }
+        if($request->get('murid2')){
+            array_push($murid, intval($request->get('murid2')));
+        }
+        
+        $pendaftar = DB::table('pendaftaran')
+        // ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+        ->whereIn('id_pendaftaran', $murid)
+        ->get();
+        
+        $username_murid = [];
+        for ($i=0; $i < count($pendaftar); $i++) { 
+            array_push($username_murid, $pendaftar[$i]->username);
+        }
+        
+        
+        
+        $data1 = DB::table('jadwal_kosong')
+        // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+        ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        ->where('status_kosong', 0)
+        ->where('username', $username_murid[0])
+        // ->groupBy('jadwal_kosong.id_sesi')
+        // ->groupBy('jadwal_kosong.id_hari')
+        ->get();
+
+        $jadwal_kosong = [];
+
+        // 2 Murid
+        if(count($username_murid) == 2){
+            $data2 = DB::table('jadwal_kosong')
+            ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->where('status_kosong', 0)
+            ->where('username', $username_murid[1])
+            ->get();
+
+            for ($i=0; $i < count($data1); $i++) { 
+                for ($j=0; $j < count($data2); $j++) { 
+                    if($data1[$i]->id_sesi == $data2[$j]->id_sesi && $data1[$i]->id_hari == $data2[$j]->id_hari){
+                         array_push($jadwal_kosong, $data1[$i]);
+                    }
+                    # code...
+                }
+            }
+        }
+        else{
+            $jadwal_kosong = $data1;
+        }
+
+        Header('Content-type: application/json');
+        echo json_encode($jadwal_kosong);
+        // die;
+    }
+    public function getSesi(Request $request){
+        $id_hari = intval($request->get('id_hari'));
+        $murid = intval($request->get('murid'));
+        
+        $pendaftar = DB::table('pendaftaran')
+        // ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+        ->where('id_pendaftaran', $murid)
+        ->get()->first();
+        
+        
+        $data = DB::table('jadwal_kosong')
+        ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+        // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        ->where('status_kosong', 0)
+        ->where('username', $pendaftar->username)
+        ->where('id_hari', $id_hari)
+        // ->groupBy('jadwal_kosong.id_sesi')
+        // ->groupBy('jadwal_kosong.id_hari')
+        ->get();
+
+        Header('Content-type: application/json');
+        echo json_encode($data);
+        // die;
+    }
+
+    public function getSensei(Request $request){
+        $id_hari1 = intval($request->get('id_hari1'));
+        $id_sesi1 = intval($request->get('id_sesi1'));
+        $id_hari2 = intval($request->get('id_hari2'));
+        $id_sesi2 = intval($request->get('id_sesi2'));
+
+        $hari = [];
+        $sesi = [];
+
+        // array_push($hari, $id_hari1);
+        // array_push($sesi, $id_sesi1);
+        // array_push($hari, $id_hari2);
+        // array_push($sesi, $id_sesi2);
+        
+        // Tabel 1
+        $data1 = DB::table('jadwal_kosong')
+        ->join('user', 'jadwal_kosong.username', '=', 'user.username')
+        // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+        // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        ->where('status_kosong', 0)
+        ->where('id_status_user', 2)
+        ->where('id_hari', $id_hari1)
+        ->where('id_sesi', $id_sesi1)
+        // ->where('username', $pendaftar->username)
+        // ->whereIn('id_hari', $hari)
+        // ->whereIn('id_sesi', $sesi)
+        // ->groupBy('jadwal_kosong.id_sesi')
+        // ->groupBy('jadwal_kosong.id_hari')
+        ->get();
+
+        $data2 = DB::table('jadwal_kosong')
+        ->join('user', 'jadwal_kosong.username', '=', 'user.username')
+        // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+        // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        ->where('status_kosong', 0)
+        ->where('id_status_user', 2)
+        ->where('id_hari', $id_hari2)
+        ->where('id_sesi', $id_sesi2)
+        // ->where('username', $pendaftar->username)
+        // ->whereIn('id_hari', $hari)
+        // ->whereIn('id_sesi', $sesi)
+        // ->groupBy('jadwal_kosong.id_sesi')
+        // ->groupBy('jadwal_kosong.id_hari')
+        ->get();
+
+        $username_sensei = [];
+
+        for ($i=0; $i < count($data1); $i++) { 
+            for ($j=0; $j < count($data2); $j++) { 
+                if($data1[$i]->username == $data2[$j]->username){
+                     array_push($username_sensei, $data1[$i]->username);
+                }
+                # code...
+            }
+        }
+
+        $sensei = DB::table('sensei')
+        ->whereIn('username', $username_sensei)
+        ->get();
+
+
+        Header('Content-type: application/json');
+        echo json_encode($sensei);
+        // die;
+    }
+
 }

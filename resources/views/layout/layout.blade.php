@@ -86,7 +86,7 @@
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block mb-0">
       <li class="nav-item">
-        <a class="nav-link logout" href="#">
+        <a class="nav-link" href="#" onclick="logout()">
           <i class="fas fa-fw fa-sign-out-alt"></i>
           <span>Logout</span></a>
       </li>
@@ -117,25 +117,6 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
-            <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-            <li class="nav-item dropdown no-arrow d-sm-none">
-              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
-              </a>
-              <!-- Dropdown - Messages -->
-              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
-                <form class="form-inline mr-auto w-100 navbar-search">
-                  <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </li>
 
             <!-- Nav Item - Alerts -->
             {{--  <li class="nav-item dropdown no-arrow mx-1">
@@ -164,6 +145,11 @@
               </div>
             </li>  --}}
 
+            <li class="nav-item no-arrow mx-1">
+                <a class="nav-link" href="{{ url('/landing') }}">
+                    <button class="mr-2 d-none d-lg-inline text-gray-600 small btn btn-danger"><span class="text-white">Landing Page</span></button>
+                </a>
+              </li>
             <!-- Nav Item - Messages -->
 
             <div class="topbar-divider d-none d-sm-block"></div>
@@ -182,7 +168,7 @@
                   Profil
                 </a>
                 @endif
-                <a class="dropdown-item logout" href="#">
+                <a class="dropdown-item logout" href="#" onclick="logout()">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -257,8 +243,13 @@
   {{-- <script src="{{URL::asset('js/demo/chart-area-demo.js')}}"></script> --}}
   {{-- <script src="{{URL::asset('js/demo/chart-pie-demo.js')}}"></script> --}}
   
-  <script src="{{URL::asset('js/date.js')}}"></script>
-
+  
+  @if(Request::segment(2) == "jadwal")
+  @if(Request::segment(1) == "murid")
+  <script src="{{URL::asset('js/murid_date.js')}}"></script>
+  @else
+  <script src="{{URL::asset('js/sensei_date.js')}}"></script>
+  @endif
   <!-- Full Calendar -->
   <link href='{{ URL::asset('/packages/core/main.css') }}' rel='stylesheet' />
   <link href='{{ URL::asset('/packages/daygrid/main.css') }}' rel='stylesheet' />
@@ -274,6 +265,7 @@
   <script src='{{ URL::asset('/packages/list/main.js') }}'></script>
   <script src='{{ URL::asset('/packages/rrule/main.js') }}'></script>
   <script src='{{ URL::asset('/packages/bootstrap/main.js') }}'></script>
+  @endif
 
   <!-- JS Libraies -->
 <script src="{{ URL::asset('/modules/datatables/datatables.min.js') }}"></script>

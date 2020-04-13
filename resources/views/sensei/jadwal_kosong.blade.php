@@ -24,6 +24,9 @@
           </div>
         <div class="row">
           <div class="table-responsive">
+            @if(count($jadwal_kosong) == 0)
+                <div class="alert alert-warning text-center mt-2 mb-2 col-lg-12">Tidak ada jadwal kosong</div>
+            @else
             <table class="table table-striped text-wrap" id="">
                 <thead>
                     <tr class="text-center">
@@ -42,6 +45,7 @@
                         @endforeach
                 </tbody>
             </table>
+            @endif
         </div>
         </div>
       </div>

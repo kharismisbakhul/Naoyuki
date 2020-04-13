@@ -16,6 +16,9 @@
           <h6 class="m-0 font-weight-bold text-capitalize text-white">Pembelajaran Berjalan</h6>
         </div>
         <div class="card-body row">
+          @if(count($kelas_berjalan) == 0)
+            <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada pembelajaran yang sedang berjalan</div>
+          @else
           @foreach ($kelas_berjalan as $kb)
           <div class="card col-lg-5 mb-3" style="">
           <div class="row no-gutters">  
@@ -25,6 +28,13 @@
                     <figcaption class="figure-caption mt-3">
                         <h3>Pertemuan</h3>
                         <h3>{{count($kb->pertemuan).'/'.$kb->jumlah_pertemuan}}</h3>
+                        @if($kb->status_les == 1)
+                          @if($kb->nilai_evaluasi >= 80)
+                            <h3 class="text-success">Lulus</h3>
+                          @else
+                            <h3 class="text-danger">Tidak Lulus</h3>
+                          @endif
+                        @endif
                     </figcaption>
                 </figure>
             </div>
@@ -47,6 +57,7 @@
           <div class="col-lg-1 mb-3" style="">
           </div>
           @endforeach
+          @endif
         </div>
       </div>
     </div>

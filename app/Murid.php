@@ -24,6 +24,17 @@ class Murid extends Model
     }
     public static function editProfil($request)
     {
+        $file = $request->file('fotoProfil');
+        
+        if($file != null){
+            $tujuan_upload = public_path('image/profil/');
+            
+            $file->move($tujuan_upload, $file->getClientOriginalName());
+            $nama_file = 'image/profil/'.$file->getClientOriginalName();
+            session(['image_profil' => $nama_file]);
+            DB::update('update user set image = ? where username = ?', [$nama_file, $request->username]);
+        }
+
         DB::update('update murid set email = ?, no_hp = ?, asal_sekolah = ?, alamat = ? where username = ?', [$request->email, $request->no_telp, $request->asal_sekolah, $request->alamat, $request->username]);
     }
     public static function bayar($id, $nama_file)

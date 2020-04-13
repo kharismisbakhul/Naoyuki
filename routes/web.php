@@ -63,6 +63,11 @@ Route::get('/akademik/tambahKelas/{id}', 'AkademikController@tambahKelas');
 Route::post('/akademik/tambahKelas', 'AkademikController@tambahKelasLes');
 Route::post('/akademik/materi', 'AkademikController@editMateri');
 Route::get('/akademik/getDetailKelas/{id}', 'AkademikController@getDetailKelas');
+Route::get('/akademik/getMurid/{id}', 'AkademikController@getMurid');
+Route::get('/akademik/getJadwalKosong', 'AkademikController@getJadwalKosong');
+Route::get('/akademik/getSesi', 'AkademikController@getSesi');
+Route::get('/akademik/getSensei', 'AkademikController@getSensei');
+Route::get('/akademik/RandomColor', 'AkademikController@getRandomColor');
 
 // Finance
 Route::get('/finance', 'FinanceController@index');

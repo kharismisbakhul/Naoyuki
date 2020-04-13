@@ -43,6 +43,7 @@ class MuridController extends Controller
         $data['program_berjalan'] = DB::table('pendaftaran')
             ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->where('pendaftaran.username', session('username'))
+            ->where('pendaftaran.status_pendaftaran', 1)
             ->groupBy('pendaftaran.id_program_les')
             ->get();
 
@@ -115,11 +116,23 @@ class MuridController extends Controller
         ->where('id_sesi', $sesi)
         ->get();
 
+        $jadwal_tidak_kosong = DB::table('jadwal_kosong')
+        ->where('username', $username)
+        ->where('id_hari', $hari)
+        ->where('id_sesi', $sesi)
+        ->where('status_kosong', 1)
+        ->get();
+
         if ($jadwal->isEmpty()) {
             DB::insert('insert into jadwal_kosong (id_sesi, id_hari, username) values (?, ?, ?)', [$sesi, $hari, $username]);
             return redirect('/murid/jadwalKosong')->with('status', 'Penambahan jadwal kosong berhasil');
         } else {
-            return redirect('/murid/jadwalKosong')->with('status', 'Jadwal kosong sudah ada / Jadwal tidak kosong');
+            if($jadwal_tidak_kosong->isEmpty()){
+                return redirect('/murid/jadwalKosong')->with('status', 'Jadwal kosong sudah ada');
+            }
+            else{
+                return redirect('/murid/jadwalKosong')->with('status', 'Jadwal tidak kosong');
+            }
         }
     }
 
@@ -192,6 +205,7 @@ class MuridController extends Controller
     public function profil()
     {
         $data['title'] = "Profil";
+        // echo json_encode(session('image_profil'));die;
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['profil'] = Murid::where(['username' => session('username')])->get()->first();
         return view('murid.profil', $data);
@@ -319,6 +333,12 @@ class MuridController extends Controller
             ->where('id_kelas', "=", $data['detail_kelas']->id_kelas)
             ->where('id_peserta', "=", $data['detail_kelas']->id_peserta_kelas)
             ->get();
+
+            for ($i=0; $i < count($data['detail_kelas']->pertemuan); $i++) {
+                $data['detail_kelas']->pertemuan[$i]->tgl_indo = $this->tanggal($data['detail_kelas']->pertemuan[$i]->tanggal);
+            }
+
+
 
         // Header('Content-type: application/json');
         // echo json_encode($data['detail_kelas']);die;

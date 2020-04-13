@@ -31,10 +31,14 @@
             <div class="col-lg-9">
               <div class="card-body">
                 <div class="table-responsive">
+                    @if(count($detail_kelas->pertemuan) == 0)
+                        <div class="alert alert-warning text-center mt-2 mb-2 col-lg-12">Belum ada pertemuan</div>
+                    @else
                     <table class="table table-striped text-wrap" id="table-pertemuan">
                         <thead>
                             <tr class="text-center">
                                 <th>Pertemuan</th>
+                                <th>Tanggal</th>
                                 <th>Deskripsi</th>
                                 <th>Kehadiran</th>
                                 <th>Aksi</th>
@@ -44,6 +48,7 @@
                                 @foreach ($detail_kelas->pertemuan as $p)
                                 <tr class="text-center">
                                   <td>{{$p->pertemuan_ke}}</td>
+                                  <td>{{$p->tgl_indo}}</td>
                                   <td>{{$p->deskripsi}}</td>
                                   @if($p->kehadiran == 1)
                                   <td class="text-success">Hadir</td>
@@ -59,6 +64,7 @@
                                 @endforeach
                         </tbody>
                     </table>
+                    @endif
                 </div>
               </div>
             </div>

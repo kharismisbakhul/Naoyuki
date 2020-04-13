@@ -13,34 +13,60 @@ class Akademik extends Model
         return $temp;
     }
 
-    public static function getRandomColor() 
+    public static function tambahKelas($data, $color)
     {
-        $letters = '0123456789ABCDEF';
-        $color = '#';
-        for ($i = 0; $i < 6; $i++) {
-          $color += $letters[Math.floor(Math.random() * 16)];
-        }
-        return $color;
-    }
-
-    public static function tambahKelas($data)
-    {
-        $temp = DB::insert('insert into kelas (nama_kelas, id_sensei, color) values (?, ?)', [$data->nama_kelas, $data->nama_sensei, $this->getRandomColor]);
+        $temp = DB::insert('insert into kelas (nama_kelas, id_sensei, color) values (?, ?, ?)', [$data->nama_kelas, $data->nama_sensei, $color]);
 
         $dataA = DB::table('kelas')
             ->where(['nama_kelas' => $data->nama_kelas, 'id_sensei' => $data->nama_sensei])
             ->get()->first();
 
-            DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [1, intval($data->nama_murid)]);
+            $sensei = DB::table('sensei')
+            ->where(['id_sensei' => $data->nama_sensei])
+            ->get()->first();
+
+            DB::table('pendaftaran')->whereIn('id_pendaftaran', $data->murid)->update(['status_pendaftaran' => 1]);
+            
+            DB::table('jadwal_kosong')
+            ->where('id_sesi', $data->waktuPertemuan1)
+            ->where('id_hari', $data->hariPertemuan1)
+            ->where('username', $sensei->username)
+            ->update(array('status_kosong' => 1));
+
+            DB::table('jadwal_kosong')
+            ->where('id_sesi', $data->waktuPertemuan2)
+            ->where('id_hari', $data->hariPertemuan2)
+            ->where('username', $sensei->username)
+            ->update(array('status_kosong' => 1));
 
         $dataB = DB::table('pendaftaran')
             ->join('murid', 'pendaftaran.username', '=', 'murid.username')
-            ->where('pendaftaran.id_pendaftaran', $data->nama_murid)
-            ->get()->first();
+            ->whereIn('pendaftaran.id_pendaftaran', $data->murid)
+            ->get();
 
-            // Error
-        $temp2 = DB::insert('insert into peserta_kelas (username, id_kelas, id_pendaftaran, nilai_evaluasi, status_les) values (?, ?, ?, ?, ?)', [$dataB->username, $dataA->id_kelas, $data->nama_murid, 0, 0]);
-        $temp3 = DB::insert('insert into jadwal_kelas (id_kelas, id_hari, id_sesi) values (?, ?, ?)', [$dataA->id_kelas, $data->hariPertemuan, $data->waktuPertemuan]);
+        for ($i=0; $i < count($dataB); $i++) { 
+            # code...
+            DB::insert('insert into peserta_kelas (username, id_kelas, id_pendaftaran, nilai_evaluasi, status_les) values (?, ?, ?, ?, ?)', [$dataB[$i]->username, $dataA->id_kelas, $dataB[$i]->id_pendaftaran, 0, 0]);
+
+            DB::table('jadwal_kosong')
+            ->where('id_sesi', $data->waktuPertemuan1)
+            ->where('id_hari', $data->hariPertemuan1)
+            ->where('username', $dataB[$i]->username)
+            ->update(array('status_kosong' => 1));
+
+            DB::table('jadwal_kosong')
+            ->where('id_sesi', $data->waktuPertemuan2)
+            ->where('id_hari', $data->hariPertemuan2)
+            ->where('username', $dataB[$i]->username)
+            ->update(array('status_kosong' => 1));
+        }
+
+        // Jadwal 1
+        DB::insert('insert into jadwal_kelas (id_kelas, id_hari, id_sesi) values (?, ?, ?)', [$dataA->id_kelas, $data->hariPertemuan1, $data->waktuPertemuan1]);
+        
+        // Jadwal 2
+        DB::insert('insert into jadwal_kelas (id_kelas, id_hari, id_sesi) values (?, ?, ?)', [$dataA->id_kelas, $data->hariPertemuan2, $data->waktuPertemuan2]);
+
         return $temp;
     }
 }

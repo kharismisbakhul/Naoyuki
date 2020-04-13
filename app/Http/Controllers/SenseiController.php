@@ -93,11 +93,23 @@ class SenseiController extends Controller
         ->where('id_sesi', $sesi)
         ->get();
 
+        $jadwal_tidak_kosong = DB::table('jadwal_kosong')
+        ->where('username', $username)
+        ->where('id_hari', $hari)
+        ->where('id_sesi', $sesi)
+        ->where('status_kosong', 1)
+        ->get();
+
         if ($jadwal->isEmpty()) {
             DB::insert('insert into jadwal_kosong (id_sesi, id_hari, username) values (?, ?, ?)', [$sesi, $hari, $username]);
             return redirect('/sensei/jadwalKosong')->with('status', 'Penambahan jadwal kosong berhasil');
         } else {
-            return redirect('/sensei/jadwalKosong')->with('status', 'Jadwal kosong sudah ada / Jadwal tidak kosong');
+            if($jadwal_tidak_kosong->isEmpty()){
+                return redirect('/sensei/jadwalKosong')->with('status', 'Jadwal kosong sudah ada');
+            }
+            else{
+                return redirect('/sensei/jadwalKosong')->with('status', 'Jadwal tidak kosong');
+            }
         }
     }
 
@@ -139,10 +151,16 @@ class SenseiController extends Controller
             ->where('id_kelas', "=", $data['kelas_berjalan'][$i]->id_kelas)
             ->get();
 
+            // Header('Content-type: application/json');
+            // echo json_encode(count($data['kelas_berjalan']));
+            // die;
+
+            if(count($data['kelas_berjalan']) != 0){
             $data['kelas_berjalan'][$i]->jumlah_pertemuan = $data['kelas_berjalan'][$i]->peserta[0]->jumlah_pertemuan;
             $data['kelas_berjalan'][$i]->image = $data['kelas_berjalan'][$i]->peserta[0]->image;
             $data['kelas_berjalan'][$i]->nama_program_les = $data['kelas_berjalan'][$i]->peserta[0]->nama_program_les;
-            
+            }
+
             $data['kelas_berjalan'][$i]->jadwal = DB::table('jadwal_kelas')
             ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
             ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
@@ -220,10 +238,14 @@ class SenseiController extends Controller
     }
 
     public function getKehadiranPeserta($id){
-        $data = DB::table('kehadiran_peserta')->where(['id_pertemuan' => $id])
+        $data['kehadiran'] = DB::table('kehadiran_peserta')->where(['id_pertemuan' => $id])
         ->join('peserta_kelas', 'peserta_kelas.id_peserta_kelas', '=', 'kehadiran_peserta.id_peserta')
+        // ->join('pertemuan', 'pertemuan.id_pertemuan', '=', 'kehadiran_peserta.id_pertemuan')
         ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
         ->get();
+
+        $data['pertemuan'] = DB::table('pertemuan')->where(['id_pertemuan' => $id])
+        ->get()->first();
 
         Header('Content-type: application/json');
         echo json_encode($data);
@@ -238,9 +260,9 @@ class SenseiController extends Controller
         ->join('pendaftaran', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
         ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
         ->join('sensei', 'kelas.id_sensei', '=', 'sensei.id_sensei')
-        ->join('jadwal_kelas', 'kelas.id_kelas', '=', 'jadwal_kelas.id_kelas')
-        ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
-        ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
+        // ->join('jadwal_kelas', 'kelas.id_kelas', '=', 'jadwal_kelas.id_kelas')
+        // ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+        // ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
         ->where('pendaftaran.status_pendaftaran', 1)
         ->get()->first();
 
@@ -253,7 +275,12 @@ class SenseiController extends Controller
         ->where('id_kelas', "=", $id)
         ->get();
 
-        $data['detail_kelas']->jumlah_pertemuan = count($data['detail_kelas']->pertemuan);
+        $data['detail_kelas']->jumlah_pertemuan_hadir = count($data['detail_kelas']->pertemuan);
+        
+        // Header('Content-type: application/json');
+        // echo json_encode($data['detail_kelas']);
+        // die;
+
         return view('sensei.tambah_Laporan', $data);
     }
 
@@ -261,6 +288,7 @@ class SenseiController extends Controller
     {
         
         $data['id_kelas'] = $request->id_kelas;
+        $data['total_hadir'] = $request->jumlah_pertemuan;
         $data['pertemuan'] = $request->pertemuan;
         $data['tanggal'] = $request->tanggal;
         $data['deskripsi'] = $request->deskripsi;
@@ -279,6 +307,8 @@ class SenseiController extends Controller
         ->get()->first();
 
         $kehadiran_peserta = [];
+
+        $id_peserta = [];
         if($data['kehadiran'] != null){
             for ($i=0; $i < count($data['kehadiran']) ; $i++) { 
                 $hadir = [
@@ -287,6 +317,10 @@ class SenseiController extends Controller
                     'kehadiran' => 1
                 ];
     
+                if($data['total_hadir'] == $data['pertemuan']){
+                    DB::update('update peserta_kelas set status_les = ? where id_peserta_kelas = ?', [1, intval($data['kehadiran'][$i])]);                    
+                }
+                
                 array_push($kehadiran_peserta, $hadir);
             }
         }
