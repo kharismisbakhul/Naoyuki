@@ -15,14 +15,14 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
         method: 'get',
         dataType: 'json',
         success: function (data) {
-            // console.log(data);
+            console.log(data);
             $('#nama-kelas-modal').html(data['nama_kelas']);
             $('#body-pertemuan-modal').html(``);
             $('#body-peserta-modal').html(``);
             if(data['pertemuan'].length == 0){
                 $('#body-pertemuan-modal').html(`
                     <tr>
-                        <td colspan="3"><h5>Belum ada pertemuan</h5></td>
+                        <td colspan="4"><h5>Belum ada pertemuan</h5></td>
                     </tr>
                 `);
             }
@@ -37,27 +37,31 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
                         <td class="kehadiran-detail"></td>
                     </tr>
                     `);
-                    pp['kehadiran_peserta'].forEach(function(kp){
-                        var kehadiran = '';
-                        var feedback = '';
-                        if (kp['kehadiran'] == 1) {
-                            kehadiran = '<span class="text-success text-center">Hadir</span>';
-                        } else {
-                            kehadiran = '<span class="text-danger text-center">Tidak Hadir</span>';
-                        }
-                        if (kp['feedback'] == null) {
-                            feedback = '<span class="text-secondary text-center">* Belum ada feedback *</span>';
-                        } else {
-                            feedback = `<span class="text-warning text-center">`+e['feedback']+`</span>`;
-                        }
-                        $('.kehadiran-detail').append(`
-                        <span>
-                            `+kp['nama_lengkap']+`\t
-                            [`+kehadiran+`]\t
-                            [`+feedback+`]
-                        </span><br>
-                        `);
-                    })  
+
+                    if(pp['kehadiran_peserta'].length != 0){
+                        pp['kehadiran_peserta'].forEach(function(kp){
+                            var kehadiran = '';
+                            var feedback = '';
+                            if (kp['kehadiran'] == 1) {
+                                kehadiran = '<span class="text-success text-center">Hadir</span>';
+                            } else {
+                                kehadiran = '<span class="text-danger text-center">Tidak Hadir</span>';
+                            }
+                            if (kp['feedback'] == null) {
+                                feedback = '<span class="text-secondary text-center">* Belum ada feedback *</span>';
+                            } else {
+                                feedback = `<span class="text-warning text-center">`+kp['feedback']+`</span>`;
+                            }
+                            $('.kehadiran-detail').append(`
+                            <span>
+                                `+kp['nama_lengkap']+`\t
+                                [`+kehadiran+`]\t
+                                [`+feedback+`]
+                            </span><br>
+                            `);
+                        })  
+                    }
+
                 });
             }
             if(data['peserta'].length == 0){
@@ -92,9 +96,17 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
 
 $('.tambah-murid').on('click', function () {
     var id_program = $('#nama_program').val();
+    var jumlah_murid = parseInt($('#jumlah_murid').val()) + 1;
+    $('#jumlah_murid').val(jumlah_murid)
+    console.log(jumlah_murid);
+
+    if(jumlah_murid == 2){
+        $('#icon-murid-plus').after(`<span><a href="#" class="btn btn-danger kurang-murid"><i class="fas fa-fw fa-minus text-white" id="icon-murid-minus"></i></a></span>`)
+    }
 
     if($('#icon-murid').attr('class') == "fas fa-fw fa-minus text-white"){
         $('.murid-baru').remove();
+        $('.waktu-pertemuan').removeBefore();
         $('#hariPertemuan1').html(`<option value="" hidden selected>Pilih Hari</option>`)
         $('#hariPertemuan2').html(`<option value="" hidden selected>Pilih Hari</option>`)
         $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)

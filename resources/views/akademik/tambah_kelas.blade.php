@@ -24,16 +24,17 @@
             </div>
           </div>
           <div class="form-group row murid-murid">
+            <input type="hidden" class="form-control" id="jumlah_murid" name="jumlah_murid" value="1">
             <label for="murid[]" class="col-sm-3 col-form-label">Nama Murid</label>
             <div class="col-sm-8">
-              <select class="form-control" id="muridA" name="murid[]">
+              <select class="form-control" id="murid1" name="murid[]">
                       <option value="" hidden selected>Pilih Murid</option>
                       @foreach ($murid as $m)
                       <option value="{{ $m->id_pendaftaran }}">{{ $m->nama_lengkap }}</option>
                       @endforeach
                   </select>
             </div>
-            <a href="#" class="btn btn-danger col-sm-1 tambah-murid"><i class="fas fa-fw fa-plus text-white" id="icon-murid"></i></a>
+            <span><a href="#" class="btn btn-danger mr-2 tambah-murid"><i class="fas fa-fw fa-plus text-white" id="icon-murid-plus"></i></a></span>
           </div>
           
           {{--  <div class="form-group row murid-baru">

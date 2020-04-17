@@ -117,33 +117,60 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
-
+            @if(session('status_user') == 3 || session('status_user') == 4)
             <!-- Nav Item - Alerts -->
-            {{--  <li class="nav-item dropdown no-arrow mx-1">
+            <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                @if($notifikasi['count_notif'] != 0)
+                <span class="badge badge-danger badge-counter">{{$notifikasi['count_notif']}}</span>
+                @endif
               </a>
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
                   Notifikasi
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                @if(count($notifikasi['notif']) == 0)
+                <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada notifikasi</div>
+                @else
+                @foreach($notifikasi['notif'] as $notif)
+                {{--  Seleksi Notifikasi  --}}
+                @if(session('status_user') == 3)
+                {{--  Akademik  --}}
+                <a class="dropdown-item d-flex align-items-center" href="{{url('/akademik/tambahKelas/'.$notif->id_program_les)}}">
                   <div class="mr-3">
                     <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
+                      <i class="fas fa-book text-white"></i>
                     </div>
                   </div>
                   <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for your account.
+                    <div class="small text-gray-500">{{$notif->tgl_indo}}</div>
+                    <span class="text-primary">{{$notif->nama_lengkap}}</span> Menunggu Kelas Program <span class="text-success">{{$notif->nama_program_les}}</span>
                   </div>
                 </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                @else
+                {{--  Finance  --}}
+                <a class="dropdown-item d-flex align-items-center" href="{{url('/finance/validasi/')}}">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fas fa-book text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">{{$notif->tgl_indo .' Pukul '.$notif->waktu_pendaftaran}}</div>
+                    <span class="text-primary">{{$notif->nama_lengkap}}</span> Melakukan konfirmasi pembayaran Kelas Program <span class="text-success">{{$notif->nama_program_les}}</span>
+                  </div>
+                </a>
+                @endif
+                {{--  Akhir Seleksi Notifikasi  --}}
+                @endforeach
+                @endif
+                {{--  <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>  --}}
               </div>
-            </li>  --}}
+            </li>
+            @endif
 
             <li class="nav-item no-arrow mx-1">
                 <a class="nav-link" href="{{ url('/landing') }}">

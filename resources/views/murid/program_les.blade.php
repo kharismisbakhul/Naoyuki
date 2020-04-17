@@ -73,9 +73,9 @@
                   @foreach ($program_berjalan as $pb) 
                   <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pb->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
-                    <td>{{ $pb->nama_program_les }}</td>
-                    <td>{{ $pb->jumlah_pertemuan }} Kali</td>
+                    <td><img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
+                    <td>{{ $pb['program_les']->nama_program_les }}</td>
+                    <td>{{ $pb['program_les']->jumlah_pertemuan }} Kali</td>
                     <td>
                       @if($pb->status_pendaftaran == 0)
                       <p class="text-danger">Belum Bayar</p><a href="{{url('/murid/pembayaran/'.$pb->id_pendaftaran)}}" class="btn btn-warning">Bayar</a>
@@ -188,7 +188,7 @@
                   <div class="row">
                     <h5>Bukti Pendaftaran</h5>
                   </div>
-                  <div class="row">
+                  <div class="row bukti-row">
                     <img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;"></img>
                   </div>
                 </div>

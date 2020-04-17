@@ -34,6 +34,26 @@ class SenseiController extends Controller
         return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
+    // public function notif(){
+    //     $data['notif'] = DB::table('kelas')
+    //     ->where('kelas.id_sensei', $sensei->id_sensei)
+
+    //     DB::table('pendaftaran')
+    //     ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+    //     ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+    //     ->where('pendaftaran.status_pendaftaran', 1)
+    //     ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
+    //     ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
+    //     ->get();
+
+    //     for ($i=0; $i < count($data['notif']); $i++) { 
+    //         $data['notif'][$i]->tgl_indo = $this->tanggal($data['notif'][$i]->tanggal_pendaftaran);
+    //     }
+        
+    //     $data['count_notif'] = count($data['notif']);
+    //     return $data;
+    // }
+
     public function index()
     {
         $data['title'] = "Dashboard";

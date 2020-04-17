@@ -33,10 +33,28 @@ class FinanceController extends Controller
         return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
     }
 
+    public function notif(){
+        $data['notif'] = DB::table('pendaftaran')
+        ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+        ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+        ->where('pendaftaran.status_pendaftaran', 2)
+        ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
+        ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
+        ->get();
+
+        for ($i=0; $i < count($data['notif']); $i++) { 
+            $data['notif'][$i]->tgl_indo = $this->tanggal($data['notif'][$i]->tanggal_pendaftaran);
+        }
+        
+        $data['count_notif'] = count($data['notif']);
+        return $data;
+    }
+
     public function index()
     {
         $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['notifikasi'] = $this->notif();
         $data['jumlah_total_pendaftar'] = DB::table('pendaftaran')->get()->count();
         $data['jumlah_belum_valid'] = DB::table('pendaftaran')->where('status_pendaftaran', 2)->get()->count();
         return view('finance.dashboard', $data);
@@ -46,6 +64,7 @@ class FinanceController extends Controller
     {
         $data['title'] = "Validasi";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['notifikasi'] = $this->notif();
         $data['data_pendaftaran'] = DB::table('pendaftaran')
             ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->join('murid', 'pendaftaran.username', '=', 'murid.username')

@@ -22,12 +22,15 @@
             <div class="form-group row">
               <label for="inputPassword" class="col-sm-3 col-form-label">Program Les</label>
               <div class="col-sm-9">
-                <select name="program" id="program" class="form-control">
+                <select name="program" id="program" class="form-control @error('program') is-invalid @enderror">
                 <option value="" selected hidden>Pilih Program Les</option>
                 @foreach ($program_les as $pl)
                     <option value="{{ $pl->id_program_les }}">{{ $pl->nama_program_les }}</option>
                 @endforeach
                 </select>
+                @error('program')
+                <div class="invalid-feedback">{{$message}}</div>
+                @enderror
               </div>
             </div>
             <div class="form-group row">

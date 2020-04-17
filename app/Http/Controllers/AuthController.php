@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\Auth;
-
 class AuthController extends Controller
 {
     public function login()
@@ -40,30 +38,36 @@ class AuthController extends Controller
             'password.required'  => 'Password tidak boleh kosong'
         ]);
 
-        $status = Auth::where(['username' => $request->username, 'password' => $request->password])
-            ->join('status_user', 'user.id_status_user', '=', 'status_user.id_status_user')
-            ->get()->first();
-
-        if ($status != []) {
-            $data = $status->toArray();
-            session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['nama_status_user'], 'image_profil' => $data['image']]);
-            if (session('status_user') == 1) {
-                $data_murid = DB::table('murid')->where(['username' => session('username')])->get()->first();
-                session(['nama_lengkap' => $data_murid->nama_lengkap]);
-                return redirect('/murid');
-            } else if (session('status_user') == 2) {
-                $data_murid = DB::table('sensei')->where(['username' => session('username')])->get()->first();
-                session(['nama_lengkap' => $data_murid->nama_sensei]);
-                return redirect('/sensei');
-            } else if (session('status_user') == 3) {
-                return redirect('/akademik');
-            } else if (session('status_user') == 4) {
-                return redirect('/finance');
-            } else {
-                return redirect('/admin');
+        $username = \App\User::where(['username' => $request->username])->get()->first();
+        if($username == []){
+            return redirect('/')->with('statusEror', 'Login Gagal. Username Tidak Terdaftar');
+        }
+        else{
+            if($request->password != $username['password']){
+                return redirect('/')->with('statusEror', 'Login Gagal. Password Salah');
             }
-        } else {
-            return redirect('/')->with('statusEror', 'Login Gagal');
+            else{
+                $data = \App\User::where(['username' => $request->username, 'password' => $request->password])
+                ->with('status_user')
+                ->get()->first()->toArray();
+
+                session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['status_user']['nama_status_user'], 'image_profil' => $data['image']]);
+                if (session('status_user') == 1) {
+                    $data_murid = \App\Murid::where(['username' => session('username')])->get()->first();
+                    session(['nama_lengkap' => $data_murid->nama_lengkap]);
+                    return redirect('/murid');
+                } else if (session('status_user') == 2) {
+                    $data_murid = \App\Sensei::where(['username' => session('username')])->get()->first();
+                    session(['nama_lengkap' => $data_murid->nama_sensei]);
+                    return redirect('/sensei');
+                } else if (session('status_user') == 3) {
+                    return redirect('/akademik');
+                } else if (session('status_user') == 4) {
+                    return redirect('/finance');
+                } else {
+                    return redirect('/admin');
+                }
+            }
         }
     }
 
@@ -92,6 +96,8 @@ class AuthController extends Controller
 
     public function getProgramLes($id)
     {
-        Auth::getProgramLes($id);
+        $program_les = \App\Program_Les::find($id);
+        Header('Content-type: application/json');
+        echo json_encode($program_les);
     }
 }

@@ -7,6 +7,8 @@
   <div class="col-lg-12">
     @if (session('status'))
     <div class="alert alert-success text-center mb-2">{{ session('status') }}</div>
+    @elseif (session('gagal'))
+    <div class="alert alert-danger text-center mb-2">{{ session('gagal') }}</div>
     @endif
   </div>
   <div class="col-lg-12 col-md-12 mb-4">
@@ -39,8 +41,8 @@
                         @foreach ($jadwal_kosong as $jk)
                         <tr class="text-center">
                           <td>{{$loop->iteration}}</td>
-                          <td>{{$jk->hari}}</td>
-                          <td>{{substr($jk->jam_mulai,0,5). ' - '.substr($jk->jam_selesai,0,5)}}</td>
+                          <td>{{$jk['hari']->hari}}</td>
+                          <td>{{substr($jk['sesi']->jam_mulai,0,5). ' - '.substr($jk['sesi']->jam_selesai,0,5)}}</td>
                         </tr>
                         @endforeach
                 </tbody>

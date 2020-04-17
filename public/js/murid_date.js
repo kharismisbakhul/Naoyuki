@@ -19,20 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var dateNow = year + '-' + month + '-' + day;
 
-    var prevColor;
-    function getRandomColor(usePrev) {
-        if (usePrev && prevColor)
-          return prevColor;
-    
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 6; i++) {
-          color += letters[Math.floor(Math.random() * 16)];
-        }
-        prevColor = color;
-        return color;
-      }
-
     var calendar = new FullCalendar.Calendar(calendarEl, {
         plugins: ['bootstrap', 'interaction', 'dayGrid', 'timeGrid', 'list', 'rrule'],
         themeSystem: 'bootstrap',
@@ -56,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		dataType: 'json',
 		type: 'get',
 		success: function (data) {
-            // console.log(data);
+            console.log(data);
 			data['kelas_berjalan'].forEach(function (kelas) {
                 // console.log(kelas);
                 kelas['jadwal'].forEach(function (jadwal) {
@@ -64,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 						id: kelas.id_kelas,
 						title: kelas.nama_kelas,
 						rrule: {
-							dtstart: kelas.tanggal_mulai + 'T' + jadwal.jam_mulai,
+							dtstart: kelas.tanggal_mulai + 'T' + jadwal['sesi'].jam_mulai,
                             byweekday: rrule.RRule[jadwal.day],
                             count: kelas.jumlah_pertemuan,
 							freq: 'weekly'

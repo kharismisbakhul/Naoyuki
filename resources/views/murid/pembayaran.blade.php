@@ -7,6 +7,8 @@
   <div class="col-lg-12">
     @if (session('status'))
     <div class="alert alert-success text-center mb-2">{{ session('status') }}</div>
+    @elseif (session('error'))
+    <div class="alert alert-danger text-center mb-2">{{ session('error') }}</div>
     @endif
   </div>
 <div class="col-lg-12 col-md-12 mb-4">
@@ -29,11 +31,11 @@
           </div>
           <div class="col-lg-3">
               <div class="row"><h4 class="mt-3">Data Pendaftar</h4></div><hr>
-              <div class="row"><h4 class="mt-4">Nama Lengkap: {{ $data_pendaftaran->nama_lengkap }}</h4></div>
-              <div class="row"><h4 class="mt-4">Email: {{ $data_pendaftaran->email }}</h4></div>
-              <div class="row"><h4 class="mt-4">No. Telepon: {{ $data_pendaftaran->no_hp }}<h4></div>
-              <div class="row"><h4 class="mt-4">Asal Sekolah: {{ $data_pendaftaran->asal_sekolah }}</h4></div>
-              <div class="row"><h4 class="mt-4">Alamat: {{ $data_pendaftaran->alamat }}</h4></div>
+              <div class="row"><h4 class="mt-4">Nama Lengkap: {{ $data_pendaftaran['murid']->nama_lengkap }}</h4></div>
+              <div class="row"><h4 class="mt-4">Email: {{ $data_pendaftaran['murid']->email }}</h4></div>
+              <div class="row"><h4 class="mt-4">No. Telepon: {{ $data_pendaftaran['murid']->no_hp }}<h4></div>
+              <div class="row"><h4 class="mt-4">Asal Sekolah: {{ $data_pendaftaran['murid']->asal_sekolah }}</h4></div>
+              <div class="row"><h4 class="mt-4">Alamat: {{ $data_pendaftaran['murid']->alamat }}</h4></div>
           </div>
           <div class="col-lg-1"></div>
           <div class="col-lg-4 ml-0">
@@ -47,7 +49,6 @@
       </div>
         <div class="row">
             <div class="col-lg">
-              {{-- {!! Form::open(['action' => url('/murid/bayar/'.$data_pendaftaran->id_pendaftaran), 'method' => 'post', 'files' => true]) !!} --}}
               <form action="{{ url('/murid/bayar/'.$data_pendaftaran->id_pendaftaran) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <button type="submit" class="btn btn-danger float-right">Konfirmasi</button>
@@ -55,7 +56,6 @@
                 <input type="file" name="buktiDaftar" class="float-right mr-5">
                 <h4 class="float-right mr-3 mt-1">Upload Bukti Pembayaran</h4>
               </form>
-              {{-- {!! Form::close() !!} --}}
             </div>
         </div>
     </div>

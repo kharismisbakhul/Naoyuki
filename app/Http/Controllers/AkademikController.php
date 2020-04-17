@@ -33,6 +33,24 @@ class AkademikController extends Controller
 
         return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
     }
+    
+    public function notif(){
+        $data['notif'] = DB::table('pendaftaran')
+        ->join('peserta_kelas', 'pendaftaran.id_pendaftaran', '=', 'peserta_kelas.id_pendaftaran')
+        ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
+        ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+        ->where('pendaftaran.status_pendaftaran', 3)
+        ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
+        ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
+        ->get();
+
+        for ($i=0; $i < count($data['notif']); $i++) { 
+            $data['notif'][$i]->tgl_indo = $this->tanggal($data['notif'][$i]->tanggal_pendaftaran);
+        }
+        
+        $data['count_notif'] = count($data['notif']);
+        return $data;
+    }
 
     public function index()
     {
@@ -40,6 +58,11 @@ class AkademikController extends Controller
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['program_les'] = DB::table('program_les')->get()->count();
         $data['kelas'] = DB::table('kelas')->get()->count();
+        $data['notifikasi'] = $this->notif();
+        // Header('Content-type: application/json');
+        // echo json_encode($data['notifikasi']);
+        // die;
+
         return view('akademik.dashboard', $data);
     }
 
@@ -48,6 +71,7 @@ class AkademikController extends Controller
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['program_les'] = DB::table('program_les')->get();
+        $data['notifikasi'] = $this->notif();
 
         return view('akademik.program_les', $data);
     }
@@ -55,6 +79,7 @@ class AkademikController extends Controller
     {
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['notifikasi'] = $this->notif();
         $data['program_les'] = DB::table('program_les')->where(['id_program_les' => intval($id)])->get()->first();
         $data['kelas'] = DB::table('kelas')->where(['pendaftaran.id_program_les' => intval($id)])
             ->join('peserta_kelas', 'kelas.id_kelas', '=', 'peserta_kelas.id_kelas')    
@@ -84,6 +109,7 @@ class AkademikController extends Controller
     {
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['notifikasi'] = $this->notif();
         $data['program_les'] = DB::table('program_les')->get();
         return view('akademik.tambah_program_les', $data);
     }
@@ -109,6 +135,7 @@ class AkademikController extends Controller
     {
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
+        $data['notifikasi'] = $this->notif();
         $data['program_les'] = DB::table('program_les')->where(['id_program_les' => $id])->get()->first();
         $data['murid'] = DB::table('pendaftaran')
         ->join('murid', 'pendaftaran.username', '=', 'murid.username')

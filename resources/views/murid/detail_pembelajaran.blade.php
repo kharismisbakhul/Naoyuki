@@ -50,15 +50,15 @@
                                   <td>{{$p->pertemuan_ke}}</td>
                                   <td>{{$p->tgl_indo}}</td>
                                   <td>{{$p->deskripsi}}</td>
-                                  @if($p->kehadiran == 1)
+                                  @if($p['kehadiran']->kehadiran == 1)
                                   <td class="text-success">Hadir</td>
                                   @else
                                   <td class="text-danger">Tidak Hadir</td>
                                   @endif
-                                  @if($p->feedback == null)
-                                  <td><button class="btn btn-danger feedback" data-toggle="modal" data-target=".modalFeedback" data-id="{{$p->id_kehadiran}}">Tambah Feedback</button></td>
+                                  @if($p['kehadiran']->feedback == null)
+                                  <td><button class="btn btn-danger feedback" data-toggle="modal" data-target=".modalFeedback" data-id="{{$p['kehadiran']->id_kehadiran}}">Tambah Feedback</button></td>
                                   @else 
-                                  <td><button class="btn btn-success detail-feedback ml-3" data-toggle="modal" data-target=".modalDetailFeedback" data-id="{{$p->id_kehadiran}}">Detail Feedback</button></td>
+                                  <td><button class="btn btn-success detail-feedback ml-3" data-toggle="modal" data-target=".modalDetailFeedback" data-id="{{$p['kehadiran']->id_kehadiran}}">Detail Feedback</button></td>
                                   @endif
                                 </tr>
                                 @endforeach

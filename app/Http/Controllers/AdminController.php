@@ -36,8 +36,8 @@ class AdminController extends Controller
     {
         $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['jumlah_murid'] = DB::table('user')->where(['id_status_user' => 1])->get()->count();
-        $data['jumlah_sensei'] = DB::table('user')->where(['id_status_user' => 2])->get()->count();
+        $data['jumlah_murid'] = \App\User::where(['id_status_user' => 1])->get()->count();
+        $data['jumlah_sensei'] = \App\User::where(['id_status_user' => 2])->get()->count();
         
         return view('admin.dashboard', $data);
     }
@@ -46,7 +46,7 @@ class AdminController extends Controller
     {
         $data['title'] = "Manajemen User";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['user'] = DB::table('user')->where('username', '!=', session('username'))
+        $data['user'] = \App\User::where('username', '!=', session('username'))
         ->join('status_user', 'user.id_status_user', '=', 'status_user.id_status_user')
         ->orderBy('user.id_status_user', 'asc')
         ->get();
@@ -58,8 +58,7 @@ class AdminController extends Controller
     {
         $data['title'] = "Manajemen User";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['status_user'] = DB::table('status_user')
-        ->get();
+        $data['status_user'] = \App\Status_User::all();
         
         return view('admin.tambah_user', $data);
     }

@@ -43,11 +43,11 @@
             <div class="card mb-3 col-lg">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="{{ URL::asset($pb->image) }}" class="img-fluid" style="width: 100%; height: 100%;" alt="...">
+                  <img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid" style="width: 100%; height: 100%;" alt="...">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title mb-5">{{$pb->nama_program_les}}</h5>
+                    <h5 class="card-title mb-5">{{$pb['program_les']->nama_program_les}}</h5>
                     <a href="{{ url('/murid/pembelajaran') }}" class="card-text float-right mt-5 mb-3 btn btn-danger"><small class="text-white">Detail</small></a>
                   </div>
                 </div>

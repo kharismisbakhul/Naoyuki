@@ -45,7 +45,7 @@
                 
                 <h3 class="card-title">Jadwal :</h3>
                 @foreach($kb->jadwal as $jadwal)
-                <h3 class="card-title">{{$jadwal->hari.' '.substr($jadwal->jam_mulai,0,5). ' - '.substr($jadwal->jam_selesai,0,5)}}</h3>
+                <h3 class="card-title">{{$jadwal['hari']->hari.' '.substr($jadwal['sesi']->jam_mulai,0,5). ' - '.substr($jadwal['sesi']->jam_selesai,0,5)}}</h3>
                 @endforeach
                 <a href="{{ url('/murid/pembelajaran/'.$kb->id_kelas) }}" class="card-text float-right mt-5 mb-3 btn btn-danger"><small class="text-white">Detail</small></a>
               </div>
