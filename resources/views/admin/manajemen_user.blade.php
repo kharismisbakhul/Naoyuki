@@ -68,7 +68,7 @@
                                 <input type="hidden" class="id_user" name="id_user" value="">
                                 <div class="form-group">
                                     <label for="username">Username</label>
-                                    <input type="text" class="form-control username" id="username" name="username" value="">
+                                    <input type="text" class="form-control username" id="username" name="username" value="" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2020 at 06:01 PM
+-- Generation Time: Apr 23, 2020 at 09:44 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -99,7 +99,8 @@ INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username
 (9, 3, 2, 'Baskara', 1, NULL, NULL),
 (10, 1, 7, 'Kharis', 0, NULL, NULL),
 (11, 4, 4, 'Kharis', 0, NULL, NULL),
-(12, 8, 1, 'Kharis', 0, NULL, NULL);
+(12, 8, 1, 'Kharis', 0, NULL, NULL),
+(13, 1, 7, 'Joni', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -114,16 +115,6 @@ CREATE TABLE `kehadiran_peserta` (
   `kehadiran` int(10) NOT NULL DEFAULT '0',
   `feedback` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `kehadiran_peserta`
---
-
-INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
-(17, 8, 14, 1, 'AAAA'),
-(18, 8, 15, 1, NULL),
-(19, 8, 16, 1, NULL),
-(20, 8, 17, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -221,16 +212,19 @@ CREATE TABLE `pendaftaran` (
   `tanggal_pendaftaran` date NOT NULL,
   `waktu_pendaftaran` time NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `update_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `pendaftaran`
 --
 
-INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`, `created_at`, `update_at`) VALUES
+INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`, `created_at`, `updated_at`) VALUES
 (30, 'Kharis', 1, 1, 'AksaraFILKOM.png', '2020-04-15', '2020-04-14', '12:18:27', NULL, NULL),
-(32, 'Kharis', 7, 2, 'AksaraFILKOM.png', '2020-04-19', '2020-04-17', '03:54:29', NULL, NULL);
+(32, 'Kharis', 7, 3, 'AksaraFILKOM.png', '2020-04-19', '2020-04-17', '03:54:29', NULL, '2020-04-20 19:45:02'),
+(33, 'Joni', 7, 3, NULL, '2020-04-22', '2020-04-21', '13:00:00', NULL, NULL),
+(34, 'Kharis', 2, 2, 'AksaraFILKOM.png', '2020-04-23', '2020-04-22', '01:50:32', NULL, NULL),
+(35, 'misbakhul', 7, 3, NULL, '2020-04-24', '2020-04-23', '13:00:00', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -245,16 +239,6 @@ CREATE TABLE `pertemuan` (
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_kelas` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `pertemuan`
---
-
-INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`) VALUES
-(14, 1, '2020-04-16', 'Pertemuan 1 Kana', 14),
-(15, 2, '2020-04-17', '2', 14),
-(16, 3, '2020-04-18', '3', 14),
-(17, 4, '2020-04-19', '4', 14);
 
 -- --------------------------------------------------------
 
@@ -305,7 +289,7 @@ INSERT INTO `program_les` (`id_program_les`, `nama_program_les`, `image`, `jumla
 (4, 'Basic Grammar', 'image/thumbnail.jpg', 24, 'Basic Grammar adalah tingkat 4', 'Conversation Part 2', 5000000),
 (5, 'Basic Kanji', 'image/thumbnail.jpg', 20, 'Basic Kanji adalah tingkat 5', 'Kanji N4', 500000),
 (6, 'Intermediate Grammar', 'image/thumbnail.jpg', 28, 'Intermediate Grammar adalah tingkat 6', 'Conversation Part 3', 3000000),
-(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N3', 5000000);
+(7, 'Intermediate Kanji', 'image/thumbnail.jpg', 30, 'Intermediate Kanji adalah tingkat 7', 'Kanji N33', 5000000);
 
 -- --------------------------------------------------------
 
@@ -404,7 +388,7 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `image`, `id_status_user`
 (3, 'Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
 (4, 'Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
 (5, 'Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL),
-(6, 'Joni', '123', 'image/default.jpg', 1, NULL, NULL),
+(6, 'Joni', '1234', 'image/default.jpg', 1, NULL, '2020-04-20 18:09:53'),
 (7, 'Sensei1', '123', 'image/default.jpg', 2, NULL, NULL),
 (8, 'misbakhul', '123', 'image/default.jpg', 1, NULL, NULL);
 
@@ -635,13 +619,13 @@ ALTER TABLE `jadwal_kelas`
 -- AUTO_INCREMENT for table `jadwal_kosong`
 --
 ALTER TABLE `jadwal_kosong`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `kelas`
@@ -659,13 +643,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`
@@ -707,7 +691,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
-  MODIFY `id_access` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_access` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user_menu`

@@ -19,9 +19,15 @@
       <div class="card-body">
         <div class="row mb-3">
             <div class="col-lg-12">
+                    
               <button class="float-right btn btn-primary jadwalKosong" data-toggle="modal" data-target=".modalJadwalKosong">
                 Tambah Jadwal kosong
               </button>
+
+              <a class="float-right" href="{{ url('/murid/jadwal') }}" style="text-decoration: none;">
+                <button class="mr-2 d-none d-lg-inline text-gray-600 small btn btn-secondary" ><span class="text-white">Kembali</span></button>
+              </a>
+
             </div>
           </div>
         <div class="row">

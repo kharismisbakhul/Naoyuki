@@ -81,9 +81,14 @@
 /* DESKTOP VERSION */
 @media (min-width: 992px) {
 
+    .navbar .container{
+        background-color: white;
+        /* backgropacity:50%; */
+    }
+
     .navbar-brand,
     .nav-link {
-        color: white !important;
+        color: black !important;
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.7);
     }
 

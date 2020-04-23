@@ -130,6 +130,11 @@
                 </tbody>
               </table>
               @endif
+
+              <a class="float-right" href="{{ url('/sensei/pembelajaran') }}" style="text-decoration: none;">
+                <button class="mr-3 d-none d-lg-inline text-gray-600 small btn btn-secondary" ><span class="text-white">Kembali</span></button>
+            </a>
+
             </div>
           </div>
 

@@ -91,6 +91,16 @@ class MuridController extends Controller
 
     public function tambahJadwalKosong(Request $request)
     {
+        if($request->hari == "" && $request->jam == ""){
+            return redirect('/murid/jadwalKosong')->with('gagal', 'Hari dan Jam tidak boleh kosong');
+        }
+        if($request->jam == ""){
+            return redirect('/murid/jadwalKosong')->with('gagal', 'Jam tidak boleh kosong');
+        }
+        if($request->hari == ""){
+            return redirect('/murid/jadwalKosong')->with('gagal', 'Hari tidak boleh kosong');
+        }
+        
         $username = $request->username;
         $hari = intval($request->hari);
         $sesi = intval($request->jam);
@@ -160,8 +170,8 @@ class MuridController extends Controller
             'program' => 'required',
             'waktuMulai' => 'required'
         ], [
-            'program.required' => 'Program tidak boleh kosong',
-            'waktuMulai.required'  => 'Tanggal Mulai Telepon tidak boleh kosong'
+            'program.required' => 'Program Les tidak boleh kosong',
+            'waktuMulai.required'  => 'Tanggal Mulai tidak boleh kosong'
         ]);
 
         \App\Pendaftaran::insert([
@@ -175,11 +185,11 @@ class MuridController extends Controller
         date_default_timezone_set("Asia/Jakarta");
 
         $data_daftar = \App\Pendaftaran::where(['pendaftaran.username' => session('username'), 'pendaftaran.id_program_les' => $request->program,'pendaftaran.tanggal_mulai' => $request->waktuMulai, 'status_pendaftaran' => 0])->get()->first();
-
+        
+        return redirect('/murid/pembayaran/' . $data_daftar->id_pendaftaran)->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
         // $status = Murid::daftar($request);
-        if ($data_daftar) {
-            return redirect('/murid/pembayaran/' . $data_daftar->id_pendaftaran)->with('status', 'Pendaftaran berhasil, silahkan melakukan pembayaran');
-        }
+        // if ($data_daftar) {
+        // }
     }
 
     public function pembayaran($id)
@@ -203,7 +213,13 @@ class MuridController extends Controller
             $tujuan_upload = public_path('bukti_pembayaran/');
             $file->move($tujuan_upload, $file->getClientOriginalName());
             $nama_file = $file->getClientOriginalName();
-            Murid::bayar($id, $nama_file);
+
+            \App\Pendaftaran::where('id_pendaftaran', $id)
+            ->update([
+                'bukti_pendaftaran' => $nama_file,
+                'status_pendaftaran' => 2
+            ]);
+
             return redirect('/murid/programLes')->with('status', 'Pembayaran berhasil dilakukan, silahkan menunggu konfirmasi sekitar 1 hari (Waktu Kerja)');
         }
     }

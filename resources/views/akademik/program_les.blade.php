@@ -6,8 +6,10 @@
 <div class="row">
   <div class="col-lg-12">
     @if (session('status'))
-    <div class="alert alert-success text-center mb-2">{{ session('status') }}</div>
-    @endif
+      <div class="alert alert-success text-center mb-2">{{ session('status') }}</div>
+      @elseif (session('gagal'))
+      <div class="alert alert-danger text-center mb-2">{{ session('gagal') }}</div>
+      @endif
   </div>
   <div class="col-lg-12 col-md-12 mb-4">
     <div class="card shadow mb-4">

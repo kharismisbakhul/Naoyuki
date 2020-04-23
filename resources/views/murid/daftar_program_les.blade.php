@@ -43,11 +43,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg">
+              <div class="col-lg">
                     <button type="submit" class="btn btn-danger float-right">Daftar</button>
+                    
                 </div>
             </div>
           </form>
+          <a class="float-right" href="{{ url('/murid/programLes') }}" style="text-decoration: none;">
+            <button class="mt-2 d-none d-lg-inline text-gray-600 small btn btn-secondary" ><span class="text-white">Kembali</span></button>
+          </a>
       </div>
     </div>
   </div>

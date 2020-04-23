@@ -65,6 +65,7 @@ Route::post('/akademik/materi', 'AkademikController@editMateri');
 Route::get('/akademik/getDetailKelas/{id}', 'AkademikController@getDetailKelas');
 Route::get('/akademik/getMurid/{id}', 'AkademikController@getMurid');
 Route::get('/akademik/getJadwalKosong', 'AkademikController@getJadwalKosong');
+Route::get('/akademik/getJadwalOpsi', 'AkademikController@getJadwalOpsi');
 Route::get('/akademik/getSesi', 'AkademikController@getSesi');
 Route::get('/akademik/getSensei', 'AkademikController@getSensei');
 Route::get('/akademik/RandomColor', 'AkademikController@getRandomColor');

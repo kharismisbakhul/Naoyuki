@@ -11,8 +11,8 @@ $('#table-daftar-validasi').on('click', '.detailValidasi', function () {
             var link_bukti = window.location.origin + '/bukti_pembayaran/' + data['bukti_pendaftaran'];
             $('.image-info').attr('src', link_image);
             $('.bukti-les').attr('src', link_bukti);
-            $('.pendaftar').val(data['nama_lengkap']);
-            $('.nama_program').val(data['nama_program_les']);
+            $('.pendaftar').val(data['murid']['nama_lengkap']);
+            $('.nama_program').val(data['program_les']['nama_program_les']);
             $('.id_validasi').val(id);
         }
     });

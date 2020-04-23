@@ -74,17 +74,52 @@ class AdminController extends Controller
             $file->move($tujuan_upload, $file->getClientOriginalName());
             $nama_file = 'image/profil/'.$file->getClientOriginalName();
 
-            DB::insert('insert into user (username, password, id_status_user, image) values (?, ?, ?, ?)', [$request->username, $request->password, $request->status, $nama_file]);
+            \App\User::insert([
+                'username' => $request->username,
+                'password' => $request->password,
+                'id_status_user' => $request->status,
+                'image' => $nama_file
+            ]);
 
-            DB::insert('insert into murid (username, nama_lengkap, email, no_hp, asal_sekolah, alamat) values (?, ?, ?, ?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->email_user, $request->no_hp_user, $request->asal_sekolah_user, $request->alamat_user]);    
+            \App\Murid::insert([
+                'username' => $request->username,
+                'nama_lengkap' => $request->nama_lengkap_user,
+                'email' => $request->email_user,
+                'no_hp' => $request->no_hp_user,
+                'asal_sekolah' => $request->asal_sekolah_user,
+                'alamat' => $request->$request->alamat_user
+            ]);
+
+            // DB::insert('insert into user (username, password, id_status_user, image) values (?, ?, ?, ?)', [$request->username, $request->password, $request->status, $nama_file]);
+
+            // DB::insert('insert into murid (username, nama_lengkap, email, no_hp, asal_sekolah, alamat) values (?, ?, ?, ?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->email_user, $request->no_hp_user, $request->asal_sekolah_user, $request->alamat_user]);    
         }
         else if($request->status == 2){
-            DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
 
-            DB::insert('insert into sensei (username, nama_sensei, no_hp) values (?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->no_hp_user]);
+            \App\User::insert([
+                'username' => $request->username,
+                'password' => $request->password,
+                'id_status_user' => $request->status
+            ]);
+
+            \App\Sensei::insert([
+                'username' => $request->username,
+                'nama_sensei' => $request->nama_lengkap_user,
+                'no_hp' => $request->no_hp_user
+            ]);
+
+            // DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+
+            // DB::insert('insert into sensei (username, nama_sensei, no_hp) values (?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->no_hp_user]);
         }
         else{
-            DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+            \App\User::insert([
+                'username' => $request->username,
+                'password' => $request->password,
+                'id_status_user' => $request->status
+            ]);
+
+            // DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
         }
         
         return redirect('/admin/manajemenUser')->with('status', 'Penambahan user berhasil');
@@ -92,18 +127,34 @@ class AdminController extends Controller
 
     public function editUser(Request $request)
     {
-        DB::update('update user set username = ?, password = ? where id_user = ?', [$request->username, $request->password, $request->id_user]);
+        \App\User::where('id_user', $request->id_user)
+        ->update([
+            'username' => $request->username,
+            'password' => $request->password
+        ]);
+
+        // DB::update('update user set username = ?, password = ? where id_user = ?', [$request->username, $request->password, $request->id_user]);
         return redirect('/admin/manajemenUser')->with('status', 'Perubahan data user berhasil');
     }
 
     public function hapusUser($id)
     {
-        DB::table('user')->where('id_user', '=', $id)->delete();
+        
+        $data = \App\User::find($id)->get()->first();
+
+        if($data->id_status_user == 1){
+            \App\Murid::where('username', $data->username)->delete();
+            \App\Murid::where('username', $data->username)->delete();
+        }elseif($data->id_status_user == 2){
+            \App\Sensei::where('username', $data->username)->delete();
+        }
+        
+        \App\User::find($id)->delete();
         return redirect('/admin/manajemenUser')->with('status', 'Penghapusan user berhasil');
     }
 
     public function getUser($id){
-        $data = DB::table('user')->where(['id_user' => $id])
+        $data = \App\User::where(['id_user' => $id])
         ->get()->first();
 
         Header('Content-type: application/json');

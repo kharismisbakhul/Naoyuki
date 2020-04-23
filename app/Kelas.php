@@ -17,6 +17,6 @@ class Kelas extends Model
         return $this->hasMany('App\Peserta_Kelas', 'id_kelas', 'id_kelas');
     }
     public function pertemuan(){
-        return $this->hasMany('App\Pertemuan', 'id_kelas', 'id_kelas');
+        return $this->hasMany('App\Pertemuaninser', 'id_kelas', 'id_kelas');
     }
 }

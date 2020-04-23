@@ -112,7 +112,7 @@ $('.tambah-murid').on('click', function () {
         $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)
         $('#waktuPertemuan2').html(`<option value="" hidden selected>Pilih Sesi</option>`)
         $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
-        $('#icon-murid').attr('class', 'fas fa-fw fa-plus text-white');
+        // $('#icon-murid').attr('class', 'fas fa-fw fa-plus text-white');
     }
     else{
         $('.waktu-pertemuan').before(`
@@ -144,59 +144,49 @@ $('.tambah-murid').on('click', function () {
     // console.log($('#icon-murid').attr('class'))
 })
 
-// 1 Murid
-$('#muridA').on('click', function(){
-    var murid = $('#muridA').val();
-    // console.log(murid);
-
+$('.detail-jadwal').on('click', function(){
     $('#hariPertemuan1').html(`<option value="" hidden selected>Pilih Hari</option>`)
     $('#hariPertemuan2').html(`<option value="" hidden selected>Pilih Hari</option>`)
     $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)
     $('#waktuPertemuan2').html(`<option value="" hidden selected>Pilih Sesi</option>`)
     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
-    $.ajax({
-        url: segments[0] + '/akademik/getJadwalKosong?murid1='+murid,
-        method: 'get',
-        dataType: 'json',
-        success: function (data) {
-            // console.log(data)
-            data.forEach(function(jadwal){
-                $('#hariPertemuan1').append(`
-                    <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
-                `)
-                $('#hariPertemuan2').append(`
-                    <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
-                `)
-            })
+
+    var murid = document.getElementsByName('peserta[]');
+    // console.log(murid.length);
+
+    let peserta = [];
+    for (var index = 0; index < murid.length; index++) {
+        if(murid[index].checked == true){
+            peserta.push(murid[index].value)
         }
-    })
+    }
+    // console.log(peserta.length);
 
-})
-
-// 2 Murid
-$('.form-kelas').on('click', '#muridB', function(){
-    var murid1 = $('#muridA').val();
-    var murid2 = $('#muridB').val();
-    // console.log(murid2);
-
-    $('#hariPertemuan1').html(`<option value="" hidden selected>Pilih Hari</option>`)
-    $('#hariPertemuan2').html(`<option value="" hidden selected>Pilih Hari</option>`)
-    $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)
-    $('#waktuPertemuan2').html(`<option value="" hidden selected>Pilih Sesi</option>`)
-    $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
     $.ajax({
-        url: segments[0] + '/akademik/getJadwalKosong?murid1='+murid1+'&murid2='+murid2,
+        url: segments[0] + '/akademik/getJadwalKosong',
         method: 'get',
+        data:{
+            murid: peserta
+        },
         dataType: 'json',
         success: function (data) {
-            // console.log(data)
+            console.log(data)
             data.forEach(function(jadwal){
-                $('#hariPertemuan1').append(`
-                    <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
-                `)
-                $('#hariPertemuan2').append(`
-                    <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
-                `)
+                if(data.length == 0){
+                    $('#hariPertemuan1').append(`
+                        <option value="">* Tidak ada waktu kosong *</option>
+                    `)
+                    $('#waktuPertemuan1').append(`
+                        <option value="">* Tidak ada waktu kosong *</option>
+                    `)
+                }else{
+                    $('#hariPertemuan1').append(`
+                        <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
+                    `)
+                    $('#hariPertemuan2').append(`
+                        <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
+                    `)
+                }
             })
         }
     })
@@ -205,7 +195,16 @@ $('.form-kelas').on('click', '#muridB', function(){
 
 // Get Sesi 1
 $('#hariPertemuan1').on('click', function(){
-    var murid = $('#muridA').val();
+    var murid = document.getElementsByName('peserta[]');
+    // console.log(murid.length);
+
+    let peserta = [];
+    for (var index = 0; index < murid.length; index++) {
+        if(murid[index].checked == true){
+            peserta.push(murid[index].value)
+        }
+    }
+    var murid = peserta[0];
     var id_hari = $('#hariPertemuan1').val();
     $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)
     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
@@ -225,9 +224,59 @@ $('#hariPertemuan1').on('click', function(){
 
 })
 
+// $('#waktuPertemuan1').on('click', function(){
+//     var murid = document.getElementsByName('kehadiran[]');
+//     // console.log(murid.length);
+
+//     let peserta = [];
+//     for (var index = 0; index < murid.length; index++) {
+//         if(murid[index].checked == true){
+//             peserta.push(murid[index].value)
+//         }
+//     }
+//         var id_hari = $('#hariPertemuan1').val();
+//         var id_sesi = $('#waktuPertemuan1').val();
+//         $.ajax({
+//             url: segments[0] + '/akademik/getJadwalOpsi?id_hari='+id_hari+'&id_sesi='+id_sesi,
+//             method: 'get',
+//             data:{
+//                 murid: peserta
+//             },
+//             dataType: 'json',
+//             success: function (data) {
+//                 console.log(data)
+//                 if(data.length == 0){
+//                     $('#hariPertemuan2').append(`
+//                         <option value="">* Tidak ada waktu kosong lagi *</option>
+//                     `)
+//                     $('#waktuPertemuan2').append(`
+//                         <option value="">* Tidak ada waktu kosong lagi *</option>
+//                     `)
+//                 }
+//                 else{
+//                     data.forEach(function(jadwal){
+//                         $('#hariPertemuan2').append(`
+//                             <option value="`+jadwal['id_hari']+`">`+jadwal['hari']+`</option>
+//                         `)
+//                     })
+//                 }
+//             }
+//         })
+    
+    // })
+
 // Get Sesi 2
 $('#hariPertemuan2').on('click', function(){
-    var murid = $('#muridA').val();
+    var murid = document.getElementsByName('peserta[]');
+    // console.log(murid.length);
+
+    let peserta = [];
+    for (var index = 0; index < murid.length; index++) {
+        if(murid[index].checked == true){
+            peserta.push(murid[index].value)
+        }
+    }
+    var murid = peserta[0];
     var id_hari = $('#hariPertemuan2').val();
     $('#waktuPertemuan2').html(`<option value="" hidden selected>Pilih Sesi</option>`)
     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
@@ -279,6 +328,6 @@ $('#waktuPertemuan2').on('click', function(){
 
 })
 
-$('#waktuPertemuan1').on('click', function(){
-    $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
-})
+// $('#waktuPertemuan1').on('click', function(){
+//     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
+// })

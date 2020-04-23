@@ -34,10 +34,9 @@ class FinanceController extends Controller
     }
 
     public function notif(){
-        $data['notif'] = DB::table('pendaftaran')
+        $data['notif'] = \App\Pendaftaran::where('pendaftaran.status_pendaftaran', 2)
         ->join('murid', 'pendaftaran.username', '=', 'murid.username')
         ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
-        ->where('pendaftaran.status_pendaftaran', 2)
         ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
         ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
         ->get();
@@ -55,8 +54,8 @@ class FinanceController extends Controller
         $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['notifikasi'] = $this->notif();
-        $data['jumlah_total_pendaftar'] = DB::table('pendaftaran')->get()->count();
-        $data['jumlah_belum_valid'] = DB::table('pendaftaran')->where('status_pendaftaran', 2)->get()->count();
+        $data['jumlah_total_pendaftar'] = \App\Pendaftaran::all()->count();
+        $data['jumlah_belum_valid'] = \App\Pendaftaran::where('status_pendaftaran', 2)->get()->count();
         return view('finance.dashboard', $data);
     }
 
@@ -65,8 +64,7 @@ class FinanceController extends Controller
         $data['title'] = "Validasi";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['notifikasi'] = $this->notif();
-        $data['data_pendaftaran'] = DB::table('pendaftaran')
-            ->join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
+        $data['data_pendaftaran'] = \App\Pendaftaran::join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->join('murid', 'pendaftaran.username', '=', 'murid.username')
             ->get();
         
@@ -79,12 +77,19 @@ class FinanceController extends Controller
 
     public function validasi_pendaftaran(Request $request)
     {
-        $status = DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [intval($request->validasi), $request->id_validasi]);
 
-        if ($status == true) {
-            return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
-        } else {
-            return redirect('/finance/validasi')->with('status', 'Validasi gagal');
-        }
+        \App\Pendaftaran::where('id_pendaftaran', $request->id_validasi)
+        ->update([
+            'status_pendaftaran' => intval($request->validasi)
+        ]);
+        return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
+
+        // $status = DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [intval($request->validasi), $request->id_validasi]);
+
+        // if ($status == true) {
+        //     return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
+        // } else {
+        //     return redirect('/finance/validasi')->with('status', 'Validasi gagal');
+        // }
     }
 }

@@ -1,18 +1,18 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use App\Akademik;
+use Illuminate\Support\Facades\Input;
 
 class AkademikController extends Controller
 {
     function tanggal($tanggal)
     {
         $bulan = array(
-            1 =>   'Januari',
+            1 => 'Januari',
             'Februari',
             'Maret',
             'April',
@@ -31,23 +31,22 @@ class AkademikController extends Controller
         // variabel pecahkan 1 = bulan
         // variabel pecahkan 2 = tahun
 
-        return $pecahkan[2] . ' ' . $bulan[(int) $pecahkan[1]] . ' ' . $pecahkan[0];
+        return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
     }
-    
-    public function notif(){
-        $data['notif'] = DB::table('pendaftaran')
-        ->join('peserta_kelas', 'pendaftaran.id_pendaftaran', '=', 'peserta_kelas.id_pendaftaran')
-        ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
-        ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
-        ->where('pendaftaran.status_pendaftaran', 3)
-        ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
-        ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
-        ->get();
 
-        for ($i=0; $i < count($data['notif']); $i++) { 
+    public function notif()
+    {
+        $data['notif'] = \App\Pendaftaran::where('pendaftaran.status_pendaftaran', 3)
+            ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+            ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
+            ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
+            ->orderBy('pendaftaran.waktu_pendaftaran', 'asc')
+            ->get();
+
+        for ($i = 0; $i < count($data['notif']); $i++) {
             $data['notif'][$i]->tgl_indo = $this->tanggal($data['notif'][$i]->tanggal_pendaftaran);
         }
-        
+
         $data['count_notif'] = count($data['notif']);
         return $data;
     }
@@ -56,8 +55,8 @@ class AkademikController extends Controller
     {
         $data['title'] = "Dashboard";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['program_les'] = DB::table('program_les')->get()->count();
-        $data['kelas'] = DB::table('kelas')->get()->count();
+        $data['program_les'] = \App\Program_Les::all()->count();
+        $data['kelas'] = \App\Kelas::all()->count();
         $data['notifikasi'] = $this->notif();
         // Header('Content-type: application/json');
         // echo json_encode($data['notifikasi']);
@@ -70,7 +69,7 @@ class AkademikController extends Controller
     {
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-        $data['program_les'] = DB::table('program_les')->get();
+        $data['program_les'] = \App\Program_Les::all();
         $data['notifikasi'] = $this->notif();
 
         return view('akademik.program_les', $data);
@@ -80,9 +79,9 @@ class AkademikController extends Controller
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['notifikasi'] = $this->notif();
-        $data['program_les'] = DB::table('program_les')->where(['id_program_les' => intval($id)])->get()->first();
-        $data['kelas'] = DB::table('kelas')->where(['pendaftaran.id_program_les' => intval($id)])
-            ->join('peserta_kelas', 'kelas.id_kelas', '=', 'peserta_kelas.id_kelas')    
+        $data['program_les'] = \App\Program_Les::where(['id_program_les' => intval($id)])->get()->first();
+        $data['kelas'] = \App\Kelas::where(['pendaftaran.id_program_les' => intval($id)])
+            ->join('peserta_kelas', 'kelas.id_kelas', '=', 'peserta_kelas.id_kelas')
             ->join('pendaftaran', 'peserta_kelas.id_pendaftaran', '=', 'pendaftaran.id_pendaftaran')
             ->join('program_les', 'program_les.id_program_les', '=', 'pendaftaran.id_program_les')
             ->join('sensei', 'kelas.id_sensei', '=', 'sensei.id_sensei')
@@ -90,17 +89,15 @@ class AkademikController extends Controller
             ->get();
 
 
-            for ($i=0; $i < count($data['kelas']) ; $i++) { 
-                $data['kelas'][$i]->jadwal = DB::table('jadwal_kelas')
-                ->join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
+        for ($i = 0; $i < count($data['kelas']); $i++) {
+            $data['kelas'][$i]->jadwal = \App\Jadwal_Kelas::join('hari', 'hari.id_hari', '=', 'jadwal_kelas.id_hari')
                 ->join('sesi_jam', 'sesi_jam.id_sesi', '=', 'jadwal_kelas.id_sesi')
                 ->where('id_kelas', "=", $data['kelas'][$i]->id_kelas)
                 ->get();;
 
-                $data['kelas'][$i]->pertemuan = DB::table('pertemuan')
-                ->where('id_kelas', "=", $data['kelas'][$i]->id_kelas)
+            $data['kelas'][$i]->pertemuan = \App\Pertemuan::where('id_kelas', "=", $data['kelas'][$i]->id_kelas)
                 ->get()->count();
-            }
+        }
 
         return view('akademik.detail_program_les', $data);
     }
@@ -110,24 +107,48 @@ class AkademikController extends Controller
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['notifikasi'] = $this->notif();
-        $data['program_les'] = DB::table('program_les')->get();
+        $data['program_les'] = \App\Program_Les::all();
         return view('akademik.tambah_program_les', $data);
     }
     public function tambahProgramLes(Request $request)
     {
-        $file = $request->file('fotoProgram');
-        
-        $tujuan_upload = public_path('foto_program/');
+        $request->validate([
+            'nama' => 'required',
+            'jumlah_pertemuan' => 'required',
+            'biaya' => 'required',
+            'materi' => 'required',
+            'deskripsi' => 'required'
+        ], [
+            'nama.required' => 'Nama Program tidak boleh kosong',
+            'jumlah_pertemuan.required' => 'Jumlah Pertemuan tidak boleh kosong',
+            'biaya.required' => 'Biaya tidak boleh kosong',
+            'materi.required' => 'Materi tidak boleh kosong',
+            'deskripsi.required' => 'Deskripsi tidak boleh kosong'
+        ]);
 
-        // echo json_encode($file);die;
-        $file->move($tujuan_upload, $file->getClientOriginalName());
-        $nama_file = 'foto_program/'.$file->getClientOriginalName();
+        if ($request->file('fotoProgram') == null) {
+            return redirect('/akademik/programLes')->with('gagal', 'Penambahan Program gagal, Foto Gambar tidak boleh Kosong');
+        }
+        else {
+            $file = $request->file('fotoProgram');
 
-        $status = Akademik::tambahProgram($request, $nama_file);
-        if ($status == true) {
+            $tujuan_upload = public_path('foto_program/');
+    
+            // echo json_encode($file);die;
+            $file->move($tujuan_upload, $file->getClientOriginalName());
+            $nama_file = 'foto_program/' . $file->getClientOriginalName();
+    
+            // $status = Akademik::tambahProgram($request, $nama_file);
+            \App\Program_Les::insert([
+                'nama_program_les' => $request->nama,
+                'image' => $nama_file,
+                'jumlah_pertemuan' => $request->jumlah_pertemuan,
+                'deskripsi' => $request->deskripsi,
+                'cakupan_materi' => $request->materi,
+                'biaya' => $request->biaya,
+            ]);
+            // DB::insert('insert into program_les (nama_program_les, image, jumlah_pertemuan, deskripsi, cakupan_materi, biaya) values (?, ?, ?, ?, ?, ?)', [$data->nama, $nama_file ,$data->jumlah_pertemuan, $data->deskripsi, $data->materi, $data->biaya]);
             return redirect('/akademik/programLes')->with('status', 'Penambahan Program berhasil');
-        } else {
-            return redirect('/akademik/programLes')->with('status', 'Penambahan Program gagal');
         }
     }
 
@@ -136,176 +157,311 @@ class AkademikController extends Controller
         $data['title'] = "Program Les";
         $data['tanggal'] = $this->tanggal(date('Y-m-d'));
         $data['notifikasi'] = $this->notif();
-        $data['program_les'] = DB::table('program_les')->where(['id_program_les' => $id])->get()->first();
-        $data['murid'] = DB::table('pendaftaran')
-        ->join('murid', 'pendaftaran.username', '=', 'murid.username')
-        ->where('pendaftaran.status_pendaftaran', 3)
-        ->where('pendaftaran.id_program_les', $id)
-        ->get();
-        $data['jadwal_kosong'] = DB::table('jadwal_kosong')
-        // ->where(['username' => 'Kharis'])
-        ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
-        ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-        ->groupBy('jadwal_kosong.id_sesi')
-        ->groupBy('jadwal_kosong.id_hari')
-        ->get();
+        $data['program_les'] = \App\Program_Les::where(['id_program_les' => $id])->get()->first();
+        $data['murid'] = \App\Pendaftaran::join('murid', 'pendaftaran.username', '=', 'murid.username')
+            ->where('pendaftaran.status_pendaftaran', 3)
+            ->where('pendaftaran.id_program_les', $id)
+            ->get();
+        $data['jadwal_kosong'] = \App\Jadwal_Kosong::
+            join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+            ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->groupBy('jadwal_kosong.id_sesi')
+            ->groupBy('jadwal_kosong.id_hari')
+            ->get();
 
         // Header('Content-type: application/json');
         // echo json_encode($data['jadwal_kosong']);
         // die;
         
-        $data['sensei'] = DB::table('sensei')->get();
+        // $data['sensei'] = DB::table('sensei')->get();
 
 
-        $data['sesi'] = DB::table('sesi_jam')->get();
-        $data['hari'] = DB::table('hari')->get();
+        // $data['sesi'] = DB::table('sesi_jam')->get();
+        // $data['hari'] = DB::table('hari')->get();
         return view('akademik.tambah_kelas', $data);
     }
-    
-    function getRandomColor() 
+
+    function getRandomColor()
     {
         $letters = '0123456789ABCDEF';
         $color = '#';
         for ($i = 0; $i < 6; $i++) {
-            $color = $color.''.$letters[random_int(0,15)];
+            $color = $color . '' . $letters[random_int(0, 15)];
         }
         return $color;
     }
 
     public function tambahKelasLes(Request $request)
     {
-        
-        $status = Akademik::tambahKelas($request, $this->getRandomColor());
-        if ($status == true) {
-            return redirect('/akademik/detailProgramLes/'.$request->nama_program)->with('status', 'Penambahan Kelas Berhasil');
-        } else {
-            return redirect('/akademik/detailProgramLes/'.$request->nama_program)->with('status', 'Penambahan Kelas Gagal');
+        if ($request->nama_murid == '') {
+            $request->nama_murid = null;
         }
+        if ($request->hariPertemuan1 == '') {
+            $request->hariPertemuan1 = null;
+        }
+        if ($request->waktuPertemuan1 == '') {
+            $request->waktuPertemuan1 = null;
+        }
+        if ($request->hariPertemuan2 == '') {
+            $request->hariPertemuan2 = null;
+        }
+        if ($request->waktuPertemuan2 == '') {
+            $request->waktuPertemuan2 = null;
+        }
+        if ($request->nama_sensei == '') {
+            $request->nama_sensei = null;
+        }
+
+        $request->validate([
+            'nama_kelas' => 'required',
+            'hariPertemuan1' => 'required',
+            'waktuPertemuan1' => 'required',
+            'hariPertemuan2' => 'required',
+            'waktuPertemuan2' => 'required',
+            'nama_sensei' => 'required'
+        ], [
+            'nama_kelas.required' => 'Nama Kelas tidak boleh kosong',
+            'hariPertemuan1.required' => 'Hari Pertemuan 1 boleh kosong',
+            'waktuPertemuan1.required' => 'Sesi Pertemuan 1 boleh kosong',
+            'hariPertemuan2.required' => 'Hari Pertemuan 2 tidak boleh kosong',
+            'waktuPertemuan2.required' => 'Sesi Pertemuan 2 tidak boleh kosong',
+            'nama_sensei.required' => 'Sensei tidak boleh kosong'
+        ]);
+
+        \App\Kelas::insert([
+            'nama_kelas' => $request->nama_kelas,
+            'id_sensei' => $request->nama_sensei,
+            'color' => $this->getRandomColor()
+        ]);
+
+        $dataA = \App\Kelas::where(['nama_kelas' => $request->nama_kelas, 'id_sensei' => $request->nama_sensei])
+            ->get()->first();
+
+        $sensei = \App\Sensei::where(['id_sensei' => $request->nama_sensei])
+            ->get()->first();
+
+        \App\Pendaftaran::whereIn('id_pendaftaran', $request->peserta)->update(['status_pendaftaran' => 1]);
+
+        \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan1)
+            ->where('id_hari', $request->hariPertemuan1)
+            ->where('username', $sensei->username)
+            ->update(array('status_kosong' => 1));
+
+        \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan2)
+            ->where('id_hari', $request->hariPertemuan2)
+            ->where('username', $sensei->username)
+            ->update(array('status_kosong' => 1));
+
+        $dataB = \App\Pendaftaran::join('murid', 'pendaftaran.username', '=', 'murid.username')
+            ->whereIn('pendaftaran.id_pendaftaran', $request->peserta)
+            ->get();
+
+        for ($i = 0; $i < count($dataB); $i++) {
+
+            \App\Peserta_Kelas::insert([
+                'username' => $dataB[$i]->username,
+                'id_kelas' => $dataA->id_kelas,
+                'id_pendaftaran' => $dataB[$i]->id_pendaftaran,
+                'nilai_evaluasi' => 0,
+                'status_les' => 0
+            ]);
+
+            \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan1)
+                ->where('id_hari', $request->hariPertemuan1)
+                ->where('username', $dataB[$i]->username)
+                ->update(array('status_kosong' => 1));
+
+            \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan2)
+                ->where('id_hari', $request->hariPertemuan2)
+                ->where('username', $dataB[$i]->username)
+                ->update(array('status_kosong' => 1));
+        }
+        
+                // Jadwal 1
+        \App\Jadwal_Kelas::insert([
+            'id_kelas' => $dataA->id_kelas,
+            'id_hari' => $request->hariPertemuan1,
+            'id_sesi' => $request->waktuPertemuan1
+        ]);
+
+                // Jadwal 2
+        \App\Jadwal_Kelas::insert([
+            'id_kelas' => $dataA->id_kelas,
+            'id_hari' => $request->hariPertemuan2,
+            'id_sesi' => $request->waktuPertemuan2
+        ]);
+        return redirect('/akademik/detailProgramLes/' . $request->nama_program)->with('status', 'Penambahan Kelas Berhasil');
     }
 
-    public function editMateri(Request $request){
-        DB::update('update program_les set cakupan_materi = ? where id_program_les = ?', [$request->materi, intval($request->id_program_les)]);
-        return redirect('/akademik/detailProgramLes/'.$request->id_program_les)->with('status', 'Materi berhasil diupdate');
+    public function editMateri(Request $request)
+    {
+        \App\Program_Les::where('id_program_les', intval($request->id_program_les))
+            ->update([
+            'cakupan_materi' => $request->materi
+        ]);
+
+        // DB::update('update program_les set cakupan_materi = ? where id_program_les = ?', [$request->materi, intval($request->id_program_les)]);
+        return redirect('/akademik/detailProgramLes/' . $request->id_program_les)->with('status', 'Materi berhasil diupdate');
     }
 
-    public function getDetailKelas($id){
-        $data = DB::table('kelas')->where(['id_kelas' => $id])
-        ->get()->first();
+    public function getDetailKelas($id)
+    {
+        $data = \App\Kelas::where(['id_kelas' => $id])
+            ->get()->first();
 
-        $data->peserta = DB::table('peserta_kelas')->where(['id_kelas' => $id])
-        ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
-        ->get();
-
-        $data->pertemuan = DB::table('pertemuan')->where(['id_kelas' => $id])
-        ->get();
-
-        for ($i=0; $i < count($data->pertemuan) ; $i++) { 
-            $data->pertemuan[$i]->tanggal_indo = $this->tanggal($data->pertemuan[$i]->tanggal);
-            $data->pertemuan[$i]->kehadiran_peserta = DB::table('kehadiran_peserta')
-            ->where(['id_pertemuan' => $data->pertemuan[$i]->id_pertemuan])
-            ->join('peserta_kelas', 'kehadiran_peserta.id_peserta', '=', 'peserta_kelas.id_peserta_kelas')
+        $data->peserta = \App\Peserta_Kelas::where(['id_kelas' => $id])
             ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
             ->get();
+
+        $data->pertemuan = \App\Pertemuan::where(['id_kelas' => $id])
+            ->get();
+
+        for ($i = 0; $i < count($data->pertemuan); $i++) {
+            $data->pertemuan[$i]->tanggal_indo = $this->tanggal($data->pertemuan[$i]->tanggal);
+            $data->pertemuan[$i]->kehadiran_peserta = \App\Kehadiran_Peserta::where(['id_pertemuan' => $data->pertemuan[$i]->id_pertemuan])
+                ->join('peserta_kelas', 'kehadiran_peserta.id_peserta', '=', 'peserta_kelas.id_peserta_kelas')
+                ->join('murid', 'peserta_kelas.username', '=', 'murid.username')
+                ->get();
         }
 
         Header('Content-type: application/json');
         echo json_encode($data);
     }
 
-    public function getMurid($id){
-        $data = DB::table('pendaftaran')
-        ->join('murid', 'pendaftaran.username', '=', 'murid.username')
-        ->where('pendaftaran.status_pendaftaran', 3)
-        ->where('pendaftaran.id_program_les', $id)
-        ->get();
+    public function getMurid($id)
+    {
+        $data = \App\Pendaftaran::join('murid', 'pendaftaran.username', '=', 'murid.username')
+            ->where('pendaftaran.status_pendaftaran', 3)
+            ->where('pendaftaran.id_program_les', $id)
+            ->get();
 
         Header('Content-type: application/json');
         echo json_encode($data);
     }
 
-    public function getJadwalKosong(Request $request){
-        $murid = [];
-        if($request->get('murid1')){
-            array_push($murid, intval($request->get('murid1')));
-        }
-        if($request->get('murid2')){
-            array_push($murid, intval($request->get('murid2')));
-        }
-        
-        $pendaftar = DB::table('pendaftaran')
-        // ->join('murid', 'pendaftaran.username', '=', 'murid.username')
-        ->whereIn('id_pendaftaran', $murid)
-        ->get();
-        
+    public function getJadwalKosong(Request $request)
+    {
+        $murid = $request->murid;
+
+        $pendaftar = \App\Pendaftaran::whereIn('id_pendaftaran', $murid)
+            ->get();
+
         $username_murid = [];
-        for ($i=0; $i < count($pendaftar); $i++) { 
+        for ($i = 0; $i < count($pendaftar); $i++) {
             array_push($username_murid, $pendaftar[$i]->username);
         }
-        
-        
-        
-        $data1 = DB::table('jadwal_kosong')
-        // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
-        ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-        ->where('status_kosong', 0)
-        ->where('username', $username_murid[0])
+
+        $data1 = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->where('status_kosong', 0)
+            ->where('username', $username_murid[0])
         // ->groupBy('jadwal_kosong.id_sesi')
         // ->groupBy('jadwal_kosong.id_hari')
-        ->get();
+            ->get();
 
         $jadwal_kosong = [];
 
-        // 2 Murid
-        if(count($username_murid) == 2){
-            $data2 = DB::table('jadwal_kosong')
-            ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-            ->where('status_kosong', 0)
-            ->where('username', $username_murid[1])
-            ->get();
+        $data = [];
 
-            for ($i=0; $i < count($data1); $i++) { 
-                for ($j=0; $j < count($data2); $j++) { 
-                    if($data1[$i]->id_sesi == $data2[$j]->id_sesi && $data1[$i]->id_hari == $data2[$j]->id_hari){
-                         array_push($jadwal_kosong, $data1[$i]);
+        // > 1 Murid
+        if (count($username_murid) > 1) {
+            for ($i = 0; $i < count($username_murid); $i++) {
+                $temp = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+                ->where('status_kosong', 0)
+                ->where('username', $username_murid[1])
+                ->get();
+
+            }
+        }
+
+        // 2 Murid
+        if (count($username_murid) == 2) {
+            $data2 = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+                ->where('status_kosong', 0)
+                ->where('username', $username_murid[1])
+                ->get();
+
+            for ($i = 0; $i < count($data1); $i++) {
+                for ($j = 0; $j < count($data2); $j++) {
+                    if ($data1[$i]->id_sesi == $data2[$j]->id_sesi && $data1[$i]->id_hari == $data2[$j]->id_hari) {
+                        array_push($jadwal_kosong, $data1[$i]);
                     }
                     # code...
+
                 }
             }
         }
-        else{
+        else {
             $jadwal_kosong = $data1;
         }
 
         Header('Content-type: application/json');
         echo json_encode($jadwal_kosong);
         // die;
+
     }
-    public function getSesi(Request $request){
+    public function getJadwalOpsi(Request $request)
+    {
+        $murid = $request->murid;
+        $id_hari = intval($request->get('id_hari'));
+        $id_sesi = intval($request->get('id_sesi'));
+
+        $pendaftar = \App\Pendaftaran::whereIn('id_pendaftaran', $murid)
+            ->get();
+
+        $username_murid = [];
+        for ($i = 0; $i < count($pendaftar); $i++) {
+            array_push($username_murid, $pendaftar[$i]->username);
+        }
+
+        $temp_jadwal_kosong = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->where('status_kosong', 0)
+            ->where('username', $username_murid[0])
+            ->where('id_sesi', $id_sesi)
+            ->where('id_hari', $id_hari)
+            ->orderBy('jadwal_kosong.id_sesi', 'asc')
+            ->orderBy('jadwal_kosong.id_hari', 'asc')
+            ->get()->first();
+
+        $jadwal_kosong = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->where('status_kosong', 0)
+            ->where('username', $username_murid[0])
+        // ->whereNotIn('id_jadwal_kosong', $temp_jadwal_kosong->id_jadwal_kosong)
+->orderBy('jadwal_kosong.id_sesi', 'asc')
+            ->orderBy('jadwal_kosong.id_hari', 'asc')
+            ->get();
+
+
+        Header('Content-type: application/json');
+        echo json_encode($jadwal_kosong);
+        // die;
+
+    }
+    public function getSesi(Request $request)
+    {
         $id_hari = intval($request->get('id_hari'));
         $murid = intval($request->get('murid'));
-        
-        $pendaftar = DB::table('pendaftaran')
-        // ->join('murid', 'pendaftaran.username', '=', 'murid.username')
-        ->where('id_pendaftaran', $murid)
-        ->get()->first();
-        
-        
-        $data = DB::table('jadwal_kosong')
-        ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
+
+        $pendaftar = \App\Pendaftaran::where('id_pendaftaran', $murid)
+            ->get()->first();
+
+
+        $data = \App\Jadwal_Kosong::join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
         // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-        ->where('status_kosong', 0)
-        ->where('username', $pendaftar->username)
-        ->where('id_hari', $id_hari)
+->where('status_kosong', 0)
+            ->where('username', $pendaftar->username)
+            ->where('id_hari', $id_hari)
         // ->groupBy('jadwal_kosong.id_sesi')
         // ->groupBy('jadwal_kosong.id_hari')
-        ->get();
+->get();
 
         Header('Content-type: application/json');
         echo json_encode($data);
         // die;
+
     }
 
-    public function getSensei(Request $request){
+    public function getSensei(Request $request)
+    {
         $id_hari1 = intval($request->get('id_hari1'));
         $id_sesi1 = intval($request->get('id_sesi1'));
         $id_hari2 = intval($request->get('id_hari2'));
@@ -320,55 +476,54 @@ class AkademikController extends Controller
         // array_push($sesi, $id_sesi2);
         
         // Tabel 1
-        $data1 = DB::table('jadwal_kosong')
-        ->join('user', 'jadwal_kosong.username', '=', 'user.username')
+        $data1 = \App\Jadwal_Kosong::join('user', 'jadwal_kosong.username', '=', 'user.username')
         // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
         // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-        ->where('status_kosong', 0)
-        ->where('id_status_user', 2)
-        ->where('id_hari', $id_hari1)
-        ->where('id_sesi', $id_sesi1)
+->where('status_kosong', 0)
+            ->where('id_status_user', 2)
+            ->where('id_hari', $id_hari1)
+            ->where('id_sesi', $id_sesi1)
         // ->where('username', $pendaftar->username)
         // ->whereIn('id_hari', $hari)
         // ->whereIn('id_sesi', $sesi)
         // ->groupBy('jadwal_kosong.id_sesi')
         // ->groupBy('jadwal_kosong.id_hari')
-        ->get();
+->get();
 
-        $data2 = DB::table('jadwal_kosong')
-        ->join('user', 'jadwal_kosong.username', '=', 'user.username')
+        $data2 = \App\Jadwal_Kosong::join('user', 'jadwal_kosong.username', '=', 'user.username')
         // ->join('sesi_jam', 'jadwal_kosong.id_sesi', '=', 'sesi_jam.id_sesi')
         // ->join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-        ->where('status_kosong', 0)
-        ->where('id_status_user', 2)
-        ->where('id_hari', $id_hari2)
-        ->where('id_sesi', $id_sesi2)
+->where('status_kosong', 0)
+            ->where('id_status_user', 2)
+            ->where('id_hari', $id_hari2)
+            ->where('id_sesi', $id_sesi2)
         // ->where('username', $pendaftar->username)
         // ->whereIn('id_hari', $hari)
         // ->whereIn('id_sesi', $sesi)
         // ->groupBy('jadwal_kosong.id_sesi')
         // ->groupBy('jadwal_kosong.id_hari')
-        ->get();
+->get();
 
         $username_sensei = [];
 
-        for ($i=0; $i < count($data1); $i++) { 
-            for ($j=0; $j < count($data2); $j++) { 
-                if($data1[$i]->username == $data2[$j]->username){
-                     array_push($username_sensei, $data1[$i]->username);
+        for ($i = 0; $i < count($data1); $i++) {
+            for ($j = 0; $j < count($data2); $j++) {
+                if ($data1[$i]->username == $data2[$j]->username) {
+                    array_push($username_sensei, $data1[$i]->username);
                 }
                 # code...
+
             }
         }
 
-        $sensei = DB::table('sensei')
-        ->whereIn('username', $username_sensei)
-        ->get();
+        $sensei = \App\Sensei::whereIn('username', $username_sensei)
+            ->get();
 
 
         Header('Content-type: application/json');
         echo json_encode($sensei);
         // die;
+
     }
 
 }

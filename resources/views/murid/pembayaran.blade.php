@@ -56,6 +56,9 @@
                 <input type="file" name="buktiDaftar" class="float-right mr-5">
                 <h4 class="float-right mr-3 mt-1">Upload Bukti Pembayaran</h4>
               </form>
+              <a class="" href="{{ url('/murid/programLes') }}" style="text-decoration: none;">
+                <button class="mr-2 d-none d-lg-inline text-gray-600 small btn btn-secondary" ><span class="text-white">Kembali</span></button>
+              </a>
             </div>
         </div>
     </div>

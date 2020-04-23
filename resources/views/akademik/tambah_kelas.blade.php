@@ -20,76 +20,102 @@
           <div class="form-group row">
             <label for="nama_kelas" class="col-sm-3 col-form-label">Nama Kelas</label>
             <div class="col-sm-9">
-              <input type="text" class="form-control" id="nama_kelas" name="nama_kelas" value="">
+              <input type="text" class="form-control @error('nama_kelas') is-invalid @enderror" id="nama_kelas" name="nama_kelas" value="">
+              @error('nama_kelas')
+              <div class="invalid-feedback">{{$message}}</div>
+              @enderror
             </div>
           </div>
           <div class="form-group row murid-murid">
             <input type="hidden" class="form-control" id="jumlah_murid" name="jumlah_murid" value="1">
-            <label for="murid[]" class="col-sm-3 col-form-label">Nama Murid</label>
-            <div class="col-sm-8">
-              <select class="form-control" id="murid1" name="murid[]">
+            <label for="peserta[]" class="col-sm-3 col-form-label">Peserta Kelas</label>
+            
+            <div class="col-sm-9">
+                @if(count($murid) == 0)
+                <div class="alert alert-warning text-center mb-2 col-lg-12">Tidak ada Pendaftar Program Ini</div>
+                @else
+                <table class="table table-hover text-nowrap" id="rencana_peserta" width="100%" cellspacing="0" border="1">
+                    <thead class="text-center" style="background-color: #2980b9;color:#ecf0f1">
+                      <tr>
+                        <th>Nama Murid</th>
+                        <th>Peserta</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach ($murid as $m)
+                      <tr class="text-center">
+                        <td>{{$m->nama_lengkap}}</td>
+                        <td>
+                            <input type="checkbox" name="peserta[]" value="{{$m->id_pendaftaran}}">
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+              {{--  <select class="form-control @error('murid') is-invalid @enderror" id="murid1" name="murid[]">
                       <option value="" hidden selected>Pilih Murid</option>
                       @foreach ($murid as $m)
                       <option value="{{ $m->id_pendaftaran }}">{{ $m->nama_lengkap }}</option>
                       @endforeach
-                  </select>
+                  </select>  --}}
+                  {{--  @error('murid')
+                  <div class="invalid-feedback">{{$message}}</div>
+                  @enderror  --}}
+                  <span><p class="btn btn-danger mt-1 detail-jadwal">Detail Jadwal</p></span>
+                  @endif
             </div>
-            <span><a href="#" class="btn btn-danger mr-2 tambah-murid"><i class="fas fa-fw fa-plus text-white" id="icon-murid-plus"></i></a></span>
+            {{--  <span class="mr-2" id="icon-murid-plus"><a href="#" class="btn btn-danger tambah-murid"><i class="fas fa-fw fa-plus text-white"></i></a></span>  --}}
           </div>
-          
-          {{--  <div class="form-group row murid-baru">
-            
-          </div>  --}}
 
 
           <div class="form-group row waktu-pertemuan">
             <label for="hariPertemuan1" class="col-sm-3 col-form-label">Waktu Pertemuan 1</label>
             <div class="col-sm-5">
-              <select class="form-control" id="hariPertemuan1" name="hariPertemuan1">
+              <select class="form-control @error('hariPertemuan1') is-invalid @enderror" id="hariPertemuan1" name="hariPertemuan1">
                     <option value="" hidden selected>Pilih Hari</option>
-                    {{--  @foreach ($hari as $h)
-                    <option value="{{$h->id_hari}}">{{$h->hari}}</option>
-                    @endforeach  --}}
                   </select>
+                  @error('hariPertemuan1')
+                  <div class="invalid-feedback">{{$message}}</div>
+                  @enderror
             </div>
             <div class="col-sm-4">
-              <select class="form-control" id="waktuPertemuan1" name="waktuPertemuan1">
+              <select class="form-control @error('waktuPertemuan1') is-invalid @enderror" id="waktuPertemuan1" name="waktuPertemuan1">
                         <option value="" hidden selected>Pilih Sesi</option>
-                        {{--  @foreach ($sesi as $s)
-                        <option value="{{$s->id_sesi}}">{{$s->jam_mulai. ' - '.$s->jam_selesai}}</option>
-                        @endforeach  --}}
                     </select>
+                    @error('waktuPertemuan1')
+                    <div class="invalid-feedback">{{$message}}</div>
+                    @enderror
             </div>
           </div>
           <div class="form-group row">
             <label for="hariPertemuan2" class="col-sm-3 col-form-label">Waktu Pertemuan 2</label>
             <div class="col-sm-5">
-              <select class="form-control" id="hariPertemuan2" name="hariPertemuan2">
+              <select class="form-control @error('hariPertemuan2') is-invalid @enderror" id="hariPertemuan2" name="hariPertemuan2">
                     <option value="" hidden selected>Pilih Hari</option>
-                    {{--  @foreach ($hari as $h)
-                    <option value="{{$h->id_hari}}">{{$h->hari}}</option>
-                    @endforeach  --}}
                   </select>
+                  @error('hariPertemuan2')
+                  <div class="invalid-feedback">{{$message}}</div>
+                  @enderror
             </div>
             <div class="col-sm-4">
-              <select class="form-control" id="waktuPertemuan2" name="waktuPertemuan2">
+              <select class="form-control @error('waktuPertemuan2') is-invalid @enderror" id="waktuPertemuan2" name="waktuPertemuan2">
                         <option value="" hidden selected>Pilih Sesi</option>
-                        {{--  @foreach ($sesi as $s)
-                        <option value="{{$s->id_sesi}}">{{$s->jam_mulai. ' - '.$s->jam_selesai}}</option>
-                        @endforeach  --}}
                     </select>
+                    @error('waktuPertemuan2')
+                    <div class="invalid-feedback">{{$message}}</div>
+                    @enderror
             </div>
           </div>
 
           <div class="form-group row">
             <label for="nama_sensei" class="col-sm-3 col-form-label">Nama Sensei</label>
             <div class="col-sm-9">
-              <select class="form-control" id="nama_sensei" name="nama_sensei">
+              <select class="form-control @error('nama_sensei') is-invalid @enderror" id="nama_sensei" name="nama_sensei">
                       <option value="" hidden selected>Pilih Sensei</option>
-                        {{--  @foreach ($sensei as $s)
-                        <option value="{{ $s->id_sensei }}">{{ $s->nama_sensei }}</option>
-                        @endforeach  --}}
                     </select>
+                    @error('nama_sensei')
+                    <div class="invalid-feedback">{{$message}}</div>
+                    @enderror
             </div>
           </div>
           <div class="row">

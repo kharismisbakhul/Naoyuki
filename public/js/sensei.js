@@ -70,3 +70,20 @@ $('#table-daftar-pertemuan').on('click', '.detail_kehadiran', function () {
         }
     });
 })
+
+$('#table-daftar-user').on('click', '.hapus_user', function () {
+    let id_user = $(this).data('id');
+    Swal.fire({
+        title: 'Anda yakin ingin Menghapus User?',
+        text: "",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#868e96',
+        confirmButtonText: 'Hapus'
+    }).then(function (result) {
+        if (result.value) {
+            window.location = window.location.origin + "/admin/hapusUser/"+id_user;
+        }
+    })
+})
