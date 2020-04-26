@@ -364,32 +364,42 @@ class AkademikController extends Controller
 
         // > 1 Murid
         if (count($username_murid) > 1) {
-            for ($i = 0; $i < count($username_murid); $i++) {
-                $temp = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-                ->where('status_kosong', 0)
-                ->where('username', $username_murid[1])
-                ->get();
-
+            $jadwal_murid = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+            ->where('status_kosong', 0)
+            ->whereIn('username', $username_murid)
+            ->get();
+            
+            for ($i = 0; $i < count($jadwal_murid) - 1; $i++) {
+                $count = 0;
+                for ($j = ($i+1); $j < count($jadwal_murid); $j++) {
+                    if($jadwal_murid[$i]->id_sesi == $jadwal_murid[$j]->id_sesi && $jadwal_murid[$i]->id_hari == $jadwal_murid[$j]->id_hari){
+                        $count++;
+                        if($count == (count($username_murid)-1)){
+                            array_push($jadwal_kosong, $jadwal_murid[$i]);
+                        }
+                    }
+                }
             }
         }
 
         // 2 Murid
-        if (count($username_murid) == 2) {
-            $data2 = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
-                ->where('status_kosong', 0)
-                ->where('username', $username_murid[1])
-                ->get();
+        // if (count($username_murid) == 2) {
 
-            for ($i = 0; $i < count($data1); $i++) {
-                for ($j = 0; $j < count($data2); $j++) {
-                    if ($data1[$i]->id_sesi == $data2[$j]->id_sesi && $data1[$i]->id_hari == $data2[$j]->id_hari) {
-                        array_push($jadwal_kosong, $data1[$i]);
-                    }
-                    # code...
+        //     $data2 = \App\Jadwal_Kosong::join('hari', 'jadwal_kosong.id_hari', '=', 'hari.id_hari')
+        //         ->where('status_kosong', 0)
+        //         ->where('username', $username_murid[1])
+        //         ->get();
 
-                }
-            }
-        }
+        //     for ($i = 0; $i < count($data1); $i++) {
+        //         for ($j = 0; $j < count($data2); $j++) {
+        //             if ($data1[$i]->id_sesi == $data2[$j]->id_sesi && $data1[$i]->id_hari == $data2[$j]->id_hari) {
+        //                 array_push($jadwal_kosong, $data1[$i]);
+        //             }
+        //             # code...
+
+        //         }
+        //     }
+        // }
         else {
             $jadwal_kosong = $data1;
         }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2020 at 09:44 AM
+-- Generation Time: Apr 26, 2020 at 10:51 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -65,7 +65,9 @@ CREATE TABLE `jadwal_kelas` (
 
 INSERT INTO `jadwal_kelas` (`id_jadwal_kelas`, `id_kelas`, `id_hari`, `id_sesi`) VALUES
 (8, 14, 1, 1),
-(9, 14, 2, 3);
+(9, 14, 2, 3),
+(10, 15, 7, 1),
+(11, 15, 5, 6);
 
 -- --------------------------------------------------------
 
@@ -97,10 +99,20 @@ INSERT INTO `jadwal_kosong` (`id_jadwal_kosong`, `id_sesi`, `id_hari`, `username
 (7, 1, 1, 'misbakhul', 0, NULL, NULL),
 (8, 2, 2, 'Baskara', 0, NULL, NULL),
 (9, 3, 2, 'Baskara', 1, NULL, NULL),
-(10, 1, 7, 'Kharis', 0, NULL, NULL),
+(10, 1, 7, 'Kharis', 1, NULL, NULL),
 (11, 4, 4, 'Kharis', 0, NULL, NULL),
 (12, 8, 1, 'Kharis', 0, NULL, NULL),
-(13, 1, 7, 'Joni', 0, NULL, NULL);
+(13, 1, 7, 'Joni', 0, NULL, NULL),
+(14, 2, 2, 'Kharis', 0, NULL, NULL),
+(15, 2, 2, 'Joni', 0, NULL, NULL),
+(16, 2, 2, 'misbakhul', 0, NULL, NULL),
+(17, 3, 3, 'Kharis', 0, NULL, NULL),
+(18, 3, 3, 'Joni', 0, NULL, NULL),
+(19, 3, 3, 'misbakhul', 0, NULL, NULL),
+(21, 3, 3, 'Baskara', 0, NULL, NULL),
+(22, 6, 5, 'Kharis', 1, NULL, NULL),
+(23, 6, 5, 'Baskara', 1, NULL, NULL),
+(24, 1, 7, 'Baskara', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -115,6 +127,15 @@ CREATE TABLE `kehadiran_peserta` (
   `kehadiran` int(10) NOT NULL DEFAULT '0',
   `feedback` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kehadiran_peserta`
+--
+
+INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
+(1, 8, 1, 1, 'JOS'),
+(5, 8, 3, 1, 'WKWKWKWKWKW'),
+(8, 8, 4, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -134,7 +155,8 @@ CREATE TABLE `kelas` (
 --
 
 INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_sensei`, `color`) VALUES
-(14, 'Kelas Kana 1', 1, '#15A2EA');
+(14, 'Kelas Kana 1', 1, '#15A2EA'),
+(15, 'B Grammar', 1, '#320B1E');
 
 -- --------------------------------------------------------
 
@@ -221,10 +243,11 @@ CREATE TABLE `pendaftaran` (
 
 INSERT INTO `pendaftaran` (`id_pendaftaran`, `username`, `id_program_les`, `status_pendaftaran`, `bukti_pendaftaran`, `tanggal_mulai`, `tanggal_pendaftaran`, `waktu_pendaftaran`, `created_at`, `updated_at`) VALUES
 (30, 'Kharis', 1, 1, 'AksaraFILKOM.png', '2020-04-15', '2020-04-14', '12:18:27', NULL, NULL),
-(32, 'Kharis', 7, 3, 'AksaraFILKOM.png', '2020-04-19', '2020-04-17', '03:54:29', NULL, '2020-04-20 19:45:02'),
-(33, 'Joni', 7, 3, NULL, '2020-04-22', '2020-04-21', '13:00:00', NULL, NULL),
-(34, 'Kharis', 2, 2, 'AksaraFILKOM.png', '2020-04-23', '2020-04-22', '01:50:32', NULL, NULL),
-(35, 'misbakhul', 7, 3, NULL, '2020-04-24', '2020-04-23', '13:00:00', NULL, NULL);
+(33, 'Joni', 7, 3, NULL, '2020-04-22', '2020-04-21', '13:00:00', NULL, '2020-04-23 03:41:10'),
+(34, 'Kharis', 2, 1, 'AksaraFILKOM.png', '2020-04-23', '2020-04-22', '01:50:32', NULL, '2020-04-24 20:27:12'),
+(35, 'misbakhul', 7, 3, NULL, '2020-04-24', '2020-04-23', '13:00:00', NULL, '2020-04-23 03:41:10'),
+(36, 'Kharis', 5, 2, 'AksaraFILKOM.png', '2020-04-24', '2020-04-23', '08:17:30', NULL, '2020-04-23 02:05:35'),
+(37, 'Kharis', 7, 3, 'AksaraFILKOM.png', '2020-04-24', '2020-04-23', '10:25:54', NULL, '2020-04-23 03:33:53');
 
 -- --------------------------------------------------------
 
@@ -239,6 +262,15 @@ CREATE TABLE `pertemuan` (
   `deskripsi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `id_kelas` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `pertemuan`
+--
+
+INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`) VALUES
+(1, 1, '2020-04-24', 'AAAA', 14),
+(3, 2, '2020-04-23', 'AAAA', 14),
+(4, 3, '2020-05-23', 'BBBB', 14);
 
 -- --------------------------------------------------------
 
@@ -260,7 +292,8 @@ CREATE TABLE `peserta_kelas` (
 --
 
 INSERT INTO `peserta_kelas` (`id_peserta_kelas`, `username`, `id_kelas`, `id_pendaftaran`, `nilai_evaluasi`, `status_les`) VALUES
-(8, 'Kharis', 14, 30, 90, 1);
+(8, 'Kharis', 14, 30, 0, 0),
+(9, 'Kharis', 15, 34, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -613,25 +646,25 @@ ALTER TABLE `hari`
 -- AUTO_INCREMENT for table `jadwal_kelas`
 --
 ALTER TABLE `jadwal_kelas`
-  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_jadwal_kelas` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `jadwal_kosong`
 --
 ALTER TABLE `jadwal_kosong`
-  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_jadwal_kosong` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -643,19 +676,19 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `pendaftaran`
 --
 ALTER TABLE `pendaftaran`
-  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id_pendaftaran` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`
 --
 ALTER TABLE `peserta_kelas`
-  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_peserta_kelas` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `program_les`

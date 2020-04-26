@@ -44,14 +44,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		success: function (data) {
             console.log(data);
 			data['kelas_berjalan'].forEach(function (kelas) {
-                // console.log(kelas);
                 kelas['jadwal'].forEach(function (jadwal) {
                     calendar.addEvent({
 						id: kelas.id_kelas,
 						title: kelas.nama_kelas,
 						rrule: {
 							dtstart: kelas.tanggal_mulai + 'T' + jadwal['sesi'].jam_mulai,
-                            byweekday: rrule.RRule[jadwal.day],
+                            byweekday: rrule.RRule[jadwal['hari'].day],
                             count: kelas.jumlah_pertemuan,
 							freq: 'weekly'
 						},

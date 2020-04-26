@@ -323,7 +323,7 @@ class MuridController extends Controller
                 $data['kelas_berjalan'][$i]->jadwal[$j]->durasi = $diff->format('%H:%I:%S');
 
                 if($data['kelas_berjalan'][$i]->jadwal[$j]['hari']->id_hari == 1){
-                    $data['kelas_berjalan'][$i]->jadwal[$j]->day = "MO";
+                    $data['kelas_berjalan'][$i]->jadwal[$j]['hari']->day = "MO";
                 }
                 elseif($data['kelas_berjalan'][$i]->jadwal[$j]['hari']->id_hari == 2){
                     $data['kelas_berjalan'][$i]->jadwal[$j]['hari']->day = "TU";

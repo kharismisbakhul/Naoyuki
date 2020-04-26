@@ -67,12 +67,11 @@ $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () 
         success: function (data) {
             var link_image = window.location.origin + '/' + data['program_les']['image'];
             var link_bukti = window.location.origin + '/bukti_pembayaran/' + data['bukti_pendaftaran'];
-            
+
             $('.image-info').attr('src', link_image);
-            if(data['bukti_pendaftaran'] == null){
+            if (data['bukti_pendaftaran'] == null) {
                 $('.bukti-row').html('<alert class="alert alert-warning">Belum ada bukti</alert>');
-            }
-            else{
+            } else {
                 $('.bukti-row').html('<img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;"></img>');
                 $('.bukti-les-terdaftar').attr('src', link_bukti);
             }
@@ -83,14 +82,14 @@ $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () 
             var status_daftar = '';
             if (data['status_pendaftaran'] == "1") {
                 status_daftar = '<span class="text-success">Valid</span>';
-            } else if(data['status_pendaftaran'] == "0") {
+            } else if (data['status_pendaftaran'] == "0") {
                 status_daftar = '<span class="text-danger">Belum Bayar</span>';
-            } else if(data['status_pendaftaran'] == "2") {
+            } else if (data['status_pendaftaran'] == "2") {
                 status_daftar = '<span class="text-warning">Sedang di Proses</span>';
-            } else{
+            } else {
                 status_daftar = '<span class="text-primary">Menunggu Kelas</span>';
             }
-            $('.status-les-terdaftar').html('Status Pendaftaran: '+status_daftar);
+            $('.status-les-terdaftar').html('Status Pendaftaran: ' + status_daftar);
         }
     });
 })
@@ -120,3 +119,38 @@ $('#table-pertemuan').on('click', '.detail-feedback', function () {
         }
     });
 })
+
+function cariPembelajaran() {
+    var input, filter, table, tr, td, i, value;
+    input = document.getElementById("cariPembelajaran");
+    filter = input.value.toUpperCase();
+    kelas = document.getElementsByClassName("kelasPembelajaran");
+    spasi = document.getElementsByClassName("spasiPembelajaran");
+    // Loop through all table rows, and hide those who don't match the search query
+    var count = 0;
+    for (i = 0; i < kelas.length; i++) {
+        var nama_kelas = kelas[i].getElementsByClassName("namaKelas");
+        if (nama_kelas) {
+            value = nama_kelas[0].innerText;
+            if (value.toUpperCase().indexOf(filter) > -1) {
+                if($('.popup')){
+                    $('.popup').remove();
+                }
+                kelas[i].style.display = "";
+                spasi[i].style.display = "";
+            } else {
+                kelas[i].style.display = "none";
+                spasi[i].style.display = "none";
+                count++;
+                if(count >= kelas.length){
+                    if($('.popup')){
+                        $('.popup').remove();
+                    }
+                    $('.kelasp').prepend(`
+                        <div class="alert alert-warning text-center mb-2 col-lg-12 popup">Tidak ada pembelajaran yang sesuai dengan pencarian</div>
+                    `)
+                }
+            }
+        }
+    }
+}
