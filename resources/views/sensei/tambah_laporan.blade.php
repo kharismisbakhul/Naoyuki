@@ -32,13 +32,19 @@
           <div class="form-group row">
             <label for="tanggal" class="col-sm-3 col-form-label">Tanggal</label>
             <div class="col-sm-9">
-              <input type="date" class="form-control" id="tanggal" name="tanggal">
+              <input type="date" class="form-control  @error('tanggal') is-invalid @enderror" id="tanggal" name="tanggal">
+              @error('tanggal')
+              <div class="invalid-feedback">{{$message}}</div>
+              @enderror
             </div>
           </div>
           <div class="form-group row">
             <label for="deskripsi" class="col-sm-3 col-form-label">Deskripsi Laporan</label>
             <div class="col-sm-9">
-              <textarea name="deskripsi" class="form-control" id="deskripsi" rows="5"></textarea>
+              <textarea name="deskripsi" class="form-control  @error('deskripsi') is-invalid @enderror" id="deskripsi" rows="5"></textarea>
+              @error('deskripsi')
+              <div class="invalid-feedback">{{$message}}</div>
+              @enderror
             </div>
           </div>
           <div class="form-group row">
@@ -56,11 +62,7 @@
                   <td>{{$dkp->nama_lengkap}}</td>
                   <td>
                       <input type="checkbox" name="kehadiran[]" value="{{$dkp->id_peserta_kelas}}" checked>
-                      {{--  <select class="form-control" id="kehadiran" name="kehadiran">
-                          <option value="" hidden selected></option>
-                          <option value="1">Hadir</option>
-                          <option value="0">Tidak Hadir</option>
-                      </select>  --}}
+                      
                   </td>
                 </tr>
                 @endforeach

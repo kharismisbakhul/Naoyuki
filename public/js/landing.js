@@ -10,6 +10,7 @@ $('#program').on('click', '.program', function () {
         success: function (data) {
             var link_image = window.location.origin + '/' + data['image'];
             $('.image-info').attr('src', link_image);
+            $('.image-info').attr('alt', data['nama_program_les']);
             $('.judul-caption').html(data['nama_program_les']);
             $('.pertemuan-les').html(data['jumlah_pertemuan'] + " Kali");
             $('.deskripsi-les').html(data['deskripsi']);

@@ -308,6 +308,14 @@ class SenseiController extends Controller
     public function tambahLaporanKelas(Request $request, $id)
     {
 
+        $request->validate([
+            'tanggal' => 'required',
+            'deskripsi' => 'required'
+        ], [
+            'tanggal.required' => 'Tanggal tidak boleh kosong',
+            'deskripsi.required' => 'Deskripsi tidak boleh kosong'
+        ]);
+        
         $data['id_kelas'] = $request->id_kelas;
         $data['total_hadir'] = $request->jumlah_pertemuan;
         $data['pertemuan'] = $request->pertemuan;
@@ -316,7 +324,8 @@ class SenseiController extends Controller
         $data['kehadiran'] = $request->kehadiran;
 
         $data['tidak_hadir'] = \App\Peserta_Kelas::whereNotIn('id_peserta_kelas', $data['kehadiran'])
-            ->get();
+        ->where('id_kelas', $data['id_kelas'])
+        ->get();
 
         \App\Pertemuan::insert([
             'pertemuan_ke' => $data['pertemuan'],
@@ -325,8 +334,6 @@ class SenseiController extends Controller
             'id_kelas' => $data['id_kelas']
         ]);
 
-        // DB::insert('insert into pertemuan (pertemuan_ke, tanggal, deskripsi, id_kelas) values (?, ?, ?, ?)', [$data['pertemuan'], $data['tanggal'], $data['deskripsi'], $data['id_kelas']]);
-
         $pertemuan = \App\Pertemuan::where('pertemuan_ke', $data['pertemuan'])
             ->where('deskripsi', $data['deskripsi'])
             ->where('id_kelas', $data['id_kelas'])
@@ -334,7 +341,6 @@ class SenseiController extends Controller
 
         $kehadiran_peserta = [];
 
-        $id_peserta = [];
         if ($data['kehadiran'] != null) {
             for ($i = 0; $i < count($data['kehadiran']); $i++) {
                 $hadir = [
@@ -346,25 +352,19 @@ class SenseiController extends Controller
                 if ($data['total_hadir'] == $data['pertemuan']) {
                     \App\Peserta_Kelas::where('id_peserta_kelas', intval($data['kehadiran'][$i]))
                         ->update(['status_les' => 1]);
-                    // DB::update('update peserta_kelas set status_les = ? where id_peserta_kelas = ?', [1, intval($data['kehadiran'][$i])]);                    
-
                 }
-
                 array_push($kehadiran_peserta, $hadir);
             }
         }
 
-        if ($data['tidak_hadir']->isEmpty()) {
-
-        }
-        else {
+        if (count($data['tidak_hadir'])!= 0) {
             for ($i = 0; $i < count($data['tidak_hadir']); $i++) {
                 $tidak_hadir = [
                     'id_peserta' => intval($data['tidak_hadir'][$i]->id_peserta_kelas),
                     'id_pertemuan' => intval($pertemuan->id_pertemuan),
                     'kehadiran' => 0
                 ];
-
+    
                 array_push($kehadiran_peserta, $tidak_hadir);
             }
         }

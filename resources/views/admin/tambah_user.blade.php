@@ -16,24 +16,33 @@
             <div class="form-group row">
               <label for="username" class="col-sm-3 col-form-label">Username</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" id="username" name="username" value="">
+                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="">
+                @error('username')
+                <div class="invalid-feedback">{{$message}}</div>
+                @enderror
               </div>
             </div>
             <div class="form-group row">
               <label for="password" class="col-sm-3 col-form-label">Password</label>
               <div class="col-sm-9">
-                <input type="password" class="form-control" id="password" name="password">
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+                @error('password')
+                <div class="invalid-feedback">{{$message}}</div>
+                @enderror
               </div>
             </div>
             <div class="form-group row">
               <label for="status" class="col-sm-3 col-form-label">Status User</label>
               <div class="col-sm-9">
-                <select type="number" class="form-control status" id="status" name="status">
+                <select type="number" class="form-control status @error('status') is-invalid @enderror" id="status" name="status">
                     <option value="" hidden selected>Pilih Status User</option>
                     @foreach($status_user as $su)
                     <option value="{{$su->id_status_user}}">{{$su->nama_status_user}}</option>
                     @endforeach
                 </select>
+                @error('status')
+                <div class="invalid-feedback">{{$message}}</div>
+                @enderror
               </div>
             </div>
             <div class="form-group row nama_lengkap">

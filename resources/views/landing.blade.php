@@ -33,7 +33,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#"><img src="{{URL::asset('image/Naoyuki.png')}}" alt=""></a>
+            <a class="navbar-brand" href="#"><img src="{{URL::asset('image/Naoyuki.png')}}" alt="Naoyuki"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -78,7 +78,7 @@
                 <div class="col-lg-4 mt-2">
                     <button class="program" data-toggle="modal" data-toggle="modal" data-target=".ModalDetailProgram" data-id="{{ $pl->id_program_les }}">
                         <figure class="figure">
-                            <img src="{{URL::asset($pl->image)}}" class="img-thumbnail" style="width: 300px; height: 300px;">
+                            <img src="{{URL::asset($pl->image)}}" alt="{{$pl->nama_program_les}}" class="img-thumbnail" style="width: 300px; height: 300px;">
                             <figcaption class="figure-caption">
                                 <h5>{{ $pl->nama_program_les }}</h5>
                             </figcaption>
@@ -104,27 +104,27 @@
             </div>
             <div class="row justify-content-center mt-3">
                 <div class="col-lg-5">
-                    <img src="{{URL::asset('image/tes.jpg')}}">
+                    <img src="{{URL::asset('image/tes.jpg')}}" alt="test">
                 </div>
                 <div class="col-lg-5">
                     <div class="row">
-                        <img src="{{URL::asset('image/alamat_icon.png')}}" style="width:40px;height:40px;">
+                        <img src="{{URL::asset('image/alamat_icon.png')}}" alt="alamat" style="width:40px;height:40px;">
                         <p class="ml-2 mt-2">Gd. Inbis Lt. 4, Malang</p>
                     </div>
                     <div class="row mt-2">
-                        <img src="{{URL::asset('image/fb_icon.png')}}" style="width:40px;height:40px;">
+                        <img src="{{URL::asset('image/fb_icon.png')}}" alt="facebook" style="width:40px;height:40px;">
                         <p class="ml-2 mt-2">Naoyuki Academic Center</p>
                     </div>
                     <div class="row mt-2">
-                        <img src="{{URL::asset('image/mail_icon.png')}}" style="width:40px;height:40px;">
+                        <img src="{{URL::asset('image/mail_icon.png')}}" alt="email" style="width:40px;height:40px;">
                         <p class="ml-2 mt-2">naoyuki.id@gmail.com</p>
                     </div>
                     <div class="row mt-2">
-                        <img src="{{URL::asset('image/ig_icon.png')}}" style="width:40px;height:40px;">
+                        <img src="{{URL::asset('image/ig_icon.png')}}" alt="instagram" style="width:40px;height:40px;">
                         <p class="ml-2 mt-2">naoyuki.id</p>
                     </div>
                     <div class="row mt-2">
-                        <img src="{{URL::asset('image/no_icon.png')}}" style="width:40px;height:40px;">
+                        <img src="{{URL::asset('image/no_icon.png')}}" alt="no_telepon" style="width:40px;height:40px;">
                         <p class="ml-2 mt-2">(+62) 811-3696-997</p>
                     </div>
                 </div>
@@ -164,9 +164,9 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-4">
                             <figure class="figure">
-                                <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail image-info">
+                                <img src="{{URL::asset('image/thumbnail.jpg')}}" class="img-thumbnail image-info" alt="">
                                 <figcaption class="figure-caption text-center mt-2">
-                                    <h5 class="judul-caption">Intermediate Grammar</h5>
+                                    <h5 class="judul-caption"></h5>
                                 </figcaption>
                             </figure>
                         </div>

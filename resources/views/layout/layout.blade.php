@@ -32,7 +32,7 @@
       <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('/')}}">
         <div class="sidebar-brand-icon rotate-n-15">
-          <img src="{{URL::asset('image/icon.png')}}" style="width: 75px; height: 75px;">
+          <img src="{{URL::asset('image/icon.png')}}" style="width: 75px; height: 75px;" alt="icon_naoyuki">
         </div>
         <div class="sidebar-brand-text mx-3">NAOYUKI</div>
       </a>
@@ -41,7 +41,7 @@
       <hr class="sidebar-divider mb-0">
       <li class="nav-item mt-0">
         <a class="nav-link" href="{{url('/')}}">
-          <img src="{{ URL::asset(session('image_profil')) }}" class="img-profile rounded-circle mr-2"></img>
+          <img src="{{ URL::asset(session('image_profil')) }}" class="img-profile rounded-circle mr-2" alt="{{ session('username') }}"></img>
           @if(session('status_user') == 1 && session('status_user') == 2)
           <span>{{ session('nama_lengkap') }}</span>
           @else
@@ -185,7 +185,7 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ session('username') }}</span>
-                <img class="img-profile rounded-circle" src="{{ URL::asset(session('image_profil')) }}">
+                <img class="img-profile rounded-circle" src="{{ URL::asset(session('image_profil')) }}" alt="{{ session('username') }}">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

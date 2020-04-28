@@ -13,7 +13,7 @@
                 <div class="row justify-content-left">
                     <div class="col-lg-3 mr-5">
                         <figure class="figure text-center">
-                            <img src="{{URL::asset(session('image_profil'))}}" class="img-thumbnail rounded-circle" style="width: 300px; height: 300px;">
+                            <img src="{{URL::asset(session('image_profil'))}}" class="img-thumbnail rounded-circle" style="width: 300px; height: 300px;" alt="{{ session('nama_lengkap') }}">
                             <figcaption class="figure-caption mt-3">
                                 <h3>{{ session('nama_lengkap') }}</h3>
                                 <button class="btn btn-primary mt-2 editProfil" data-toggle="modal" data-target=".modalEditProfil" data-id="{{ session('username') }}
@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-lg-2"></div>
                     <div class="col-lg-2 ml-0">
-                        <img src="{{URL::asset('image/user-solid.svg')}}" style="width: 300px; height: 300px;;" class="mt-5 mr-5 pr-5">
+                        <img src="{{URL::asset('image/user-solid.svg')}}" style="width: 300px; height: 300px;;" class="mt-5 mr-5 pr-5" alt="icon-user">
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-6">
                         <figure class="figure text-center">
-                            <img src="{{URL::asset(session('image_profil'))}}" class="img-thumbnail rounded-circle" style="width: 350px; height: 350px;">
+                            <img src="{{URL::asset(session('image_profil'))}}" class="img-thumbnail rounded-circle" style="width: 350px; height: 350px;" alt="{{ session('nama_lengkap') }}">
                         </figure>
                     </div>
                     <div class="col-lg-6">

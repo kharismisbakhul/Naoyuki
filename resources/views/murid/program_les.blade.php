@@ -31,7 +31,7 @@
                   @foreach ($program_les as $pl) 
                   <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
+                    <td><img src="{{ URL::asset($pl->image) }}" class="img-fluid img-profile" style="width: 100%; height:100%;" alt="{{ $pl->nama_program_les }}"></td>
                     <td>{{ $pl->nama_program_les }}</td>
                     <td>{{ $pl->jumlah_pertemuan }} Kali</td>
                     <td><button class="btn btn-primary detailProgram" data-toggle="modal" data-target=".modalDetailProgramLes" data-id="{{ $pl->id_program_les }}">Detail</button></td>
@@ -73,7 +73,7 @@
                   @foreach ($program_berjalan as $pb) 
                   <tr class="text-center">
                     <td>{{ $loop->iteration }}</td>
-                    <td><img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid img-profile" alt="..." style="width: 100%; height:100%;"></td>
+                    <td><img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid img-profile" alt="{{ $pb['program_les']->nama_program_les }}" style="width: 100%; height:100%;"></td>
                     <td>{{ $pb['program_les']->nama_program_les }}</td>
                     <td>{{ $pb['program_les']->jumlah_pertemuan }} Kali</td>
                     <td>
@@ -126,7 +126,7 @@
               <div class="row justify-content-center">
                   <div class="col-lg-4">
                       <figure class="figure">
-                          <img src="" class="img-thumbnail image-info">
+                          <img src="" class="img-thumbnail image-info" alt="">
                           <figcaption class="figure-caption text-center mt-2">
                               <h5 class="judul-caption"></h5>
                           </figcaption>
@@ -167,7 +167,7 @@
               <div class="row justify-content-left">
                   <div class="col-lg-5">
                       <figure class="figure">
-                          <img src="" class="img-thumbnail image-info">
+                          <img src="" class="img-thumbnail image-info" alt="">
                           <figcaption class="figure-caption text-center mt-2">
                               <h5 class="judul-caption-terdaftar"></h5>
                               <h5 class="pertemuan-les-terdaftar"></h5>
@@ -189,7 +189,7 @@
                     <h5>Bukti Pendaftaran</h5>
                   </div>
                   <div class="row bukti-row">
-                    <img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;"></img>
+                    <img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;" alt=""></img>
                   </div>
                 </div>
 

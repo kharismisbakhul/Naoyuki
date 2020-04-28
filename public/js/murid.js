@@ -50,6 +50,7 @@ $('#table-daftar-program').on('click', '.detailProgram', function () {
         success: function (data) {
             var link_image = window.location.origin + '/' + data['image'];
             $('.image-info').attr('src', link_image);
+            $('.image-info').attr('alt', data['nama_program_les']);
             $('.judul-caption').html(data['nama_program_les']);
             $('.pertemuan-les').html(data['jumlah_pertemuan'] + " Kali");
             $('.deskripsi-les').html(data['deskripsi']);
@@ -72,8 +73,9 @@ $('#table-program-berjalan').on('click', '.detailProgramTerdaftar', function () 
             if (data['bukti_pendaftaran'] == null) {
                 $('.bukti-row').html('<alert class="alert alert-warning">Belum ada bukti</alert>');
             } else {
-                $('.bukti-row').html('<img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;"></img>');
+                $('.bukti-row').html('<img src="" class="bukti-les-terdaftar" style="width: 300px; height:300px;" alt=""></img>');
                 $('.bukti-les-terdaftar').attr('src', link_bukti);
+                $('.bukti-les-terdaftar').attr('alt', data['murid']['nama_lengkap']+'-'+data['program_les']['nama_program_les']);
             }
             $('.judul-caption-terdaftar').html('Program ' + data['program_les']['nama_program_les']);
             $('.pertemuan-les-terdaftar').html('Pertemuan ' + data['program_les']['jumlah_pertemuan'] + " Kali");

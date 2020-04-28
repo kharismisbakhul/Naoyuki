@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -43,14 +44,11 @@ class AuthController extends Controller
             return redirect('/')->with('statusEror', 'Login Gagal. Username Tidak Terdaftar');
         }
         else{
-            if($request->password != $username['password']){
-                return redirect('/')->with('statusEror', 'Login Gagal. Password Salah');
-            }
-            else{
-                $data = \App\User::where(['username' => $request->username, 'password' => $request->password])
+            if(Hash::check($request->password, $username['password'])){
+                $data = \App\User::where(['username' => $request->username])
                 ->with('status_user')
                 ->get()->first()->toArray();
-
+    
                 session(['username' => $data['username'], 'status_user' => $data['id_status_user'], 'nama_status_user' => $data['status_user']['nama_status_user'], 'image_profil' => $data['image']]);
                 if (session('status_user') == 1) {
                     $data_murid = \App\Murid::where(['username' => session('username')])->get()->first();
@@ -67,6 +65,9 @@ class AuthController extends Controller
                 } else {
                     return redirect('/admin');
                 }
+            }
+            else{
+                return redirect('/')->with('statusEror', 'Login Gagal. Password Salah');
             }
         }
     }

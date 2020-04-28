@@ -25,7 +25,7 @@
               
             <div class="col-md-4">
                 <figure class="figure text-center">
-                    <img src="{{ URL::asset($kb->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;">
+                    <img src="{{ URL::asset($kb->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;" alt="{{$kb->nama_kelas}}">
                     <figcaption class="figure-caption mt-3">
                         <h3>Pertemuan</h3>
                         <h3>{{count($kb->pertemuan).'/'.$kb->jumlah_pertemuan}}</h3>

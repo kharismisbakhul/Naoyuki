@@ -169,15 +169,6 @@ class AkademikController extends Controller
             ->groupBy('jadwal_kosong.id_hari')
             ->get();
 
-        // Header('Content-type: application/json');
-        // echo json_encode($data['jadwal_kosong']);
-        // die;
-        
-        // $data['sensei'] = DB::table('sensei')->get();
-
-
-        // $data['sesi'] = DB::table('sesi_jam')->get();
-        // $data['hari'] = DB::table('hari')->get();
         return view('akademik.tambah_kelas', $data);
     }
 
@@ -228,80 +219,91 @@ class AkademikController extends Controller
             'nama_sensei.required' => 'Sensei tidak boleh kosong'
         ]);
 
-        \App\Kelas::insert([
-            'nama_kelas' => $request->nama_kelas,
-            'id_sensei' => $request->nama_sensei,
-            'color' => $this->getRandomColor()
-        ]);
+        $kelas = \App\Kelas::where('nama_kelas', $request->nama_kelas)->get();
 
-        $dataA = \App\Kelas::where(['nama_kelas' => $request->nama_kelas, 'id_sensei' => $request->nama_sensei])
-            ->get()->first();
-
-        $sensei = \App\Sensei::where(['id_sensei' => $request->nama_sensei])
-            ->get()->first();
-
-        \App\Pendaftaran::whereIn('id_pendaftaran', $request->peserta)->update(['status_pendaftaran' => 1]);
-
-        \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan1)
-            ->where('id_hari', $request->hariPertemuan1)
-            ->where('username', $sensei->username)
-            ->update(array('status_kosong' => 1));
-
-        \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan2)
-            ->where('id_hari', $request->hariPertemuan2)
-            ->where('username', $sensei->username)
-            ->update(array('status_kosong' => 1));
-
-        $dataB = \App\Pendaftaran::join('murid', 'pendaftaran.username', '=', 'murid.username')
-            ->whereIn('pendaftaran.id_pendaftaran', $request->peserta)
-            ->get();
-
-        for ($i = 0; $i < count($dataB); $i++) {
-
-            \App\Peserta_Kelas::insert([
-                'username' => $dataB[$i]->username,
-                'id_kelas' => $dataA->id_kelas,
-                'id_pendaftaran' => $dataB[$i]->id_pendaftaran,
-                'nilai_evaluasi' => 0,
-                'status_les' => 0
+        if($kelas->isEmpty()){
+            \App\Kelas::insert([
+                'nama_kelas' => $request->nama_kelas,
+                'id_sensei' => $request->nama_sensei,
+                'color' => $this->getRandomColor()
             ]);
-
+    
+            $dataA = \App\Kelas::where(['nama_kelas' => $request->nama_kelas, 'id_sensei' => $request->nama_sensei])
+                ->get()->first();
+    
+            $sensei = \App\Sensei::where(['id_sensei' => $request->nama_sensei])
+                ->get()->first();
+    
+            \App\Pendaftaran::whereIn('id_pendaftaran', $request->peserta)->update(['status_pendaftaran' => 1]);
+    
             \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan1)
                 ->where('id_hari', $request->hariPertemuan1)
-                ->where('username', $dataB[$i]->username)
+                ->where('username', $sensei->username)
                 ->update(array('status_kosong' => 1));
-
+    
             \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan2)
                 ->where('id_hari', $request->hariPertemuan2)
-                ->where('username', $dataB[$i]->username)
+                ->where('username', $sensei->username)
                 ->update(array('status_kosong' => 1));
+    
+            $dataB = \App\Pendaftaran::join('murid', 'pendaftaran.username', '=', 'murid.username')
+                ->whereIn('pendaftaran.id_pendaftaran', $request->peserta)
+                ->get();
+    
+            for ($i = 0; $i < count($dataB); $i++) {
+    
+                \App\Peserta_Kelas::insert([
+                    'username' => $dataB[$i]->username,
+                    'id_kelas' => $dataA->id_kelas,
+                    'id_pendaftaran' => $dataB[$i]->id_pendaftaran,
+                    'nilai_evaluasi' => 0,
+                    'status_les' => 0
+                ]);
+    
+                \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan1)
+                    ->where('id_hari', $request->hariPertemuan1)
+                    ->where('username', $dataB[$i]->username)
+                    ->update(array('status_kosong' => 1));
+    
+                \App\Jadwal_Kosong::where('id_sesi', $request->waktuPertemuan2)
+                    ->where('id_hari', $request->hariPertemuan2)
+                    ->where('username', $dataB[$i]->username)
+                    ->update(array('status_kosong' => 1));
+            }
+            
+                    // Jadwal 1
+            \App\Jadwal_Kelas::insert([
+                'id_kelas' => $dataA->id_kelas,
+                'id_hari' => $request->hariPertemuan1,
+                'id_sesi' => $request->waktuPertemuan1
+            ]);
+    
+                    // Jadwal 2
+            \App\Jadwal_Kelas::insert([
+                'id_kelas' => $dataA->id_kelas,
+                'id_hari' => $request->hariPertemuan2,
+                'id_sesi' => $request->waktuPertemuan2
+            ]);
+            return redirect('/akademik/detailProgramLes/' . $request->nama_program)->with('status', 'Penambahan Kelas Berhasil');
         }
-        
-                // Jadwal 1
-        \App\Jadwal_Kelas::insert([
-            'id_kelas' => $dataA->id_kelas,
-            'id_hari' => $request->hariPertemuan1,
-            'id_sesi' => $request->waktuPertemuan1
-        ]);
-
-                // Jadwal 2
-        \App\Jadwal_Kelas::insert([
-            'id_kelas' => $dataA->id_kelas,
-            'id_hari' => $request->hariPertemuan2,
-            'id_sesi' => $request->waktuPertemuan2
-        ]);
-        return redirect('/akademik/detailProgramLes/' . $request->nama_program)->with('status', 'Penambahan Kelas Berhasil');
+        else{
+            return redirect('/akademik/detailProgramLes/' . $request->nama_program)->with('gagal', 'Penambahan Kelas gagal, nama kelas sudah ada');
+        }
     }
 
     public function editMateri(Request $request)
     {
-        \App\Program_Les::where('id_program_les', intval($request->id_program_les))
-            ->update([
-            'cakupan_materi' => $request->materi
-        ]);
-
-        // DB::update('update program_les set cakupan_materi = ? where id_program_les = ?', [$request->materi, intval($request->id_program_les)]);
-        return redirect('/akademik/detailProgramLes/' . $request->id_program_les)->with('status', 'Materi berhasil diupdate');
+        if($request->materi == null){
+            return redirect('/akademik/detailProgramLes/' . $request->id_program_les)->with('gagal', 'Materi tidak boleh kosong');
+        }
+        else{
+            \App\Program_Les::where('id_program_les', intval($request->id_program_les))
+                ->update([
+                'cakupan_materi' => $request->materi
+            ]);
+    
+            return redirect('/akademik/detailProgramLes/' . $request->id_program_les)->with('status', 'Materi berhasil diupdate');
+        }
     }
 
     public function getDetailKelas($id)

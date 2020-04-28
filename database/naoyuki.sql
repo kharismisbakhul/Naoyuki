@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2020 at 10:51 AM
+-- Generation Time: Apr 28, 2020 at 11:14 AM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -135,7 +135,9 @@ CREATE TABLE `kehadiran_peserta` (
 INSERT INTO `kehadiran_peserta` (`id_kehadiran`, `id_peserta`, `id_pertemuan`, `kehadiran`, `feedback`) VALUES
 (1, 8, 1, 1, 'JOS'),
 (5, 8, 3, 1, 'WKWKWKWKWKW'),
-(8, 8, 4, 1, NULL);
+(8, 8, 4, 1, NULL),
+(9, 9, 5, 1, NULL),
+(11, 9, 6, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -215,7 +217,7 @@ CREATE TABLE `murid` (
 
 INSERT INTO `murid` (`username`, `nama_lengkap`, `email`, `no_hp`, `asal_sekolah`, `alamat`, `created_at`, `updated_at`) VALUES
 ('Joni', 'Joni Ariawan', 'joniariawan@gmail.com', '08111111', 'SMA N 2 Malang', 'Jl. Veteran No. 73', NULL, NULL),
-('Kharis', 'Misbakhul Kharis', 'kharis@gmail.comm', '085607872843', 'SMAN 2 Malang', 'Jl. Bunga Kumis Kucing No. 21', NULL, '2020-04-16 19:51:09'),
+('Kharis', 'Misbakhul Kharis', 'kharis@gmail.com', '085607872843', 'SMAN 2 Malang', 'Jl. Bunga Kumis Kucing No. 21', NULL, '2020-04-27 23:04:34'),
 ('misbakhul', 'Kharis Misbakhul', 'kharis@gmail.com', '088888888', 'SMAN 1 Kembangbahu', 'Blimbing', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -270,7 +272,9 @@ CREATE TABLE `pertemuan` (
 INSERT INTO `pertemuan` (`id_pertemuan`, `pertemuan_ke`, `tanggal`, `deskripsi`, `id_kelas`) VALUES
 (1, 1, '2020-04-24', 'AAAA', 14),
 (3, 2, '2020-04-23', 'AAAA', 14),
-(4, 3, '2020-05-23', 'BBBB', 14);
+(4, 3, '2020-05-23', 'BBBB', 14),
+(5, 1, '2020-04-28', 'B Grammar Pertemuan 1', 15),
+(6, 2, '2020-04-29', 'aaaa', 15);
 
 -- --------------------------------------------------------
 
@@ -404,8 +408,8 @@ INSERT INTO `status_user` (`id_status_user`, `nama_status_user`) VALUES
 CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
   `username` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'image/default.jpg',
+  `password` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'image/profil/default.png',
   `id_status_user` int(10) UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -416,14 +420,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `image`, `id_status_user`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', '123', 'image/profil/default.png', 5, NULL, NULL),
-(2, 'Baskara', '123', 'image/profil/default.png', 2, NULL, NULL),
-(3, 'Bunga', '123', 'image/profil/default.png', 4, NULL, NULL),
-(4, 'Deni', '123', 'image/profil/default.png', 3, NULL, NULL),
-(5, 'Kharis', '123', 'image/profil/Kharis.jpg', 1, NULL, NULL),
-(6, 'Joni', '1234', 'image/default.jpg', 1, NULL, '2020-04-20 18:09:53'),
-(7, 'Sensei1', '123', 'image/default.jpg', 2, NULL, NULL),
-(8, 'misbakhul', '123', 'image/default.jpg', 1, NULL, NULL);
+(1, 'Admin', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 5, NULL, NULL),
+(2, 'Baskara', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 2, NULL, NULL),
+(3, 'Bunga', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 4, NULL, NULL),
+(4, 'Deni', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 3, NULL, NULL),
+(5, 'Kharis', '$2y$10$/bdEtozSM.k8hF8eI1mEi.T92RtvPsGbHAbycAjpEqd/oGG7OAv62', 'image/profil/Kharis.jpg', 1, NULL, '2020-04-27 20:44:16'),
+(6, 'Joni', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 1, NULL, '2020-04-20 18:09:53'),
+(7, 'Sensei1', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 2, NULL, NULL),
+(8, 'misbakhul', '$2y$10$XRSncm2.zWKlUuU6p7X0O.Lr4wClzs1Xaw5.5J4LbHZx3BRwSjlXa', 'image/profil/default.png', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -658,7 +662,7 @@ ALTER TABLE `jadwal_kosong`
 -- AUTO_INCREMENT for table `kehadiran_peserta`
 --
 ALTER TABLE `kehadiran_peserta`
-  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_kehadiran` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `kelas`
@@ -682,7 +686,7 @@ ALTER TABLE `pendaftaran`
 -- AUTO_INCREMENT for table `pertemuan`
 --
 ALTER TABLE `pertemuan`
-  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_pertemuan` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `peserta_kelas`

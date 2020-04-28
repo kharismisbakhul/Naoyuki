@@ -20,7 +20,7 @@
           <div class="row no-gutters">
             <div class="col-lg-3">
                 <figure class="figure text-center">
-                    <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;">
+                    <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;" alt="{{$detail_kelas->nama_kelas}}">
                     <figcaption class="figure-caption mt-3">
                         <h4>{{$detail_kelas->nama_kelas}}</h4>
                         <h4>{{$detail_kelas->nama_program_les}}</h4>
@@ -97,7 +97,7 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-4">
                         <figure class="figure text-center">
-                            <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;">
+                            <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 100%; height: 100%;" alt="{{ $detail_kelas->nama_kelas }}">
                         </figure>
                     </div>
                     <div class="col-lg-8">
@@ -143,7 +143,7 @@
                     <div class="row justify-content-center">
                         <div class="col-lg-4">
                             <figure class="figure text-center">
-                                <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 200px; height: 200px;">
+                                <img src="{{ URL::asset($detail_kelas->image) }}" class="img-thumbnail rounded" style="width: 200px; height: 200px;" alt="{{ $detail_kelas->nama_kelas }}">
                             </figure>
                         </div>
                         <div class="col-lg-8">

@@ -14,6 +14,7 @@ $('#table-daftar-peserta').on('click', '.detail_peserta_kelas', function () {
         success: function (data) {
             var link_image = window.location.origin + '/' + data['image'];
             $('.image-profil').attr('src', link_image);
+            $('.image-profil').attr('alt', data['nama_lengkap']);
             $('.nama_lengkap').val(data['nama_lengkap']);
             $('.email_p').val(data['email']);
             $('.no_telp_p').val(data['no_hp']);

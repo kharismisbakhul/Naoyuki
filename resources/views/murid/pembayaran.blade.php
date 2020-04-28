@@ -20,7 +20,7 @@
         <div class="row justify-content-left">
           <div class="col-lg-3 mr-2">
               <figure class="figure text-center">
-                  <img src="{{URL::asset(url($data_pendaftaran->image))}}" class="img-thumbnail rounded" style="width: 300px; height: 300px;">
+                  <img src="{{URL::asset(url($data_pendaftaran->image))}}" class="img-thumbnail rounded" style="width: 300px; height: 300px;" alt="{{ $data_pendaftaran->nama_program_les }}">
                   <figcaption class="figure-caption mt-3">
                       <h3>Program: {{ $data_pendaftaran->nama_program_les }}</h3>
                       <h5>Tanggal Pendaftaran:</h5>

@@ -7,10 +7,11 @@ $('#table-daftar-validasi').on('click', '.detailValidasi', function () {
         dataType: 'json',
         success: function (data) {
             console.log(data);
-            var link_image = window.location.origin + '/' + data['image'];
+            // var link_image = window.location.origin + '/' + data['image'];
             var link_bukti = window.location.origin + '/bukti_pembayaran/' + data['bukti_pendaftaran'];
-            $('.image-info').attr('src', link_image);
+            // $('.image-info').attr('src', link_image);
             $('.bukti-les').attr('src', link_bukti);
+            $('.bukti-les').attr('alt', data['murid']['nama_lengkap']+'-'+data['program_les']['nama_program_les']);
             $('.pendaftar').val(data['murid']['nama_lengkap']);
             $('.nama_program').val(data['program_les']['nama_program_les']);
             $('.id_validasi').val(id);

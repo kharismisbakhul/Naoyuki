@@ -43,7 +43,7 @@
             <div class="card mb-3 col-lg">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid" style="width: 100%; height: 100%;" alt="...">
+                  <img src="{{ URL::asset($pb['program_les']->image) }}" class="img-fluid" style="width: 100%; height: 100%;" alt="{{$pb['program_les']->nama_program_les}}">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">

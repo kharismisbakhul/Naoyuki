@@ -52,19 +52,9 @@
                       @endforeach
                     </tbody>
                   </table>
-              {{--  <select class="form-control @error('murid') is-invalid @enderror" id="murid1" name="murid[]">
-                      <option value="" hidden selected>Pilih Murid</option>
-                      @foreach ($murid as $m)
-                      <option value="{{ $m->id_pendaftaran }}">{{ $m->nama_lengkap }}</option>
-                      @endforeach
-                  </select>  --}}
-                  {{--  @error('murid')
-                  <div class="invalid-feedback">{{$message}}</div>
-                  @enderror  --}}
                   <span><p class="btn btn-danger mt-1 detail-jadwal">Detail Jadwal</p></span>
                   @endif
-            </div>
-            {{--  <span class="mr-2" id="icon-murid-plus"><a href="#" class="btn btn-danger tambah-murid"><i class="fas fa-fw fa-plus text-white"></i></a></span>  --}}
+            </div>  
           </div>
 
 

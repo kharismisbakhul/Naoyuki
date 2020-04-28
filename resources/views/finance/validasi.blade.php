@@ -100,7 +100,7 @@
                             </div>
                             <div class="form-group">
                                 <p class="text text-success" id="bukti-pendaftaran">Bukti Pendaftaran / Transfer</p>
-                                <img src="" class="bukti-les" style="width: 200px; height: 200px;"></img>
+                                <img src="" class="bukti-les" style="width: 200px; height: 200px;" alt=""></img>
                             </div>
                             <div class="row">
                                 <div class="col-lg">

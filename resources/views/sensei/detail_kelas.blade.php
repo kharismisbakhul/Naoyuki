@@ -160,7 +160,7 @@
         <div class="row justify-content-center">
           <div class="col-lg-6">
             <figure class="figure text-center">
-              <img src="{{URL::asset(session('image_profil'))}}" class="img-thumbnail rounded-circle image-profil" style="width: 350px; height: 350px;">
+              <img src="" class="img-thumbnail rounded-circle image-profil" style="width: 350px; height: 350px;" alt="">
             </figure>
           </div>
           <div class="col-lg-6">

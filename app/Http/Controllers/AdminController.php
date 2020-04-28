@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -65,76 +66,93 @@ class AdminController extends Controller
 
     public function tambahUser(Request $request)
     {   
-        if($request->status == 1){
-            $file = $request->file('fotoUser');
-            
-            $tujuan_upload = public_path('image/profil/');
-    
-            // echo json_encode($file);die;
-            $file->move($tujuan_upload, $file->getClientOriginalName());
-            $nama_file = 'image/profil/'.$file->getClientOriginalName();
-
-            \App\User::insert([
-                'username' => $request->username,
-                'password' => $request->password,
-                'id_status_user' => $request->status,
-                'image' => $nama_file
-            ]);
-
-            \App\Murid::insert([
-                'username' => $request->username,
-                'nama_lengkap' => $request->nama_lengkap_user,
-                'email' => $request->email_user,
-                'no_hp' => $request->no_hp_user,
-                'asal_sekolah' => $request->asal_sekolah_user,
-                'alamat' => $request->$request->alamat_user
-            ]);
-
-            // DB::insert('insert into user (username, password, id_status_user, image) values (?, ?, ?, ?)', [$request->username, $request->password, $request->status, $nama_file]);
-
-            // DB::insert('insert into murid (username, nama_lengkap, email, no_hp, asal_sekolah, alamat) values (?, ?, ?, ?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->email_user, $request->no_hp_user, $request->asal_sekolah_user, $request->alamat_user]);    
+        if($request->status == ''){
+            $request->status = null;
         }
-        else if($request->status == 2){
 
-            \App\User::insert([
-                'username' => $request->username,
-                'password' => $request->password,
-                'id_status_user' => $request->status
-            ]);
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+            'status' => 'required'
+        ], [
+            'username.required' => 'Username tidak boleh kosong',
+            'password.required'  => 'Password tidak boleh kosong',
+            'status.required'  => 'Status User tidak boleh kosong'
+        ]);
 
-            \App\Sensei::insert([
-                'username' => $request->username,
-                'nama_sensei' => $request->nama_lengkap_user,
-                'no_hp' => $request->no_hp_user
-            ]);
+        $temp = \App\User::where('username', $request->username)->get();
 
-            // DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
-
-            // DB::insert('insert into sensei (username, nama_sensei, no_hp) values (?, ?, ?)', [$request->username, $request->nama_lengkap_user, $request->no_hp_user]);
+        if($temp->isEmpty()){
+            if($request->status == 1){
+                $file = $request->file('fotoUser');
+                
+                $tujuan_upload = public_path('image/profil/');
+        
+                // echo json_encode($file);die;
+                $file->move($tujuan_upload, $file->getClientOriginalName());
+                $nama_file = 'image/profil/'.$file->getClientOriginalName();
+    
+                \App\User::insert([
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'id_status_user' => $request->status,
+                    'image' => $nama_file
+                ]);
+    
+                \App\Murid::insert([
+                    'username' => $request->username,
+                    'nama_lengkap' => $request->nama_lengkap_user,
+                    'email' => $request->email_user,
+                    'no_hp' => $request->no_hp_user,
+                    'asal_sekolah' => $request->asal_sekolah_user,
+                    'alamat' => $request->$request->alamat_user
+                ]);
+            }
+            else if($request->status == 2){
+    
+                \App\User::insert([
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'id_status_user' => $request->status
+                ]);
+    
+                \App\Sensei::insert([
+                    'username' => $request->username,
+                    'nama_sensei' => $request->nama_lengkap_user,
+                    'no_hp' => $request->no_hp_user
+                ]);
+            }
+            else{
+                \App\User::insert([
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                    'id_status_user' => $request->status
+                ]);
+    
+            }
+            
+            return redirect('/admin/manajemenUser')->with('status', 'Penambahan user berhasil');
         }
         else{
-            \App\User::insert([
-                'username' => $request->username,
-                'password' => $request->password,
-                'id_status_user' => $request->status
-            ]);
-
-            // DB::insert('insert into user (username, password, id_status_user) values (?, ?, ?)', [$request->username, $request->password, $request->status]);
+            return redirect('/admin/manajemenUser')->with('gagal', 'Username telah terdaftar');
         }
-        
-        return redirect('/admin/manajemenUser')->with('status', 'Penambahan user berhasil');
+
     }
 
     public function editUser(Request $request)
     {
-        \App\User::where('id_user', $request->id_user)
-        ->update([
-            'username' => $request->username,
-            'password' => $request->password
-        ]);
-
-        // DB::update('update user set username = ?, password = ? where id_user = ?', [$request->username, $request->password, $request->id_user]);
-        return redirect('/admin/manajemenUser')->with('status', 'Perubahan data user berhasil');
+        if($request->password == null){
+            return redirect('/admin/manajemenUser')->with('gagal', 'Password tidak boleh kosong');
+        }
+        else{
+            \App\User::where('id_user', $request->id_user)
+            ->update([
+                'username' => $request->username,
+                'password' => Hash::make($request->password)
+            ]);
+    
+           return redirect('/admin/manajemenUser')->with('status', 'Perubahan data user berhasil');
+        }
     }
 
     public function hapusUser($id)

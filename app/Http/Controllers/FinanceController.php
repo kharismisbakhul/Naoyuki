@@ -66,6 +66,8 @@ class FinanceController extends Controller
         $data['notifikasi'] = $this->notif();
         $data['data_pendaftaran'] = \App\Pendaftaran::join('program_les', 'pendaftaran.id_program_les', '=', 'program_les.id_program_les')
             ->join('murid', 'pendaftaran.username', '=', 'murid.username')
+            ->orderBy('pendaftaran.status_pendaftaran', 'asc')
+            ->orderBy('pendaftaran.tanggal_pendaftaran', 'asc')
             ->get();
         
             for ($i=0; $i < count($data['data_pendaftaran']) ; $i++) { 

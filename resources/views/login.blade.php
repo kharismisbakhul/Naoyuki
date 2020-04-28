@@ -40,7 +40,7 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             <div class="col-lg-6 d-none d-lg-block text-center ml-4 mt-5 login">
-                                <img src="{{URL::asset('image/study.svg')}}" class="rounded mx-auto d-block mt-5 ml-3" style="width: 100%;">
+                                <img src="{{URL::asset('image/study.svg')}}" alt="log-in" class="rounded mx-auto d-block mt-5 ml-3" style="width: 100%;">
                                 <div class="mt-5 mb-0 text-center">
                                     <p>@ Copyright 2019 Naoyuki Academic Center</p>
                                 </div>

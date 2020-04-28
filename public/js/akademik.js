@@ -27,14 +27,15 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
                 `);
             }
             else{
-                var j = 1;
+                var j = 0;
                 data['pertemuan'].forEach(function(pp) {
+                    j++;
                     $('#body-pertemuan-modal').append(`
                     <tr>
                         <td>`+pp['pertemuan_ke']+`</td>
                         <td>`+pp['tanggal_indo']+`</td>
                         <td>`+pp['deskripsi']+`</td>
-                        <td class="kehadiran-detail"></td>
+                        <td class="kehadiran-detail`+j+`"></td>
                     </tr>
                     `);
 
@@ -52,7 +53,7 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
                             } else {
                                 feedback = `<span class="text-warning text-center">`+kp['feedback']+`</span>`;
                             }
-                            $('.kehadiran-detail').append(`
+                            $('.kehadiran-detail'+j).append(`
                             <span>
                                 `+kp['nama_lengkap']+`\t
                                 [`+kehadiran+`]\t
@@ -83,66 +84,11 @@ $('#table-daftar-kelas').on('click', '.detail_kelas', function () {
                 `);
                 });
             }
-            // var link_image = window.location.origin + '/' + data['image'];
-            // $('.image-profil').attr('src', link_image);
-            // $('.nama_lengkap').val(data['nama_lengkap']);
-            // $('.email_p').val(data['email']);
-            // $('.no_telp_p').val(data['no_hp']);
-            // $('.asal_sekolah_p').val(data['asal_sekolah']);
-            // $('.alamat_p').val(data['alamat']);
+
         }
     });
 })
 
-$('.tambah-murid').on('click', function () {
-    var id_program = $('#nama_program').val();
-    var jumlah_murid = parseInt($('#jumlah_murid').val()) + 1;
-    $('#jumlah_murid').val(jumlah_murid)
-    console.log(jumlah_murid);
-
-    if(jumlah_murid == 2){
-        $('#icon-murid-plus').after(`<span><a href="#" class="btn btn-danger kurang-murid"><i class="fas fa-fw fa-minus text-white" id="icon-murid-minus"></i></a></span>`)
-    }
-
-    if($('#icon-murid').attr('class') == "fas fa-fw fa-minus text-white"){
-        $('.murid-baru').remove();
-        $('.waktu-pertemuan').removeBefore();
-        $('#hariPertemuan1').html(`<option value="" hidden selected>Pilih Hari</option>`)
-        $('#hariPertemuan2').html(`<option value="" hidden selected>Pilih Hari</option>`)
-        $('#waktuPertemuan1').html(`<option value="" hidden selected>Pilih Sesi</option>`)
-        $('#waktuPertemuan2').html(`<option value="" hidden selected>Pilih Sesi</option>`)
-        $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
-        // $('#icon-murid').attr('class', 'fas fa-fw fa-plus text-white');
-    }
-    else{
-        $('.waktu-pertemuan').before(`
-        <div class="form-group row murid-baru">
-            <label for="murid" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-8">
-                <select class="form-control" id="muridB" name="murid[]">
-                  <option value="" hidden selected>Pilih Murid</option>
-                </select>
-            </div>
-        </div>
-        `)
-        $.ajax({
-            url: segments[0] + '/akademik/getMurid/'+id_program,
-            method: 'get',
-            dataType: 'json',
-            success: function (data) {
-                // console.log(data)
-                data.forEach(function(d){
-                    $('#muridB').append(`
-                        <option value="`+d['id_pendaftaran']+`">`+d['nama_lengkap']+`</option>
-                    `)
-                })
-            }
-        })
-        
-        $('#icon-murid').attr('class', 'fas fa-fw fa-minus text-white');
-    }
-    // console.log($('#icon-murid').attr('class'))
-})
 
 $('.detail-jadwal').on('click', function(){
     $('#hariPertemuan1').html(`<option value="" hidden selected>Pilih Hari</option>`)
@@ -152,7 +98,6 @@ $('.detail-jadwal').on('click', function(){
     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
 
     var murid = document.getElementsByName('peserta[]');
-    // console.log(murid.length);
 
     let peserta = [];
     for (var index = 0; index < murid.length; index++) {
@@ -160,7 +105,6 @@ $('.detail-jadwal').on('click', function(){
             peserta.push(murid[index].value)
         }
     }
-    // console.log(peserta.length);
 
     $.ajax({
         url: segments[0] + '/akademik/getJadwalKosong',
@@ -327,7 +271,3 @@ $('#waktuPertemuan2').on('click', function(){
     })
 
 })
-
-// $('#waktuPertemuan1').on('click', function(){
-//     $('#nama_sensei').html(`<option value="" hidden selected>Pilih Sensei</option>`)
-// })
