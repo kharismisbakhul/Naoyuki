@@ -184,22 +184,12 @@ class AkademikController extends Controller
 
     public function tambahKelasLes(Request $request)
     {
-        if ($request->nama_murid == '') {
+        if ($request->nama_murid == '' || $request->hariPertemuan1 == '' || $request->waktuPertemuan1 == '' || $request->hariPertemuan2 == '' || $request->waktuPertemuan2 == '' || $request->nama_sensei == '') {
             $request->nama_murid = null;
-        }
-        if ($request->hariPertemuan1 == '') {
             $request->hariPertemuan1 = null;
-        }
-        if ($request->waktuPertemuan1 == '') {
             $request->waktuPertemuan1 = null;
-        }
-        if ($request->hariPertemuan2 == '') {
             $request->hariPertemuan2 = null;
-        }
-        if ($request->waktuPertemuan2 == '') {
             $request->waktuPertemuan2 = null;
-        }
-        if ($request->nama_sensei == '') {
             $request->nama_sensei = null;
         }
 

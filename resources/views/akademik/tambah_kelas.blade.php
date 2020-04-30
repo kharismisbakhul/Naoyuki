@@ -62,7 +62,7 @@
             <label for="hariPertemuan1" class="col-sm-3 col-form-label">Waktu Pertemuan 1</label>
             <div class="col-sm-5">
               <select class="form-control @error('hariPertemuan1') is-invalid @enderror" id="hariPertemuan1" name="hariPertemuan1">
-                    <option value="" hidden selected>Pilih Hari</option>
+                    <option value="null" hidden selected>Pilih Hari</option>
                   </select>
                   @error('hariPertemuan1')
                   <div class="invalid-feedback">{{$message}}</div>
@@ -70,7 +70,7 @@
             </div>
             <div class="col-sm-4">
               <select class="form-control @error('waktuPertemuan1') is-invalid @enderror" id="waktuPertemuan1" name="waktuPertemuan1">
-                        <option value="" hidden selected>Pilih Sesi</option>
+                        <option value="null" hidden selected>Pilih Sesi</option>
                     </select>
                     @error('waktuPertemuan1')
                     <div class="invalid-feedback">{{$message}}</div>
@@ -81,7 +81,7 @@
             <label for="hariPertemuan2" class="col-sm-3 col-form-label">Waktu Pertemuan 2</label>
             <div class="col-sm-5">
               <select class="form-control @error('hariPertemuan2') is-invalid @enderror" id="hariPertemuan2" name="hariPertemuan2">
-                    <option value="" hidden selected>Pilih Hari</option>
+                    <option value="null" hidden selected>Pilih Hari</option>
                   </select>
                   @error('hariPertemuan2')
                   <div class="invalid-feedback">{{$message}}</div>
@@ -89,7 +89,7 @@
             </div>
             <div class="col-sm-4">
               <select class="form-control @error('waktuPertemuan2') is-invalid @enderror" id="waktuPertemuan2" name="waktuPertemuan2">
-                        <option value="" hidden selected>Pilih Sesi</option>
+                        <option value="null" hidden selected>Pilih Sesi</option>
                     </select>
                     @error('waktuPertemuan2')
                     <div class="invalid-feedback">{{$message}}</div>
@@ -101,7 +101,7 @@
             <label for="nama_sensei" class="col-sm-3 col-form-label">Nama Sensei</label>
             <div class="col-sm-9">
               <select class="form-control @error('nama_sensei') is-invalid @enderror" id="nama_sensei" name="nama_sensei">
-                      <option value="" hidden selected>Pilih Sensei</option>
+                      <option value="null" hidden selected>Pilih Sensei</option>
                     </select>
                     @error('nama_sensei')
                     <div class="invalid-feedback">{{$message}}</div>

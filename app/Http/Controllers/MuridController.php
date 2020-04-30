@@ -94,10 +94,10 @@ class MuridController extends Controller
         if($request->hari == "" && $request->jam == ""){
             return redirect('/murid/jadwalKosong')->with('gagal', 'Hari dan Jam tidak boleh kosong');
         }
-        if($request->jam == ""){
+        else if($request->jam == ""){
             return redirect('/murid/jadwalKosong')->with('gagal', 'Jam tidak boleh kosong');
         }
-        if($request->hari == ""){
+        else if($request->hari == ""){
             return redirect('/murid/jadwalKosong')->with('gagal', 'Hari tidak boleh kosong');
         }
         

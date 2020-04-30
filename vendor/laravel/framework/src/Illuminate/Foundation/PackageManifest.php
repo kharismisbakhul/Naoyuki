@@ -65,9 +65,7 @@ class PackageManifest
      */
     public function providers()
     {
-        return collect($this->getManifest())->flatMap(function ($configuration) {
-            return (array) ($configuration['providers'] ?? []);
-        })->filter()->all();
+        return $this->config('providers');
     }
 
     /**
@@ -77,8 +75,19 @@ class PackageManifest
      */
     public function aliases()
     {
-        return collect($this->getManifest())->flatMap(function ($configuration) {
-            return (array) ($configuration['aliases'] ?? []);
+        return $this->config('aliases');
+    }
+
+    /**
+     * Get all of the values for all packages for the given configuration name.
+     *
+     * @param  string  $key
+     * @return array
+     */
+    public function config($key)
+    {
+        return collect($this->getManifest())->flatMap(function ($configuration) use ($key) {
+            return (array) ($configuration[$key] ?? []);
         })->filter()->all();
     }
 
@@ -113,7 +122,9 @@ class PackageManifest
         $packages = [];
 
         if ($this->files->exists($path = $this->vendorPath.'/composer/installed.json')) {
-            $packages = json_decode($this->files->get($path), true);
+            $installed = json_decode($this->files->get($path), true);
+
+            $packages = $installed['packages'] ?? $installed;
         }
 
         $ignoreAll = in_array('*', $ignore = $this->packagesToIgnore());

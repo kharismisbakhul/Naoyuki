@@ -86,12 +86,5 @@ class FinanceController extends Controller
         ]);
         return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
 
-        // $status = DB::update('update pendaftaran set status_pendaftaran = ? where id_pendaftaran = ?', [intval($request->validasi), $request->id_validasi]);
-
-        // if ($status == true) {
-        //     return redirect('/finance/validasi')->with('status', 'Validasi berhasil');
-        // } else {
-        //     return redirect('/finance/validasi')->with('status', 'Validasi gagal');
-        // }
     }
 }

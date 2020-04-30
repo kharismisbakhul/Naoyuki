@@ -108,7 +108,7 @@ class SenseiController extends Controller
         else if ($request->sesi == "") {
             return redirect('/sensei/jadwalKosong')->with('gagal', 'Jam tidak boleh kosong');
         }
-        else {
+        else if($request->hari == "") {
             return redirect('/sensei/jadwalKosong')->with('gagal', 'Hari tidak boleh kosong');
         }
 
@@ -143,13 +143,6 @@ class SenseiController extends Controller
             }
         }
     }
-
-    // public function scoreboard(){
-    //     $data['title'] = "Scoreboard";
-    //     $data['header'] = "Sensei";
-    //     $data['tanggal'] = $this->tanggal(date('Y-m-d'));
-    //     return view('sensei.scoreboard', $data);
-    // }
 
     public function pembelajaran()
     {
